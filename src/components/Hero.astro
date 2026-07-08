@@ -1,0 +1,92 @@
+---
+import Countdown from './Countdown.astro';
+---
+
+<section
+  id="inicio"
+  class="min-h-screen flex flex-col items-center justify-center text-center px-6 py-20 relative overflow-hidden"
+>
+  <!-- Rama de olivo SVG izquierda -->
+  <svg
+    class="absolute top-0 left-0 w-48 md:w-64 opacity-20 -rotate-12"
+    viewBox="0 0 200 300"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <path d="M100 280 C100 280 80 200 60 160 C40 120 20 100 30 60 C40 20 80 10 100 10" stroke="#6B7A3E" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="55" cy="90" rx="18" ry="10" fill="#6B7A3E" transform="rotate(-30 55 90)"/>
+    <ellipse cx="40" cy="130" rx="18" ry="10" fill="#6B7A3E" transform="rotate(-45 40 130)"/>
+    <ellipse cx="70" cy="160" rx="16" ry="9" fill="#6B7A3E" transform="rotate(-20 70 160)"/>
+    <ellipse cx="55" cy="200" rx="15" ry="8" fill="#6B7A3E" transform="rotate(-35 55 200)"/>
+  </svg>
+
+  <!-- Rama de olivo SVG derecha (espejada) -->
+  <svg
+    class="absolute top-0 right-0 w-48 md:w-64 opacity-20 rotate-12 scale-x-[-1]"
+    viewBox="0 0 200 300"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <path d="M100 280 C100 280 80 200 60 160 C40 120 20 100 30 60 C40 20 80 10 100 10" stroke="#6B7A3E" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="55" cy="90" rx="18" ry="10" fill="#6B7A3E" transform="rotate(-30 55 90)"/>
+    <ellipse cx="40" cy="130" rx="18" ry="10" fill="#6B7A3E" transform="rotate(-45 40 130)"/>
+    <ellipse cx="70" cy="160" rx="16" ry="9" fill="#6B7A3E" transform="rotate(-20 70 160)"/>
+    <ellipse cx="55" cy="200" rx="15" ry="8" fill="#6B7A3E" transform="rotate(-35 55 200)"/>
+  </svg>
+
+  <!-- Contenido principal -->
+  <div class="relative z-10 flex flex-col items-center gap-6 max-w-2xl">
+    <p id="hero-pre" class="gsap-fade-up font-sans text-xs tracking-[0.4em] uppercase" style="color: rgba(43, 95, 142, 0.6)">
+      Guarda la fecha
+    </p>
+
+    <h1 id="hero-names" class="gsap-fade-up font-serif font-light text-azul leading-tight">
+      <span class="text-5xl md:text-8xl">Antonio</span>
+      <span class="block text-limon text-3xl md:text-5xl my-2">&amp;</span>
+      <span class="text-5xl md:text-8xl">María</span>
+    </h1>
+
+    <p id="hero-date" class="gsap-fade-up font-serif text-2xl md:text-4xl font-light tracking-widest" style="color: rgba(43, 95, 142, 0.7)">
+      24 · 07 · 2027
+    </p>
+
+    <div class="separador w-full max-w-sm"></div>
+
+    <p id="hero-location" class="gsap-fade-up font-sans text-sm tracking-[0.2em] uppercase" style="color: rgba(43, 95, 142, 0.5)">
+      Finca Genilla · Priego de Córdoba
+    </p>
+
+    <div id="hero-countdown" class="gsap-fade-up w-full">
+      <Countdown />
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.timeline({ defaults: { ease: 'power3.out', duration: 0.9 } })
+    .to('#hero-pre',       { opacity: 1, y: 0, delay: 0.3 })
+    .to('#hero-names',     { opacity: 1, y: 0 }, '-=0.5')
+    .to('#hero-date',      { opacity: 1, y: 0 }, '-=0.5')
+    .to('#hero-location',  { opacity: 1, y: 0 }, '-=0.5')
+    .to('#hero-countdown', { opacity: 1, y: 0 }, '-=0.4');
+
+  gsap.utils.toArray('.gsap-fade-up:not(#hero-pre):not(#hero-names):not(#hero-date):not(#hero-location):not(#hero-countdown)').forEach((el) => {
+    gsap.to(el, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 85%',
+      },
+    });
+  });
+</script>
