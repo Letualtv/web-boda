@@ -4,9 +4,10 @@ import Hero from '../components/Hero.astro';
 ---
 
 <Layout>
-  <script>
+  <!-- is:inline ejecuta síncrono antes de pintar el DOM — evita flash de contenido protegido -->
+  <script is:inline define:vars={{ BASE_URL: import.meta.env.BASE_URL }}>
     if (sessionStorage.getItem('boda_auth') !== 'ok') {
-      window.location.replace(import.meta.env.BASE_URL);
+      window.location.replace(BASE_URL);
     }
   </script>
 
