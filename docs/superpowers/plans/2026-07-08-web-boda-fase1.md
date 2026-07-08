@@ -4,9 +4,9 @@
 
 **Goal:** Construir la Fase 1 de la web de boda: pantalla de contraseña + Save the Date con cuenta atrás animada, lista para publicar en GitHub Pages.
 
-**Architecture:** Sitio estático con Astro 4. Una página principal (`index.astro`) actúa de puerta de contraseña client-side con `sessionStorage`. Tras autenticarse, el usuario accede a `/boda` donde vive el contenido en scroll único. Las animaciones se gestionan con GSAP 3 + ScrollTrigger. El deploy es automático vía GitHub Actions a GitHub Pages en cada push a `main`.
+**Architecture:** Sitio estático con Astro 7. Una página principal (`index.astro`) actúa de puerta de contraseña client-side con `sessionStorage`. Tras autenticarse, el usuario accede a `/boda` donde vive el contenido en scroll único. Las animaciones se gestionan con GSAP 3 + ScrollTrigger. El deploy es automático vía GitHub Actions a GitHub Pages en cada push a `main`.
 
-**Tech Stack:** Astro 4, Tailwind CSS 3, GSAP 3 (+ ScrollTrigger), Google Fonts (Cormorant Garamond + Lato), GitHub Pages, GitHub Actions.
+**Tech Stack:** Astro 7, Tailwind CSS 4 (CSS-first, sin `tailwind.config.mjs`, paleta vía `@theme`), GSAP 3 (+ ScrollTrigger), Google Fonts (Cormorant Garamond + Lato), GitHub Pages, GitHub Actions (Node 22).
 
 ---
 
@@ -84,46 +84,51 @@ git commit -m "chore: init Astro project with Tailwind and GSAP"
 
 ---
 
-## Tarea 2: Configurar Tailwind con la paleta y fuentes de la boda
+## Tarea 2: Configurar paleta y fuentes de la boda (Tailwind v4)
+
+> **Nota:** Se instaló Tailwind v4, que usa CSS-first en lugar de `tailwind.config.mjs`. Los colores y fuentes se definen en el bloque `@theme` dentro de `src/styles/global.css`. Las clases de utilidad (`bg-azul`, `text-limon`, `font-serif`, etc.) se generan automáticamente a partir de las variables `@theme`.
 
 **Archivos:**
-- Modificar: `tailwind.config.mjs`
+- Modificar: `src/styles/global.css`
 
-- [ ] **Paso 1: Reemplazar el contenido de `tailwind.config.mjs`**
+- [ ] **Paso 1: Reemplazar el contenido de `src/styles/global.css`**
 
-```js
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ['./src/**/*.{astro,html,js,jsx,ts,tsx}'],
-  theme: {
-    extend: {
-      colors: {
-        limon:     '#D4C84A',
-        azul:      '#2B5F8E',
-        marfil:    '#FAF6EE',
-        oliva:     '#6B7A3E',
-        vino:      '#7A2D3E',
-        terracota: '#C4714F',
-      },
-      fontFamily: {
-        serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-        sans:  ['Lato', 'system-ui', 'sans-serif'],
-      },
-    },
-  },
-  plugins: [],
+```css
+@import "tailwindcss";
+
+@theme {
+  /* Paleta de colores de la boda */
+  --color-limon:     #D4C84A;
+  --color-azul:      #2B5F8E;
+  --color-marfil:    #FAF6EE;
+  --color-oliva:     #6B7A3E;
+  --color-vino:      #7A2D3E;
+  --color-terracota: #C4714F;
+
+  /* Tipografía */
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans:  Lato, system-ui, sans-serif;
 }
 ```
 
+> Esta es la única configuración necesaria para Tailwind v4. No crear `tailwind.config.mjs`.
+
 - [ ] **Paso 2: Verificar que Tailwind reconoce los colores**
 
-Arranca el dev server (`npm run dev`) y en cualquier componente prueba `class="bg-marfil"` — el fondo debe cambiar a marfil. Luego quita la prueba.
+Ejecutar el build:
+
+```powershell
+cd C:\xampp\htdocs\web-boda
+npm run build
+```
+
+Esperado: build exitoso sin errores. Las clases `bg-marfil`, `text-azul`, `font-serif`, `font-sans` estarán disponibles en todos los componentes Astro.
 
 - [ ] **Paso 3: Commit**
 
 ```powershell
-git add tailwind.config.mjs
-git commit -m "chore: configure Tailwind palette and fonts for wedding theme"
+git add src/styles/global.css
+git commit -m "chore: configure wedding color palette and fonts via Tailwind v4 @theme"
 ```
 
 ---
@@ -134,20 +139,25 @@ git commit -m "chore: configure Tailwind palette and fonts for wedding theme"
 - Crear/Modificar: `src/layouts/Layout.astro`
 - Crear: `src/styles/global.css`
 
-- [ ] **Paso 1: Crear `src/styles/global.css`**
+- [ ] **Paso 1: Reemplazar el contenido completo de `src/styles/global.css`**
+
+> Tailwind v4 usa `@import "tailwindcss"` + `@theme` (ya configurado en Tarea 2). Aquí solo añadimos los estilos base y clases de utilidad propias.
 
 ```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-:root {
+@theme {
+  /* Paleta de colores de la boda */
   --color-limon:     #D4C84A;
   --color-azul:      #2B5F8E;
   --color-marfil:    #FAF6EE;
   --color-oliva:     #6B7A3E;
   --color-vino:      #7A2D3E;
   --color-terracota: #C4714F;
+
+  /* Tipografía */
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans:  Lato, system-ui, sans-serif;
 }
 
 html {
@@ -157,7 +167,7 @@ html {
 body {
   background-color: var(--color-marfil);
   color: #2a2a2a;
-  font-family: 'Lato', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* Textura sutil de fondo */
@@ -186,7 +196,7 @@ body::before {
   max-width: 400px;
 }
 
-/* Clase para animaciones de entrada — GSAP las activa */
+/* Clase para animaciones de entrada — GSAP las activa al hacer scroll */
 .gsap-fade-up {
   opacity: 0;
   transform: translateY(30px);
@@ -637,12 +647,16 @@ git commit -m "feat: add Hero section with GSAP animations and olive branch deco
 
 - [ ] **Paso 1: Actualizar `astro.config.mjs`**
 
+> **Nota Astro v7 + Tailwind v4:** No usar `import tailwind from '@astrojs/tailwind'` — esa integración es de v3/v4 y no existe. Tailwind v4 ya está configurado como plugin Vite (`@tailwindcss/vite`), que debe mantenerse.
+
 ```js
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  integrations: [tailwind()],
+  vite: {
+    plugins: [tailwindcss()],
+  },
   output: 'static',
   // Cambiar 'web-boda' si el nombre del repo de GitHub es diferente
   base: '/web-boda/',
@@ -718,7 +732,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install dependencies
