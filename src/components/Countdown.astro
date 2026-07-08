@@ -1,0 +1,61 @@
+---
+// Fecha objetivo: 24 de julio de 2027, 12:00h
+const WEDDING_DATE = '2027-07-24T12:00:00';
+---
+
+<section class="py-16 flex flex-col items-center gap-8">
+  <p class="font-sans text-xs tracking-[0.4em] uppercase" style="color: rgba(43, 95, 142, 0.6)">Quedan</p>
+
+  <div id="countdown" class="flex gap-6 md:gap-12 text-center">
+    <div class="flex flex-col items-center gap-1">
+      <span id="dias" class="gsap-fade-up font-serif text-5xl md:text-7xl font-light text-azul tabular-nums">00</span>
+      <span class="font-sans text-xs tracking-widest uppercase" style="color: rgba(43, 95, 142, 0.5)">días</span>
+    </div>
+    <div class="flex flex-col items-center gap-1">
+      <span id="horas" class="gsap-fade-up font-serif text-5xl md:text-7xl font-light text-azul tabular-nums">00</span>
+      <span class="font-sans text-xs tracking-widest uppercase" style="color: rgba(43, 95, 142, 0.5)">horas</span>
+    </div>
+    <div class="flex flex-col items-center gap-1">
+      <span id="minutos" class="gsap-fade-up font-serif text-5xl md:text-7xl font-light text-azul tabular-nums">00</span>
+      <span class="font-sans text-xs tracking-widest uppercase" style="color: rgba(43, 95, 142, 0.5)">minutos</span>
+    </div>
+    <div class="flex flex-col items-center gap-1">
+      <span id="segundos" class="gsap-fade-up font-serif text-5xl md:text-7xl font-light text-azul tabular-nums">00</span>
+      <span class="font-sans text-xs tracking-widest uppercase" style="color: rgba(43, 95, 142, 0.5)">segundos</span>
+    </div>
+  </div>
+</section>
+
+<script define:vars={{ WEDDING_DATE }}>
+  const target = new Date(WEDDING_DATE).getTime();
+
+  function pad(n) {
+    return String(Math.floor(n)).padStart(2, '0');
+  }
+
+  function tick() {
+    const now = Date.now();
+    const diff = target - now;
+
+    if (diff <= 0) {
+      document.getElementById('dias').textContent    = '00';
+      document.getElementById('horas').textContent   = '00';
+      document.getElementById('minutos').textContent = '00';
+      document.getElementById('segundos').textContent = '00';
+      return;
+    }
+
+    const days    = diff / (1000 * 60 * 60 * 24);
+    const hours   = (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+    const minutes = (diff % (1000 * 60 * 60)) / (1000 * 60);
+    const seconds = (diff % (1000 * 60)) / 1000;
+
+    document.getElementById('dias').textContent     = pad(days);
+    document.getElementById('horas').textContent    = pad(hours);
+    document.getElementById('minutos').textContent  = pad(minutes);
+    document.getElementById('segundos').textContent = pad(seconds);
+  }
+
+  tick();
+  setInterval(tick, 1000);
+</script>
