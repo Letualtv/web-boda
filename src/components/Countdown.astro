@@ -38,10 +38,11 @@ const WEDDING_DATE = '2027-07-24T12:00:00';
     const diff = target - now;
 
     if (diff <= 0) {
-      document.getElementById('dias').textContent    = '00';
-      document.getElementById('horas').textContent   = '00';
-      document.getElementById('minutos').textContent = '00';
+      document.getElementById('dias').textContent     = '00';
+      document.getElementById('horas').textContent    = '00';
+      document.getElementById('minutos').textContent  = '00';
       document.getElementById('segundos').textContent = '00';
+      clearInterval(intervalId);
       return;
     }
 
@@ -57,5 +58,7 @@ const WEDDING_DATE = '2027-07-24T12:00:00';
   }
 
   tick();
-  setInterval(tick, 1000);
+  const intervalId = setInterval(tick, 1000);
+  // Limpia el timer si se usan View Transitions de Astro en el futuro
+  document.addEventListener('astro:before-swap', () => clearInterval(intervalId), { once: true });
 </script>
