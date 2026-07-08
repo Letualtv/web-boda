@@ -1,16 +1,16 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-
 import tailwindcss from '@tailwindcss/vite';
 
-// https://astro.build/config
+const isProd = process.env.NODE_ENV === 'production';
+
 export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
   output: 'static',
-  // Debe coincidir con el nombre exacto del repositorio en GitHub
-  base: '/web-boda/',
-  // Cambiar por el usuario real de GitHub si es diferente
+  // En dev: base '/' para acceder en localhost:4321 sin prefijo
+  // En producción (GitHub Pages): '/web-boda/'
+  base: isProd ? '/web-boda/' : '/',
   site: 'https://letualtv.github.io',
 });
