@@ -1,12 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Celebracion from '../components/paginas/Celebracion.astro';
-import NavPaginas from '../components/NavPaginas.astro';
 import AuthGuard from '../components/AuthGuard.astro';
 ---
 
 <Layout title="La celebración · Alba & Antonio">
   <AuthGuard />
   <Celebracion />
-  <NavPaginas actual="/celebracion/" />
 </Layout>

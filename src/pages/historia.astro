@@ -1,12 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Historia from '../components/paginas/Historia.astro';
-import NavPaginas from '../components/NavPaginas.astro';
 import AuthGuard from '../components/AuthGuard.astro';
 ---
 
 <Layout title="Nuestra historia · Alba & Antonio">
   <AuthGuard />
   <Historia />
-  <NavPaginas actual="/historia/" />
 </Layout>
