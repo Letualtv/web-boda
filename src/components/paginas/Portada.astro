@@ -194,14 +194,12 @@ const WEDDING_DATE = '2027-07-24T12:30:00';
 </style>
 
 <script>
-  // Fade-out al navegar al acceso
   const cta = document.getElementById('cta-entrar') as HTMLAnchorElement | null;
   if (cta) {
     const destino = cta.href;
     cta.addEventListener('click', (e) => {
       e.preventDefault();
-      document.body.classList.add('saliendo');
-      setTimeout(() => { window.location.href = destino; }, 530);
+      (window as any).navegarBoda(destino, 'adelante');
     });
   }
 </script>

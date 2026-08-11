@@ -98,56 +98,90 @@ body::after {
 }
 
 /* ─── Transición de pase de página con overlay ────────────────
-   Un div .pagina-overlay ocupa toda la pantalla, oculto por defecto
-   (translateX 100%). Al navegar, entra desde la derecha simulando
-   una hoja de papel cubriendo la página actual. Después la nueva
-   página se revela desde la izquierda con un fade sutil.
+   Overlay = hoja de papel con textura + sombras multi-capa que
+   simula una página real cubriendo la actual. Curva de easing
+   suave tipo Apple (arranca rápido, se asienta al final).
+   Soporta dirección: adelante (desde la derecha) o atrás (desde
+   la izquierda).
 ────────────────────────────────────────────────────────────── */
 
-/* Fade sutil de entrada al cargar cada página */
 @keyframes pagina-entra {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 body {
-  animation: pagina-entra 350ms ease-out both;
+  animation: pagina-entra 320ms ease-out both;
 }
 
-/* Overlay tipo hoja que se pasa por encima */
+/* Overlay base — oculto fuera de la pantalla por defecto */
 .pagina-overlay {
   position: fixed;
   inset: 0;
   z-index: 200;
   pointer-events: none;
   transform: translate3d(105%, 0, 0);
-  transition: transform 550ms cubic-bezier(0.32, 0.72, 0, 1);
-  background: var(--color-papel);
+  transition: transform 620ms cubic-bezier(0.65, 0, 0.35, 1);
+  background-color: var(--color-papel);
   background-image:
+    /* Textura de fibra */
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='pf'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.38 0 0 0 0 0.22 0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pf)'/%3E%3C/svg%3E");
   background-size: 220px;
+  /* Sombras exteriores multi-capa que simulan profundidad de hoja */
+  box-shadow:
+    -1px 0 0 rgba(120, 90, 55, 0.4),
+    -8px 0 20px rgba(30, 20, 10, 0.28),
+    -18px 0 40px rgba(30, 20, 10, 0.14);
   will-change: transform;
 }
 
-/* Sombra en el borde delantero (izquierdo) de la hoja entrante — depth */
+/* Sombra interior en el borde delantero — refuerza la sensación
+   de que hay algo debajo. Se anima con el propio overlay. */
 .pagina-overlay-sombra {
   position: absolute;
   top: 0;
   bottom: 0;
-  left: -30px;
-  width: 30px;
-  background: linear-gradient(to left,
-    rgba(30, 20, 10, 0.35) 0%,
-    rgba(30, 20, 10, 0.12) 50%,
+  left: 0;
+  width: 40px;
+  background: linear-gradient(to right,
+    rgba(80, 55, 30, 0.14) 0%,
+    rgba(80, 55, 30, 0.04) 60%,
     transparent 100%);
   pointer-events: none;
 }
 
-/* Cuando body tiene .saliendo, el overlay entra */
-body.saliendo .pagina-overlay {
+/* ─── Adelante (siguiente) — overlay entra desde la derecha ─── */
+body.saliendo .pagina-overlay,
+body.saliendo-adelante .pagina-overlay {
   transform: translate3d(0, 0, 0);
 }
 
-/* Al mismo tiempo desactivamos la animación de entrada de body */
-body.saliendo {
+/* ─── Atrás (anterior) — overlay entra desde la izquierda ─── */
+body.saliendo-atras .pagina-overlay {
+  transform: translate3d(-105%, 0, 0);
+  /* Al empezar la animación, primero se pone fuera por la izquierda,
+     luego CSS-anima hacia 0. Ver script en Layout. */
+}
+body.saliendo-atras .pagina-overlay.entrando-izq {
+  transform: translate3d(0, 0, 0);
+}
+/* Invertir la sombra interior cuando viene de la izquierda */
+body.saliendo-atras .pagina-overlay .pagina-overlay-sombra {
+  left: auto;
+  right: 0;
+  background: linear-gradient(to left,
+    rgba(80, 55, 30, 0.14) 0%,
+    rgba(80, 55, 30, 0.04) 60%,
+    transparent 100%);
+}
+body.saliendo-atras .pagina-overlay {
+  box-shadow:
+    1px 0 0 rgba(120, 90, 55, 0.4),
+    8px 0 20px rgba(30, 20, 10, 0.28),
+    18px 0 40px rgba(30, 20, 10, 0.14);
+}
+
+body.saliendo,
+body.saliendo-adelante,
+body.saliendo-atras {
   animation: none;
 }

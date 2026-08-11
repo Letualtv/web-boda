@@ -25,26 +25,20 @@ const url = (base + href.replace(/^\/+/, '')).replace(/\/+/g, '/');
   const enlace = document.querySelector<HTMLAnchorElement>('a[data-siguiente]');
   if (enlace) {
     const destino = enlace.href;
+    const navegar = () => (window as any).navegarBoda(destino, 'adelante');
 
-    function navegar(url: string) {
-      document.body.classList.add('saliendo');
-      setTimeout(() => { window.location.href = url; }, 530);
-    }
-
-    // Interceptar click en el propio enlace para animar salida
     enlace.addEventListener('click', (e) => {
       e.preventDefault();
-      navegar(destino);
+      navegar();
     });
 
-    // Click en cualquier lado de la página → pasa a la siguiente sección
     document.addEventListener('click', (e) => {
       const t = e.target as HTMLElement;
       if (!t) return;
-      if (t.closest('a, button, input, textarea, select, label, [role="button"], .idx-overlay, .epic-overlay')) return;
+      if (t.closest('a, button, input, textarea, select, label, [role="button"], .menu-overlay, .epic-overlay')) return;
       const sel = window.getSelection();
       if (sel && sel.toString().length > 0) return;
-      navegar(destino);
+      navegar();
     });
   }
 </script>

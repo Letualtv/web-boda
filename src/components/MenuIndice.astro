@@ -187,16 +187,25 @@ const norm = (u: string) => (base + u.replace(/^\/+/, '')).replace(/\/+/g, '/');
     if (e.key === 'Escape' && overlay?.classList.contains('abierto')) cerrarMenu();
   });
 
-  // Interceptar clicks en enlaces para animar salida
+  // Interceptar clicks en enlaces para animar salida direccional
+  const SECUENCIA = ['/bienvenida/', '/historia/', '/celebracion/', '/autobuses/', '/galeria/'];
+  const BASE = (window as any).BASE_URL || '/';
+  const norm = (u: string) => u.replace(BASE.replace(/\/$/, ''), '').replace(/\/+/g, '/');
+
+  function idxDeUrl(u: string): number {
+    const path = norm(new URL(u, window.location.origin).pathname);
+    return SECUENCIA.indexOf(path);
+  }
+
   document.querySelectorAll<HTMLAnchorElement>('a[data-menu-link]').forEach((a) => {
     const destino = a.href;
     a.addEventListener('click', (e) => {
       e.preventDefault();
       cerrarMenu();
-      setTimeout(() => {
-        document.body.classList.add('saliendo');
-        setTimeout(() => { window.location.href = destino; }, 530);
-      }, 100);
+      const actualIdx = idxDeUrl(window.location.href);
+      const destIdx = idxDeUrl(destino);
+      const direccion = destIdx < actualIdx ? 'atras' : 'adelante';
+      setTimeout(() => (window as any).navegarBoda(destino, direccion), 120);
     });
   });
 </script>

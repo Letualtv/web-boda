@@ -43,5 +43,24 @@ const {
     <div id="pagina-overlay" class="pagina-overlay" aria-hidden="true">
       <div class="pagina-overlay-sombra"></div>
     </div>
+
+    <script is:inline>
+      // Helper global de navegación con animación direccional
+      window.navegarBoda = function (url, direccion) {
+        direccion = direccion === 'atras' ? 'atras' : 'adelante';
+        const overlay = document.getElementById('pagina-overlay');
+        document.body.classList.add(
+          direccion === 'atras' ? 'saliendo-atras' : 'saliendo-adelante'
+        );
+        // Para "atras": el overlay arranca fuera por la izquierda y anima a 0
+        if (direccion === 'atras' && overlay) {
+          // dos frames para que la clase inicial de posición aplique antes del cambio
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => overlay.classList.add('entrando-izq'));
+          });
+        }
+        setTimeout(() => { window.location.href = url; }, 620);
+      };
+    </script>
   </body>
 </html>
