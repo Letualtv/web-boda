@@ -22,19 +22,29 @@ const url = (base + href.replace(/^\/+/, '')).replace(/\/+/g, '/');
 </a>
 
 <script>
-  // Click en cualquier lado de la página → pasa a la siguiente sección
   const enlace = document.querySelector<HTMLAnchorElement>('a[data-siguiente]');
   if (enlace) {
     const destino = enlace.href;
+
+    function navegar(url: string) {
+      document.body.classList.add('saliendo');
+      setTimeout(() => { window.location.href = url; }, 280);
+    }
+
+    // Interceptar click en el propio enlace para animar salida
+    enlace.addEventListener('click', (e) => {
+      e.preventDefault();
+      navegar(destino);
+    });
+
+    // Click en cualquier lado de la página → pasa a la siguiente sección
     document.addEventListener('click', (e) => {
       const t = e.target as HTMLElement;
       if (!t) return;
-      // Ignorar clicks sobre elementos interactivos y enlaces (incluida la propia flecha)
       if (t.closest('a, button, input, textarea, select, label, [role="button"], .idx-overlay, .epic-overlay')) return;
-      // Ignorar si el usuario está seleccionando texto
       const sel = window.getSelection();
       if (sel && sel.toString().length > 0) return;
-      window.location.href = destino;
+      navegar(destino);
     });
   }
 </script>
