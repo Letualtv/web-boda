@@ -185,28 +185,21 @@ const PASSWORD = 'genilla2027';
     transition: color 400ms ease;
   }
 
-  /* ─── Cada carácter — tinta fresca que se seca ────────
-     Inicio: casi invisible, difuminado (blur simula tinta mojada
-     esparciéndose sobre el papel), color claro.
-     Final: nítido, opacidad plena, tono tinta profunda (tinta seca).
+  /* ─── Cada carácter — aparece con salto suave ────────
+     Simple, rápido, se ve inmediatamente al escribir.
   ──────────────────────────────────────────────────────── */
   .tinta-display :global(.char) {
     display: inline-block;
     opacity: 0;
-    filter: blur(5px);
-    transform: translateY(2px);
-    color: var(--color-tinta-clara);
+    transform: translateY(-8px);
+    color: var(--color-tinta);
     transition:
-      opacity 400ms cubic-bezier(0.22, 0.61, 0.36, 1),
-      filter 550ms cubic-bezier(0.22, 0.61, 0.36, 1),
-      transform 500ms cubic-bezier(0.22, 0.61, 0.36, 1),
-      color 700ms ease 100ms;
+      opacity 220ms ease-out,
+      transform 300ms cubic-bezier(0.34, 1.45, 0.64, 1);
   }
   .tinta-display :global(.char.entrando) {
     opacity: 1;
-    filter: blur(0);
     transform: translateY(0);
-    color: var(--color-tinta);
   }
 
   /* ─── Pluma cursor ──────────────────────────────────── */

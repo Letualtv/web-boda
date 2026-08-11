@@ -97,22 +97,57 @@ body::after {
   }
 }
 
-/* ─── Transición de entrada/salida entre páginas ──────────────
-   Fade suave con leve deslizamiento — funciona con recargas
-   completas normales, sin ClientRouter.
+/* ─── Transición de pase de página con overlay ────────────────
+   Un div .pagina-overlay ocupa toda la pantalla, oculto por defecto
+   (translateX 100%). Al navegar, entra desde la derecha simulando
+   una hoja de papel cubriendo la página actual. Después la nueva
+   página se revela desde la izquierda con un fade sutil.
 ────────────────────────────────────────────────────────────── */
+
+/* Fade sutil de entrada al cargar cada página */
 @keyframes pagina-entra {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
-
 body {
-  animation: pagina-entra 500ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation: pagina-entra 350ms ease-out both;
 }
 
+/* Overlay tipo hoja que se pasa por encima */
+.pagina-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  transform: translate3d(105%, 0, 0);
+  transition: transform 550ms cubic-bezier(0.32, 0.72, 0, 1);
+  background: var(--color-papel);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='pf'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.38 0 0 0 0 0.22 0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pf)'/%3E%3C/svg%3E");
+  background-size: 220px;
+  will-change: transform;
+}
+
+/* Sombra en el borde delantero (izquierdo) de la hoja entrante — depth */
+.pagina-overlay-sombra {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -30px;
+  width: 30px;
+  background: linear-gradient(to left,
+    rgba(30, 20, 10, 0.35) 0%,
+    rgba(30, 20, 10, 0.12) 50%,
+    transparent 100%);
+  pointer-events: none;
+}
+
+/* Cuando body tiene .saliendo, el overlay entra */
+body.saliendo .pagina-overlay {
+  transform: translate3d(0, 0, 0);
+}
+
+/* Al mismo tiempo desactivamos la animación de entrada de body */
 body.saliendo {
-  opacity: 0;
-  transform: translateY(-8px);
-  transition: opacity 300ms cubic-bezier(0.4, 0, 1, 1), transform 300ms cubic-bezier(0.4, 0, 1, 1);
   animation: none;
 }

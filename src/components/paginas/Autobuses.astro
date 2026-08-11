@@ -2,7 +2,6 @@
 import PaginaMarco from '../PaginaMarco.astro';
 import GotasTinta from '../GotasTinta.astro';
 import EnlaceSiguiente from '../EnlaceSiguiente.astro';
-import EnlaceAnterior from '../EnlaceAnterior.astro';
 ---
 
 <PaginaMarco titulo="Cómo llegar" scroll>
@@ -93,10 +92,7 @@ import EnlaceAnterior from '../EnlaceAnterior.astro';
       Si vais por vuestra cuenta, el recinto dispone de <strong>aparcamiento</strong> propio.
     </p>
 
-    <div class="nav-pareja">
-      <EnlaceAnterior href="/celebracion/" label="La celebración" />
-      <EnlaceSiguiente href="/galeria/" label="Recuerdos" />
-    </div>
+    <EnlaceSiguiente href="/galeria/" label="Recuerdos" />
   </div>
 </PaginaMarco>
 

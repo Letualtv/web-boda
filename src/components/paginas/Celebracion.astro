@@ -2,7 +2,6 @@
 import PaginaMarco from '../PaginaMarco.astro';
 import GotasTinta from '../GotasTinta.astro';
 import EnlaceSiguiente from '../EnlaceSiguiente.astro';
-import EnlaceAnterior from '../EnlaceAnterior.astro';
 ---
 
 <PaginaMarco
@@ -69,10 +68,7 @@ import EnlaceAnterior from '../EnlaceAnterior.astro';
       </svg>
     </div>
 
-    <div class="nav-pareja">
-      <EnlaceAnterior href="/historia/" label="Historia" />
-      <EnlaceSiguiente href="/autobuses/" label="Cómo llegar" />
-    </div>
+    <EnlaceSiguiente href="/autobuses/" label="Cómo llegar" />
   </div>
 </PaginaMarco>
 

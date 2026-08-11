@@ -1,0 +1,202 @@
+---
+/**
+ * Botón discreto arriba a la derecha que abre un menú overlay
+ * con todas las secciones para saltar a cualquiera.
+ */
+interface Props {
+  actual?: string;
+}
+const { actual = '' } = Astro.props;
+
+const SECCIONES = [
+  { num: 'II',  titulo: 'Bienvenida',       url: '/bienvenida/'  },
+  { num: 'III', titulo: 'Nuestra historia', url: '/historia/'    },
+  { num: 'IV',  titulo: 'La celebración',   url: '/celebracion/' },
+  { num: 'V',   titulo: 'Cómo llegar',      url: '/autobuses/'   },
+  { num: 'VI',  titulo: 'Recuerdos',        url: '/galeria/'     },
+];
+
+const base = import.meta.env.BASE_URL;
+const norm = (u: string) => (base + u.replace(/^\/+/, '')).replace(/\/+/g, '/');
+---
+
+<button id="btn-menu" class="btn-menu" aria-label="Abrir menú">
+  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+    <line x1="4" y1="7"  x2="20" y2="7"/>
+    <line x1="4" y1="12" x2="20" y2="12"/>
+    <line x1="4" y1="17" x2="20" y2="17"/>
+  </svg>
+</button>
+
+<div id="menu-overlay" class="menu-overlay" role="dialog" aria-modal="true" aria-label="Menú">
+  <button id="menu-cerrar" class="menu-cerrar" aria-label="Cerrar menú">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <line x1="6" y1="6" x2="18" y2="18"/>
+      <line x1="6" y1="18" x2="18" y2="6"/>
+    </svg>
+  </button>
+  <div class="menu-inner">
+    <h2 class="menu-titulo">Índice</h2>
+    <ul class="menu-lista">
+      {SECCIONES.map((s) => (
+        <li>
+          <a
+            class={`menu-entrada ${s.url === actual ? 'activa' : ''}`}
+            href={norm(s.url)}
+            data-menu-link
+          >
+            <span class="menu-num">{s.num}.</span>
+            <span class="menu-titulo-entrada">{s.titulo}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<style>
+  .btn-menu {
+    position: fixed;
+    top: clamp(0.75rem, 2vh, 1.25rem);
+    right: clamp(0.75rem, 3vw, 1.5rem);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(243, 233, 210, 0.85);
+    border: 1px solid rgba(30, 58, 95, 0.2);
+    color: var(--color-tinta);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    backdrop-filter: blur(4px);
+    transition: background 250ms ease, transform 250ms ease;
+  }
+  .btn-menu:hover  { background: rgba(243, 233, 210, 0.98); }
+  .btn-menu:active { transform: scale(0.94); }
+
+  .menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: rgba(243, 233, 210, 0.96);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 350ms ease;
+  }
+  .menu-overlay.abierto { opacity: 1; pointer-events: auto; }
+
+  .menu-cerrar {
+    position: absolute;
+    top: clamp(0.75rem, 2vh, 1.25rem);
+    right: clamp(0.75rem, 3vw, 1.5rem);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid rgba(30, 58, 95, 0.2);
+    color: var(--color-tinta);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 250ms ease;
+  }
+  .menu-cerrar:hover { background: rgba(30, 58, 95, 0.08); }
+
+  .menu-inner {
+    text-align: center;
+    padding: 2rem;
+    max-width: 500px;
+  }
+
+  .menu-titulo {
+    font-family: var(--font-brush);
+    font-weight: 400;
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    color: var(--color-tinta);
+    margin: 0 0 2rem;
+    line-height: 1;
+  }
+
+  .menu-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.5rem, 2vh, 1rem);
+  }
+
+  .menu-entrada {
+    display: inline-flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    font-family: var(--font-serif);
+    font-size: clamp(1.2rem, 3.5vw, 1.5rem);
+    color: var(--color-tinta);
+    transition: color 250ms ease, transform 250ms ease;
+  }
+  .menu-entrada:hover { color: var(--color-teja); transform: translateX(4px); }
+  .menu-entrada.activa { color: var(--color-teja); font-style: italic; }
+  .menu-entrada.activa::after {
+    content: '·';
+    margin-left: 0.5rem;
+    color: var(--color-limon);
+  }
+
+  .menu-num {
+    font-family: var(--font-sans);
+    font-size: 0.7em;
+    color: var(--color-limon);
+    letter-spacing: 0.1em;
+  }
+  .menu-titulo-entrada {
+    font-family: var(--font-brush);
+    font-size: 1.3em;
+  }
+</style>
+
+<script>
+  const btn = document.getElementById('btn-menu');
+  const overlay = document.getElementById('menu-overlay');
+  const cerrar = document.getElementById('menu-cerrar');
+
+  function abrir() {
+    overlay?.classList.add('abierto');
+    cerrar?.focus();
+  }
+  function cerrarMenu() {
+    overlay?.classList.remove('abierto');
+  }
+
+  btn?.addEventListener('click', abrir);
+  cerrar?.addEventListener('click', cerrarMenu);
+  overlay?.addEventListener('click', (e) => {
+    if (e.target === overlay) cerrarMenu();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && overlay?.classList.contains('abierto')) cerrarMenu();
+  });
+
+  // Interceptar clicks en enlaces para animar salida
+  document.querySelectorAll<HTMLAnchorElement>('a[data-menu-link]').forEach((a) => {
+    const destino = a.href;
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      cerrarMenu();
+      setTimeout(() => {
+        document.body.classList.add('saliendo');
+        setTimeout(() => { window.location.href = destino; }, 530);
+      }, 100);
+    });
+  });
+</script>

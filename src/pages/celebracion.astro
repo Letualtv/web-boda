@@ -2,9 +2,11 @@
 import Layout from '../layouts/Layout.astro';
 import Celebracion from '../components/paginas/Celebracion.astro';
 import AuthGuard from '../components/AuthGuard.astro';
+import MenuIndice from '../components/MenuIndice.astro';
 ---
 
 <Layout title="La celebración · Alba & Antonio">
   <AuthGuard />
+  <MenuIndice actual="/celebracion/" />
   <Celebracion />
 </Layout>
