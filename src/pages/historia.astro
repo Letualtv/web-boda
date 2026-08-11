@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Historia from '../components/paginas/Historia.astro';
+import NavPaginas from '../components/NavPaginas.astro';
+import AuthGuard from '../components/AuthGuard.astro';
+---
+
+<Layout title="Nuestra historia · Alba & Antonio">
+  <AuthGuard />
+  <div class="ruta-wrap">
+    <Historia />
+  </div>
+  <NavPaginas actual="/historia/" />
+</Layout>
+
+<style>
+  .ruta-wrap {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+</style>

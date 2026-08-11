@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Celebracion from '../components/paginas/Celebracion.astro';
+import NavPaginas from '../components/NavPaginas.astro';
+import AuthGuard from '../components/AuthGuard.astro';
+---
+
+<Layout title="La celebración · Alba & Antonio">
+  <AuthGuard />
+  <div class="ruta-wrap">
+    <Celebracion />
+  </div>
+  <NavPaginas actual="/celebracion/" />
+</Layout>
+
+<style>
+  .ruta-wrap {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+</style>

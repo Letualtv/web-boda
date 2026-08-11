@@ -61,6 +61,29 @@ const PASSWORD = 'genilla2027';
 
     <p class="nota">Pregúntanos si no la recuerdas</p>
   </div>
+
+  <!-- ─── Overlay épico al acertar ─────────────────────── -->
+  <div id="epic-overlay" class="epic-overlay" aria-hidden="true">
+    <!-- Sello de lacre que baja -->
+    <div class="epic-sello">
+      <div class="epic-sello-inner">
+        <span class="epic-monograma">A &amp; A</span>
+        <span class="epic-label">Bienvenido</span>
+      </div>
+      <div class="epic-sello-goteo" aria-hidden="true"></div>
+    </div>
+
+    <!-- Ondas expansivas -->
+    <div class="epic-onda epic-onda-1"></div>
+    <div class="epic-onda epic-onda-2"></div>
+    <div class="epic-onda epic-onda-3"></div>
+
+    <!-- Pétalos/hojas de olivo -->
+    <div class="epic-particulas" id="epic-particulas"></div>
+
+    <!-- Fundido final dorado -->
+    <div class="epic-fundido"></div>
+  </div>
 </PaginaMarco>
 
 <style>
@@ -374,10 +397,200 @@ const PASSWORD = 'genilla2027';
     opacity: 0.7;
     margin: 0;
   }
+
+  /* ═════════════════════════════════════════════════════
+     ANIMACIÓN ÉPICA AL ACERTAR
+  ═════════════════════════════════════════════════════ */
+  .epic-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+  }
+  .epic-overlay.activa {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* ─── Sello de lacre que baja ────────────────────────── */
+  .epic-sello {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 180px;
+    height: 180px;
+    transform: translate(-50%, -50%) translateY(-100vh) rotate(-25deg) scale(0.6);
+    opacity: 0;
+  }
+  .epic-overlay.activa .epic-sello {
+    animation: sello-caer 900ms cubic-bezier(0.65, 0, 0.35, 1.4) 100ms forwards;
+  }
+  @keyframes sello-caer {
+    0%   { transform: translate(-50%, -50%) translateY(-100vh) rotate(-25deg) scale(0.6); opacity: 0; }
+    55%  { transform: translate(-50%, -50%) translateY(0) rotate(-8deg) scale(1.15); opacity: 1; }
+    72%  { transform: translate(-50%, -50%) translateY(0) rotate(-6deg) scale(0.95); opacity: 1; }
+    100% { transform: translate(-50%, -50%) translateY(0) rotate(-6deg) scale(1); opacity: 1; }
+  }
+
+  .epic-sello-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    background: radial-gradient(circle at 32% 28%,
+      rgba(196, 113, 79, 0.98) 0%,
+      rgba(158, 82, 55, 1) 55%,
+      rgba(100, 45, 25, 1) 100%);
+    color: #F3E9D2;
+    box-shadow:
+      inset 0 3px 6px rgba(255, 240, 220, 0.4),
+      inset 0 -6px 12px rgba(50, 20, 10, 0.5),
+      0 8px 24px rgba(50, 20, 10, 0.5),
+      0 3px 8px rgba(30, 20, 10, 0.3);
+    position: relative;
+  }
+  .epic-sello-inner::before {
+    content: '';
+    position: absolute;
+    inset: 14px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(243, 233, 210, 0.5);
+    pointer-events: none;
+  }
+  .epic-sello-inner::after {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border-radius: 50%;
+    border: 1px dashed rgba(243, 233, 210, 0.3);
+    pointer-events: none;
+  }
+
+  .epic-monograma {
+    font-family: var(--font-vibes);
+    font-size: 3.5rem;
+    line-height: 1;
+    text-shadow: 0 2px 3px rgba(50, 20, 10, 0.6);
+  }
+  .epic-label {
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(243, 233, 210, 0.85);
+    margin-top: 0.2rem;
+  }
+
+  /* Goteo alrededor del sello */
+  .epic-sello-goteo {
+    position: absolute;
+    inset: -12px;
+    border-radius: 50%;
+    background: radial-gradient(circle,
+      rgba(158, 82, 55, 0.35) 45%,
+      transparent 65%);
+    filter: blur(6px);
+    opacity: 0;
+  }
+  .epic-overlay.activa .epic-sello-goteo {
+    animation: goteo-aparecer 400ms ease-out 700ms forwards;
+  }
+  @keyframes goteo-aparecer {
+    from { opacity: 0; transform: scale(0.8); }
+    to   { opacity: 1; transform: scale(1.15); }
+  }
+
+  /* ─── Ondas expansivas concéntricas ─────────────────── */
+  .epic-onda {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 200px;
+    height: 200px;
+    margin: -100px 0 0 -100px;
+    border: 2px solid var(--color-teja);
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  .epic-overlay.activa .epic-onda-1 { animation: onda 1.6s ease-out 700ms forwards; }
+  .epic-overlay.activa .epic-onda-2 { animation: onda 1.6s ease-out 850ms forwards; }
+  .epic-overlay.activa .epic-onda-3 { animation: onda 1.6s ease-out 1000ms forwards; }
+  @keyframes onda {
+    0%   { opacity: 0.7; transform: scale(0.3); border-width: 3px; }
+    100% { opacity: 0; transform: scale(6); border-width: 0.5px; }
+  }
+
+  /* ─── Partículas (pétalos y gotas) ──────────────────── */
+  .epic-particulas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .epic-particulas :global(.particula) {
+    position: absolute;
+    top: 50%; left: 50%;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+  .epic-particulas :global(.p-hoja) {
+    width: 12px;
+    height: 6px;
+    border-radius: 50% 10% 50% 10%;
+    background: var(--color-oliva);
+  }
+  .epic-particulas :global(.p-gota) {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-limon);
+    box-shadow: 0 0 6px rgba(212, 200, 74, 0.8);
+  }
+  .epic-particulas :global(.p-teja) {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--color-teja);
+    opacity: 0.85;
+  }
+
+  /* ─── Fundido dorado antes del redirect ─────────────── */
+  .epic-fundido {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center,
+      rgba(212, 200, 74, 0.15) 0%,
+      rgba(196, 113, 79, 0.35) 45%,
+      rgba(30, 20, 10, 0.85) 100%);
+    opacity: 0;
+  }
+  .epic-overlay.activa .epic-fundido {
+    animation: fundido-final 700ms ease-in 2100ms forwards;
+  }
+  @keyframes fundido-final {
+    to { opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .epic-overlay.activa .epic-sello,
+    .epic-overlay.activa .epic-onda,
+    .epic-overlay.activa .epic-fundido {
+      animation-duration: 300ms !important;
+    }
+  }
 </style>
 
 <script>
   import { crearTintaEscritura } from '../efectos/TintaEscritura';
+
+  const BASE_URL = import.meta.env.BASE_URL;
+  const DESTINO = (BASE_URL + 'bienvenida/').replace(/\/+/g, '/');
 
   const contenedor = document.getElementById('form-acceso') as HTMLFormElement;
   const inputReal = document.getElementById('pwd-real') as HTMLInputElement;
@@ -385,6 +598,43 @@ const PASSWORD = 'genilla2027';
   const pluma = document.getElementById('pluma') as HTMLElement;
   const gotitas = document.getElementById('gotitas') as HTMLElement;
   const btnEntrar = document.getElementById('btn-entrar') as HTMLButtonElement;
+  const epic = document.getElementById('epic-overlay') as HTMLElement;
+  const particulas = document.getElementById('epic-particulas') as HTMLElement;
+
+  // Si ya está autenticado, redirigir directo
+  if (sessionStorage.getItem('boda_auth') === 'ok') {
+    window.location.replace(DESTINO);
+  }
+
+  function lanzarEpica() {
+    if (!epic || !particulas) return;
+    // Generar 40-50 partículas en direcciones aleatorias
+    const total = 48;
+    for (let i = 0; i < total; i++) {
+      const p = document.createElement('span');
+      const tipo = i % 3 === 0 ? 'p-gota' : (i % 3 === 1 ? 'p-hoja' : 'p-teja');
+      p.className = `particula ${tipo}`;
+      const angulo = (Math.PI * 2 * i) / total + Math.random() * 0.3;
+      const distancia = 200 + Math.random() * 400;
+      const dx = Math.cos(angulo) * distancia;
+      const dy = Math.sin(angulo) * distancia;
+      const rot = (Math.random() - 0.5) * 720;
+      const dur = 1200 + Math.random() * 600;
+      const delay = 700 + Math.random() * 200;
+      p.style.transition = `transform ${dur}ms cubic-bezier(0.22, 0.61, 0.36, 1) ${delay}ms, opacity ${dur}ms ease-out ${delay}ms`;
+      p.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+      p.style.opacity = '1';
+      particulas.appendChild(p);
+      // reflow + trigger
+      void p.offsetWidth;
+      requestAnimationFrame(() => {
+        p.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) rotate(${rot}deg)`;
+        p.style.opacity = '0';
+      });
+    }
+    epic.classList.add('activa');
+    epic.setAttribute('aria-hidden', 'false');
+  }
 
   if (contenedor && inputReal && display && pluma && gotitas && btnEntrar) {
     const password = contenedor.dataset.password || '';
@@ -397,7 +647,12 @@ const PASSWORD = 'genilla2027';
       gotitas,
       password,
       onCorrecto: () => {
-        document.dispatchEvent(new CustomEvent('boda:autenticado'));
+        sessionStorage.setItem('boda_auth', 'ok');
+        lanzarEpica();
+        // Redirigir tras la animación completa (~2.8s)
+        setTimeout(() => {
+          window.location.href = DESTINO;
+        }, 2800);
       },
       onError: () => { /* clase .error ya aplicada por el motor */ },
     });

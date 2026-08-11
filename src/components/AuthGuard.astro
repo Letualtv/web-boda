@@ -1,0 +1,22 @@
+---
+/**
+ * Inline script que comprueba sessionStorage.
+ * Si no está autenticado, redirige a /acceso.
+ * Se coloca en el <head> de las páginas protegidas para bloquear
+ * el render antes de cualquier flash de contenido.
+ */
+const base = import.meta.env.BASE_URL;
+const url = (base + 'acceso/').replace(/\/+/g, '/');
+---
+
+<script is:inline define:vars={{ ACCESO_URL: url }}>
+  (function () {
+    try {
+      if (sessionStorage.getItem('boda_auth') !== 'ok') {
+        window.location.replace(ACCESO_URL);
+      }
+    } catch (e) {
+      // Sin acceso a sessionStorage: dejar continuar (privado, no crítico)
+    }
+  })();
+</script>

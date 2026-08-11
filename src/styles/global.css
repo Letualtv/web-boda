@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 @theme {
-  /* ─── Paleta del libro ─────────────────────────────────────── */
   --color-papel:        #F3E9D2;
   --color-papel-sombra: #E8DCC0;
   --color-tinta:        #1E3A5F;
@@ -11,7 +10,6 @@
   --color-teja:         #C4714F;
   --color-vino:         #7A2D3E;
 
-  /* ─── Tipografías ──────────────────────────────────────────── */
   --font-serif:  "Cormorant Garamond", Georgia, serif;
   --font-sans:   Lato, system-ui, sans-serif;
   --font-vibes:  "Great Vibes", cursive;
@@ -27,60 +25,58 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  overflow: hidden;
+  min-height: 100vh;
+  background: var(--color-papel);
   color: var(--color-tinta);
   font-family: var(--font-serif);
   overscroll-behavior: none;
 }
 
-/* Fondo del "escritorio" — tono cálido oscuro donde reposa el libro */
 body {
   position: relative;
-  background:
-    radial-gradient(ellipse at center, #4a3520 0%, #2c1e12 100%);
+  overflow-x: hidden;
 }
 
-/* Textura sutil de madera/tela en el escritorio */
+/* Textura de papel — capas superpuestas */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
   background-image:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.09 0 0 0 0 0.04 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)'/%3E%3C/svg%3E");
-  background-size: 300px;
-  mix-blend-mode: overlay;
-  opacity: 0.6;
-}
-
-/* ─── Textura de papel — se aplica a cada página ───────────────
-   Definida como variables reutilizables. Se usa en .pagina-marco.
-──────────────────────────────────────────────────────────────── */
-.papel-textura {
-  background-image:
-    /* Grano fino */
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.38 0 0 0 0 0.22 0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E"),
-    /* Grano grueso (motas de fibra) */
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.15' numOctaves='4' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.28 0 0 0 0 0.14 0 0 0 0.22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
   background-size: 220px, 380px;
-  background-color: var(--color-papel);
+  mix-blend-mode: multiply;
+  opacity: 0.7;
 }
 
-/* ─── Utilidades ───────────────────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(92deg, transparent 0px, transparent 3px, rgba(120, 90, 55, 0.025) 3px, rgba(120, 90, 55, 0.025) 4px, transparent 4px, transparent 7px),
+    radial-gradient(ellipse 300px 200px at 8% 12%,  rgba(150, 108, 68, 0.10), transparent 70%),
+    radial-gradient(ellipse 220px 160px at 92% 18%, rgba(150, 108, 68, 0.08), transparent 70%),
+    radial-gradient(ellipse 380px 260px at 78% 88%, rgba(150, 108, 68, 0.12), transparent 70%),
+    radial-gradient(ellipse 180px 140px at 5%  82%, rgba(150, 108, 68, 0.09), transparent 70%),
+    radial-gradient(ellipse 260px 180px at 45% 48%, rgba(150, 108, 68, 0.05), transparent 70%);
+}
+
 .font-vibes { font-family: var(--font-vibes); }
 .font-brush { font-family: var(--font-brush); }
 .font-serif { font-family: var(--font-serif); }
 .font-sans  { font-family: var(--font-sans); }
 
-/* Selección de texto en tinta */
 ::selection {
   background: rgba(212, 200, 74, 0.35);
   color: var(--color-tinta);
 }
 
-/* Scroll suave para páginas con contenido interno */
 .pagina-scroll {
   overflow-y: auto;
   overflow-x: hidden;
@@ -93,7 +89,6 @@ body::before {
   border-radius: 3px;
 }
 
-/* Reducir motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

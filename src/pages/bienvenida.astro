@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Bienvenida from '../components/paginas/Bienvenida.astro';
+import NavPaginas from '../components/NavPaginas.astro';
+import AuthGuard from '../components/AuthGuard.astro';
+---
+
+<Layout title="Bienvenida · Alba & Antonio">
+  <AuthGuard />
+  <div class="ruta-wrap">
+    <Bienvenida />
+  </div>
+  <NavPaginas actual="/bienvenida/" />
+</Layout>
+
+<style>
+  .ruta-wrap {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+</style>

@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Galeria from '../components/paginas/Galeria.astro';
+import NavPaginas from '../components/NavPaginas.astro';
+import AuthGuard from '../components/AuthGuard.astro';
+---
+
+<Layout title="Recuerdos · Alba & Antonio">
+  <AuthGuard />
+  <div class="ruta-wrap">
+    <Galeria />
+  </div>
+  <NavPaginas actual="/galeria/" />
+</Layout>
+
+<style>
+  .ruta-wrap {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+</style>
