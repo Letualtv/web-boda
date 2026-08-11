@@ -9,12 +9,14 @@ interface Props {
 const { actual = '' } = Astro.props;
 
 const SECCIONES = [
-  { num: 'I',   titulo: 'Portada',          url: '/'             },
-  { num: 'II',  titulo: 'Bienvenida',       url: '/bienvenida/'  },
-  { num: 'III', titulo: 'Nuestra historia', url: '/historia/'    },
-  { num: 'IV',  titulo: 'La celebración',   url: '/celebracion/' },
-  { num: 'V',   titulo: 'Cómo llegar',      url: '/autobuses/'   },
-  { num: 'VI',  titulo: 'Recuerdos',        url: '/galeria/'     },
+  { num: 'I',    titulo: 'Portada',          url: '/'             },
+  { num: 'II',   titulo: 'Bienvenida',       url: '/bienvenida/'  },
+  { num: 'III',  titulo: 'Nuestra historia', url: '/historia/'    },
+  { num: 'IV',   titulo: 'La celebración',   url: '/celebracion/' },
+  { num: 'V',    titulo: 'Etiqueta',         url: '/etiqueta/'    },
+  { num: 'VI',   titulo: 'Cómo llegar',      url: '/autobuses/'   },
+  { num: 'VII',  titulo: 'Recuerdos',        url: '/galeria/'     },
+  { num: 'VIII', titulo: 'Fin',              url: '/fin/'         },
 ];
 
 const base = import.meta.env.BASE_URL;
@@ -189,7 +191,7 @@ const norm = (u: string) => (base + u.replace(/^\/+/, '')).replace(/\/+/g, '/');
   });
 
   // Interceptar clicks en enlaces para animar salida direccional
-  const SECUENCIA = ['/', '/bienvenida/', '/historia/', '/celebracion/', '/autobuses/', '/galeria/'];
+  const SECUENCIA = ['/', '/bienvenida/', '/historia/', '/celebracion/', '/etiqueta/', '/autobuses/', '/galeria/', '/fin/'];
   const BASE = (window as any).BASE_URL || '/';
   const norm = (u: string) => u.replace(BASE.replace(/\/$/, ''), '').replace(/\/+/g, '/');
 

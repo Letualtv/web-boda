@@ -1,0 +1,197 @@
+---
+import PaginaMarco from '../PaginaMarco.astro';
+import GotasTinta from '../GotasTinta.astro';
+import EnlaceSiguiente from '../EnlaceSiguiente.astro';
+---
+
+<PaginaMarco titulo="Etiqueta" scroll>
+  <GotasTinta slot="decoracion" variante={3} />
+  <div class="etiqueta-inner">
+    <h2 class="titulo">Etiqueta</h2>
+
+    <div class="separador">
+      <span class="linea"></span>
+      <span class="diamante"></span>
+      <span class="linea"></span>
+    </div>
+
+    <p class="intro">
+      Boda de mañana en un patio andaluz.
+      Vestid como os apetezca — solo os pedimos dos favores.
+    </p>
+
+    <div class="prohibiciones">
+      <div class="regla">
+        <div class="muestra muestra-blanco" aria-hidden="true"></div>
+        <div class="regla-txt">
+          <h3>Sin blanco</h3>
+          <p>Ni marfil, crudo, beige clarito, arena pálido u otros tonos que puedan confundirse con el vestido. El blanco es del novio también, pero sobre todo de la novia.</p>
+        </div>
+      </div>
+
+      <div class="regla">
+        <div class="muestra muestra-rojo" aria-hidden="true"></div>
+        <div class="regla-txt">
+          <h3>Sin rojo</h3>
+          <p>Ningún tono de rojo, granate ni cereza. Es un color que llama demasiado la atención y preferimos reservarlo.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sugerencia">
+      <p class="sug-titulo">Colores que nos encantan</p>
+      <div class="paleta">
+        <span class="tono" style="background:#1E3A5F;" title="Azul añil"></span>
+        <span class="tono" style="background:#6B7A3E;" title="Oliva"></span>
+        <span class="tono" style="background:#C4714F;" title="Teja"></span>
+        <span class="tono" style="background:#D4C84A;" title="Limón"></span>
+        <span class="tono" style="background:#3D5A80;" title="Añil claro"></span>
+        <span class="tono" style="background:#7A2D3E;" title="Vino"></span>
+      </div>
+    </div>
+
+    <p class="nota">
+      Es julio en Priego — hará calor. Zapato cómodo también recomendado.
+    </p>
+
+    <EnlaceSiguiente href="/autobuses/" label="Cómo llegar" />
+  </div>
+</PaginaMarco>
+
+<style>
+  .etiqueta-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.25rem;
+    width: 100%;
+    max-width: 560px;
+  }
+
+  .titulo {
+    font-family: var(--font-brush);
+    font-weight: 400;
+    font-size: clamp(2.5rem, 7vw, 3.6rem);
+    color: var(--color-tinta);
+    line-height: 1;
+    margin: 0;
+  }
+
+  .separador {
+    display: flex; align-items: center; gap: 0.75rem;
+    width: clamp(120px, 30vw, 180px);
+    margin: 0.5rem 0 1rem;
+  }
+  .separador .linea {
+    flex: 1; height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-teja), transparent);
+  }
+  .separador .diamante {
+    width: 6px; height: 6px;
+    background: var(--color-teja);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  .intro {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-tinta-clara);
+    font-size: clamp(0.95rem, 2.3vw, 1.1rem);
+    max-width: 480px;
+    margin: 0 0 1rem;
+  }
+
+  .prohibiciones {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .regla {
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .muestra {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(30, 20, 10, 0.15);
+  }
+  .muestra::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    background:
+      linear-gradient(45deg,
+        transparent 46%,
+        rgba(122, 45, 62, 0.9) 46%,
+        rgba(122, 45, 62, 0.9) 54%,
+        transparent 54%);
+  }
+  .muestra-blanco { background: #FDFCF7; border: 1px solid #E0DDD1; }
+  .muestra-rojo   { background: #B8353A; }
+
+  .regla-txt h3 {
+    font-family: var(--font-brush);
+    font-weight: 400;
+    color: var(--color-vino);
+    font-size: clamp(1.3rem, 3.5vw, 1.6rem);
+    margin: 0 0 0.35rem;
+    line-height: 1;
+  }
+  .regla-txt p {
+    font-family: var(--font-serif);
+    font-size: clamp(0.9rem, 2.1vw, 1rem);
+    line-height: 1.55;
+    color: var(--color-tinta);
+    margin: 0;
+  }
+
+  .sugerencia {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .sug-titulo {
+    font-family: var(--font-brush);
+    color: var(--color-oliva);
+    font-size: clamp(1.3rem, 3.5vw, 1.6rem);
+    margin: 0;
+    line-height: 1;
+  }
+
+  .paleta {
+    display: flex;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .tono {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(30, 20, 10, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.15);
+  }
+
+  .nota {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-tinta-clara);
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    margin: 1.25rem 0 0;
+    max-width: 420px;
+  }
+</style>

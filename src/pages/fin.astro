@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Fin from '../components/paginas/Fin.astro';
+import AuthGuard from '../components/AuthGuard.astro';
+import MenuIndice from '../components/MenuIndice.astro';
+---
+
+<Layout title="Fin · Alba & Antonio">
+  <AuthGuard />
+  <MenuIndice actual="/fin/" />
+  <Fin />
+</Layout>

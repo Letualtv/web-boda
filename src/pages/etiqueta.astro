@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Etiqueta from '../components/paginas/Etiqueta.astro';
+import AuthGuard from '../components/AuthGuard.astro';
+import MenuIndice from '../components/MenuIndice.astro';
+---
+
+<Layout title="Etiqueta · Alba & Antonio">
+  <AuthGuard />
+  <MenuIndice actual="/etiqueta/" />
+  <Etiqueta />
+</Layout>
