@@ -48,10 +48,19 @@ const {
       // Helper global de navegación con animación direccional
       window.navegarBoda = function (url, direccion) {
         direccion = direccion === 'atras' ? 'atras' : 'adelante';
-        document.body.classList.add(
-          direccion === 'atras' ? 'saliendo-atras' : 'saliendo-adelante'
-        );
-        setTimeout(() => { window.location.href = url; }, 720);
+        const esFin = /\/fin\/?$/.test(url);
+        const esPortada = /(^|\/)(index\.html)?$/.test(new URL(url, window.location.origin).pathname) ||
+                          new URL(url, window.location.origin).pathname.replace(/\/+/g, '/') === (new URL(document.baseURI).pathname);
+        if (esFin) {
+          // Cerrando el libro — overlay oscuro cae desde arriba
+          document.body.classList.add('saliendo-al-fin');
+          setTimeout(() => { window.location.href = url; }, 900);
+        } else {
+          document.body.classList.add(
+            direccion === 'atras' ? 'saliendo-atras' : 'saliendo-adelante'
+          );
+          setTimeout(() => { window.location.href = url; }, 720);
+        }
       };
     </script>
   </body>
