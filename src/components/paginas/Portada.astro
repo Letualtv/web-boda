@@ -23,9 +23,23 @@ const WEDDING_DATE = '2027-07-24T12:30:00';
       </span>
     </h1>
 
-    <div class="separador-diamante">
+    <div class="separador-limon">
       <span class="linea"></span>
-      <span class="diamante"></span>
+      <span class="limon-mini" aria-hidden="true">
+        <svg viewBox="0 0 40 40" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Hoja pequeña -->
+          <path d="M20 8 Q26 4 30 6 Q29 12 22 12 Z" fill="#C4714F" opacity="0.85"/>
+          <line x1="22" y1="11" x2="27" y2="7" stroke="#9E5237" stroke-width="0.5" opacity="0.7"/>
+          <!-- Limón en tono teja -->
+          <ellipse cx="20" cy="24" rx="9" ry="11" fill="#C4714F"/>
+          <ellipse cx="20" cy="24" rx="9" ry="11" fill="none" stroke="#9E5237" stroke-width="0.6" opacity="0.5"/>
+          <circle cx="16" cy="21" r="0.7" fill="#9E5237" opacity="0.5"/>
+          <circle cx="22" cy="22" r="0.6" fill="#9E5237" opacity="0.5"/>
+          <circle cx="18" cy="27" r="0.7" fill="#9E5237" opacity="0.5"/>
+          <circle cx="23" cy="28" r="0.5" fill="#9E5237" opacity="0.5"/>
+          <path d="M20 34 Q20 36 21 36" stroke="#9E5237" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+        </svg>
+      </span>
       <span class="linea"></span>
     </div>
 
@@ -100,62 +114,78 @@ const WEDDING_DATE = '2027-07-24T12:30:00';
   .palabra-2             { font-size: clamp(2rem, 7vw, 3.5rem); color: var(--color-teja); margin: -0.15em 0; }
 
   /* El span interior se anima con clip-path.
-     Los porcentajes de inset dejan margen para no cortar
-     ascendentes/descendentes de Great Vibes. */
+     Márgenes negativos generosos para no cortar ninguna letra. */
   .reveal {
     display: inline-block;
-    /* Estado inicial: cubierto por la derecha */
-    clip-path: inset(-20% 100% -20% -5%);
-    -webkit-clip-path: inset(-20% 100% -20% -5%);
+    clip-path: inset(-30% 100% -30% -10%);
+    -webkit-clip-path: inset(-30% 100% -30% -10%);
     transition: clip-path 900ms cubic-bezier(0.65, 0.05, 0.36, 1);
     -webkit-transition: -webkit-clip-path 900ms cubic-bezier(0.65, 0.05, 0.36, 1);
     will-change: clip-path;
   }
+  /* El ampersand tiene mucho descendente, aún más margen */
+  .palabra-2 .reveal {
+    clip-path: inset(-50% 100% -50% -20%);
+    -webkit-clip-path: inset(-50% 100% -50% -20%);
+  }
 
-  /* Estado final: visible con márgenes negativos para no recortar */
+  /* Estado final: visible sin recortes */
   .nombres-wrap.dibujando .palabra-1 .reveal,
-  .nombres-wrap.dibujando .palabra-2 .reveal,
   .nombres-wrap.dibujando .palabra-3 .reveal {
-    clip-path: inset(-20% -5% -20% -5%);
-    -webkit-clip-path: inset(-20% -5% -20% -5%);
+    clip-path: inset(-30% -10% -30% -10%);
+    -webkit-clip-path: inset(-30% -10% -30% -10%);
+  }
+  .nombres-wrap.dibujando .palabra-2 .reveal {
+    clip-path: inset(-50% -20% -50% -20%);
+    -webkit-clip-path: inset(-50% -20% -50% -20%);
   }
   .nombres-wrap.dibujando .palabra-1 .reveal { transition-delay: 0.3s; }
   .nombres-wrap.dibujando .palabra-2 .reveal { transition-delay: 1.3s; transition-duration: 500ms; }
   .nombres-wrap.dibujando .palabra-3 .reveal { transition-delay: 1.9s; transition-duration: 1100ms; }
 
   /* Ya vistos previamente — se muestran directos sin animar */
-  .nombres-wrap.ya-visto .reveal {
-    clip-path: inset(-20% -5% -20% -5%) !important;
-    -webkit-clip-path: inset(-20% -5% -20% -5%) !important;
+  .nombres-wrap.ya-visto .palabra-1 .reveal,
+  .nombres-wrap.ya-visto .palabra-3 .reveal {
+    clip-path: inset(-30% -10% -30% -10%) !important;
+    -webkit-clip-path: inset(-30% -10% -30% -10%) !important;
+    transition: none !important;
+  }
+  .nombres-wrap.ya-visto .palabra-2 .reveal {
+    clip-path: inset(-50% -20% -50% -20%) !important;
+    -webkit-clip-path: inset(-50% -20% -50% -20%) !important;
     transition: none !important;
   }
 
   @media (prefers-reduced-motion: reduce) {
     .reveal {
-      clip-path: inset(-20% -5% -20% -5%) !important;
-      -webkit-clip-path: inset(-20% -5% -20% -5%) !important;
+      clip-path: inset(-30% -10% -30% -10%) !important;
+      -webkit-clip-path: inset(-30% -10% -30% -10%) !important;
       transition: none !important;
+    }
+    .palabra-2 .reveal {
+      clip-path: inset(-50% -20% -50% -20%) !important;
+      -webkit-clip-path: inset(-50% -20% -50% -20%) !important;
     }
   }
 
-  .separador-diamante {
+  .separador-limon {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    width: clamp(160px, 40vw, 260px);
+    gap: 0.9rem;
+    width: clamp(180px, 45vw, 300px);
     margin: 0.5rem 0;
   }
-  .separador-diamante .linea {
+  .separador-limon .linea {
     flex: 1;
     height: 1px;
-    background: linear-gradient(to right, transparent, var(--color-limon), transparent);
+    background: linear-gradient(to right, transparent, var(--color-teja), transparent);
+    opacity: 0.7;
   }
-  .separador-diamante .diamante {
-    width: 7px;
-    height: 7px;
-    background: var(--color-limon);
-    transform: rotate(45deg);
+  .separador-limon .limon-mini {
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .fecha {
@@ -168,12 +198,12 @@ const WEDDING_DATE = '2027-07-24T12:30:00';
     margin: 0;
   }
   .lugar {
-    font-family: var(--font-serif);
-    font-style: italic;
-    font-size: clamp(0.9rem, 2.2vw, 1.15rem);
-    color: var(--color-tinta-clara);
-    letter-spacing: 0.05em;
-    margin: 0;
+    font-family: var(--font-brush);
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    color: var(--color-teja);
+    letter-spacing: 0.02em;
+    line-height: 1;
+    margin: 0.2rem 0 0;
   }
 
   /* Countdown */
