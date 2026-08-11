@@ -35,23 +35,15 @@ import EnlaceSiguiente from '../EnlaceSiguiente.astro';
           </span>
           <div>
             <h3 class="ruta-titulo">Ida</h3>
-            <p class="ruta-hora">Salida · 11:30 h</p>
+            <p class="ruta-hora">Salida · 19:30 h</p>
           </div>
         </div>
         <ul class="paradas">
           <li>
-            <span class="parada-hora">11:30</span>
+            <span class="parada-hora">19:30</span>
             <span class="parada-lugar">
-              <a href="https://maps.google.com/?q=Plaza+de+Andalucía+Priego+de+Córdoba" target="_blank" rel="noopener">
-                Plaza de Andalucía · Priego de Córdoba
-              </a>
-            </span>
-          </li>
-          <li>
-            <span class="parada-hora">11:45</span>
-            <span class="parada-lugar">
-              <a href="https://maps.google.com/?q=Priego+de+Córdoba" target="_blank" rel="noopener">
-                [Segunda parada — pendiente]
+              <a href="https://maps.google.com/?q=Plaza+Palenque+Priego+de+Córdoba" target="_blank" rel="noopener">
+                Plaza del Palenque · Priego de Córdoba
               </a>
             </span>
           </li>
@@ -72,19 +64,20 @@ import EnlaceSiguiente from '../EnlaceSiguiente.astro';
           </span>
           <div>
             <h3 class="ruta-titulo">Vuelta</h3>
-            <p class="ruta-hora">Dos salidas · 01:00 h y 04:00 h</p>
+            <p class="ruta-hora">Dos salidas · ~03:00 h y ~07:00 h</p>
           </div>
         </div>
         <ul class="paradas">
           <li>
-            <span class="parada-hora">01:00</span>
-            <span class="parada-lugar">Salida desde Finca Genilla a Priego de Córdoba</span>
+            <span class="parada-hora">~03:00</span>
+            <span class="parada-lugar">Primera salida desde Finca Genilla</span>
           </li>
           <li>
-            <span class="parada-hora">04:00</span>
+            <span class="parada-hora">~07:00</span>
             <span class="parada-lugar">Última salida desde Finca Genilla</span>
           </li>
         </ul>
+        <p class="ruta-nota">Horarios de vuelta aún por confirmar.</p>
       </section>
     </div>
 
@@ -228,6 +221,16 @@ import EnlaceSiguiente from '../EnlaceSiguiente.astro';
     transition: text-decoration-color 250ms ease;
   }
   .parada-lugar a:hover { text-decoration-color: var(--color-tinta); }
+
+  .ruta-nota {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-teja);
+    font-size: 0.85rem;
+    margin: 0.75rem 0 0;
+    text-align: center;
+    opacity: 0.85;
+  }
 
   .nota {
     font-family: var(--font-serif);

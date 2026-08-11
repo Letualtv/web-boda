@@ -1,6 +1,6 @@
 ---
 import PaginaMarco from '../PaginaMarco.astro';
-const WEDDING_DATE = '2027-07-24T12:30:00';
+const WEDDING_DATE = '2027-07-25T19:30:00';
 const PASSWORD = 'genilla2027';
 ---
 
@@ -22,8 +22,6 @@ const PASSWORD = 'genilla2027';
       <!-- Marco decorativo dorado -->
       <div class="cover-frame" aria-hidden="true"></div>
 
-      <p class="cover-invitacion">Invitación de boda</p>
-
       <h1 class="cover-nombres">
         <span class="palabra p-1">Alba</span>
         <span class="palabra p-2">&amp;</span>
@@ -44,7 +42,7 @@ const PASSWORD = 'genilla2027';
         <span class="lin"></span>
       </div>
 
-      <p class="cover-fecha">24 · Julio · 2027</p>
+      <p class="cover-fecha">25 · Julio · 2027</p>
       <p class="cover-lugar">Priego de Córdoba</p>
 
       <!-- Cuenta atrás compacta -->
@@ -60,6 +58,10 @@ const PASSWORD = 'genilla2027';
         <div class="unidad">
           <span class="num" data-cd="min">00</span>
           <span class="lbl">min</span>
+        </div>
+        <div class="unidad">
+          <span class="num" data-cd="seg">00</span>
+          <span class="lbl">seg</span>
         </div>
       </div>
 
@@ -605,15 +607,17 @@ const PASSWORD = 'genilla2027';
   function tick() {
     const diff = target - Date.now();
     if (diff <= 0) {
-      ['dias','horas','min'].forEach(k => { const el = $(k); if (el) el.textContent = '00'; });
+      ['dias','horas','min','seg'].forEach(k => { const el = $(k); if (el) el.textContent = '00'; });
       return;
     }
     const dias  = diff / (1000*60*60*24);
     const horas = (diff % (1000*60*60*24)) / (1000*60*60);
     const min   = (diff % (1000*60*60)) / (1000*60);
+    const seg   = (diff % (1000*60)) / 1000;
     if ($('dias'))  $('dias').textContent  = pad(dias, 3);
     if ($('horas')) $('horas').textContent = pad(horas);
     if ($('min'))   $('min').textContent   = pad(min);
+    if ($('seg'))   $('seg').textContent   = pad(seg);
   }
   tick();
   setInterval(tick, 1000);
