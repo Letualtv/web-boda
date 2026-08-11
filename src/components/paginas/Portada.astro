@@ -234,8 +234,8 @@ const nombresSvg = fs.readFileSync(
         // Vivus necesita un id en el elemento
         svg.id = svg.id || 'nombres-svg-anim';
         new Vivus(svg.id, {
-          duration: 180,          // frames de animación (~3s a 60fps)
-          type: 'oneByOne',       // Alba primero, luego &, luego Antonio
+          duration: 220,          // total ~3.7s a 60fps (12 letras)
+          type: 'oneByOne',       // letra por letra en orden
           animTimingFunction: Vivus.EASE_OUT,
           start: 'autostart',
         }, () => {

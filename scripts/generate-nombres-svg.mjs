@@ -1,7 +1,7 @@
 /**
  * Genera public/img/svg/monogramas/nombres.svg
- * Extrae glifos de Great Vibes con opentype.js, glifo por glifo (sin ligaduras),
- * y compone un SVG con paths animables via stroke-dashoffset.
+ * Extrae glifos de Great Vibes con opentype.js, un path por letra
+ * (Vivus.js necesita paths simples sin subpaths para trazar bien).
  */
 import opentype from 'opentype.js';
 import fs from 'node:fs';
@@ -22,41 +22,49 @@ const scale = FONT_SIZE / font.unitsPerEm;
 const baseline = FONT_SIZE + PADDING;
 
 /**
- * Genera un path SVG para un texto colocando cada glifo manualmente.
- * Devuelve { pathData, ancho }.
+ * Devuelve array de { d, ancho, char, clase }, un path por carácter.
  */
-function textoAPath(texto, xInicio) {
+function textoAPaths(texto, xInicio, clasePalabra) {
   let x = xInicio;
-  let d = '';
+  const paths = [];
+  let idx = 0;
   for (const ch of texto) {
     const glyph = font.charToGlyph(ch);
     if (!glyph) continue;
     const p = glyph.getPath(x, baseline, FONT_SIZE);
-    d += p.toPathData(2) + ' ';
-    x += glyph.advanceWidth * scale;
+    const d = p.toPathData(2);
+    const ancho = glyph.advanceWidth * scale;
+    if (d && d.trim() && ch !== ' ') {
+      paths.push({ d, char: ch, clase: `${clasePalabra} c-${idx}` });
+    }
+    x += ancho;
+    idx++;
   }
-  return { d: d.trim(), ancho: x - xInicio };
+  return { paths, anchoTotal: x - xInicio };
 }
 
 // Componer
 const albaX = PADDING;
-const alba = textoAPath('Alba', albaX);
+const alba = textoAPaths('Alba', albaX, 'alba');
 
-const espacio1 = FONT_SIZE * 0.15;
-const ampX = albaX + alba.ancho + espacio1;
-const amp = textoAPath('&', ampX);
+const espacio = FONT_SIZE * 0.15;
+const ampX = albaX + alba.anchoTotal + espacio;
+const amp = textoAPaths('&', ampX, 'amp');
 
-const espacio2 = FONT_SIZE * 0.15;
-const antonioX = ampX + amp.ancho + espacio2;
-const antonio = textoAPath('Antonio', antonioX);
+const antonioX = ampX + amp.anchoTotal + espacio;
+const antonio = textoAPaths('Antonio', antonioX, 'antonio');
 
-const anchoTotal = antonioX + antonio.ancho + PADDING;
+const anchoTotal = antonioX + antonio.anchoTotal + PADDING;
 const alturaTotal = FONT_SIZE * 1.5 + PADDING;
 
+const todosPaths = [...alba.paths, ...amp.paths, ...antonio.paths];
+
+const pathsMarkup = todosPaths
+  .map((p) => `  <path class="${p.clase}" data-char="${p.char}" d="${p.d}"/>`)
+  .join('\n');
+
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${anchoTotal.toFixed(0)} ${alturaTotal.toFixed(0)}" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-  <path class="alba"    d="${alba.d}"/>
-  <path class="amp"     d="${amp.d}"/>
-  <path class="antonio" d="${antonio.d}"/>
+${pathsMarkup}
 </svg>
 `;
 
@@ -65,6 +73,5 @@ fs.writeFileSync(SALIDA, svg, 'utf8');
 
 console.log(`✔ SVG generado: ${SALIDA}`);
 console.log(`  viewBox: 0 0 ${anchoTotal.toFixed(0)} ${alturaTotal.toFixed(0)}`);
-console.log(`  Alba:    ${alba.d.length} chars`);
-console.log(`  &:       ${amp.d.length} chars`);
-console.log(`  Antonio: ${antonio.d.length} chars`);
+console.log(`  Paths totales: ${todosPaths.length}`);
+console.log(`  Alba: ${alba.paths.length} · &: ${amp.paths.length} · Antonio: ${antonio.paths.length}`);
