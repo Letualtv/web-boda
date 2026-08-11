@@ -22,16 +22,6 @@ const PASSWORD = 'genilla2027';
       <!-- Marco decorativo dorado -->
       <div class="cover-frame" aria-hidden="true"></div>
 
-      <!-- Ornamento superior -->
-      <div class="cover-ornamento" aria-hidden="true">
-        <svg viewBox="0 0 200 30" width="100%" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="0" y1="15" x2="80" y2="15" stroke="#D4C84A" stroke-width="0.7" opacity="0.7"/>
-          <circle cx="100" cy="15" r="4" fill="none" stroke="#D4C84A" stroke-width="0.8" opacity="0.7"/>
-          <circle cx="100" cy="15" r="1.5" fill="#D4C84A" opacity="0.85"/>
-          <line x1="120" y1="15" x2="200" y2="15" stroke="#D4C84A" stroke-width="0.7" opacity="0.7"/>
-        </svg>
-      </div>
-
       <p class="cover-invitacion">Invitación de boda</p>
 
       <h1 class="cover-nombres">
@@ -106,15 +96,6 @@ const PASSWORD = 'genilla2027';
         <p class="mensaje-error" id="mensaje-error">esta no es la palabra</p>
       </form>
 
-      <!-- Ornamento inferior -->
-      <div class="cover-ornamento cover-ornamento-abajo" aria-hidden="true">
-        <svg viewBox="0 0 200 30" width="100%" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <line x1="0" y1="15" x2="80" y2="15" stroke="#D4C84A" stroke-width="0.7" opacity="0.7"/>
-          <circle cx="100" cy="15" r="4" fill="none" stroke="#D4C84A" stroke-width="0.8" opacity="0.7"/>
-          <circle cx="100" cy="15" r="1.5" fill="#D4C84A" opacity="0.85"/>
-          <line x1="120" y1="15" x2="200" y2="15" stroke="#D4C84A" stroke-width="0.7" opacity="0.7"/>
-        </svg>
-      </div>
     </div>
   </PaginaMarco>
 </div>
@@ -286,10 +267,10 @@ const PASSWORD = 'genilla2027';
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: clamp(0.75rem, 2vh, 1.25rem);
+    gap: clamp(0.5rem, 1.6vh, 1rem);
     width: 100%;
-    max-width: 460px;
-    padding: clamp(2rem, 6vh, 3rem) 0;
+    max-width: 440px;
+    padding: clamp(1.5rem, 4vh, 2.5rem) 0;
     text-align: center;
     z-index: 10;
   }
@@ -574,11 +555,13 @@ const PASSWORD = 'genilla2027';
     gap: 0.75rem;
   }
   .tinta-contenedor.autenticado .btn-entrar {
-    /* Botón más presente en modo autenticado */
-    background: rgba(212, 200, 74, 0.12);
-    border-color: rgba(212, 200, 74, 0.75);
+    /* Botón más presente pero contenido en modo autenticado */
+    background: rgba(212, 200, 74, 0.1);
+    border-color: rgba(212, 200, 74, 0.65);
     color: #F3E9D2;
-    padding: 1rem 3rem;
+    padding: 0.7rem 2rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
   }
   .tinta-contenedor.autenticado .btn-entrar::before {
     content: '→ ';
