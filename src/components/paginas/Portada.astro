@@ -4,7 +4,19 @@ const WEDDING_DATE = '2027-07-24T12:30:00';
 const PASSWORD = 'genilla2027';
 ---
 
-<div class="cover-wrap">
+<div class="book-scene">
+  <!-- Interior del libro — visible al abrir la cubierta -->
+  <div class="book-interior" aria-hidden="true">
+    <div class="book-interior-luz"></div>
+    <div class="book-interior-titulo">
+      <span class="bi-linea"></span>
+      <span class="bi-marca">A · A</span>
+      <span class="bi-linea"></span>
+    </div>
+  </div>
+
+  <!-- Cubierta con toda la portada actual -->
+<div class="cover-wrap" id="book-cover">
   <PaginaMarco titulo="Portada" clase="cover-marco">
     <div class="cover-inner">
       <!-- Marco decorativo dorado -->
@@ -105,36 +117,125 @@ const PASSWORD = 'genilla2027';
       </div>
     </div>
   </PaginaMarco>
-
-  <!-- Overlay épico al acertar -->
-  <div id="epic-overlay" class="epic-overlay" aria-hidden="true">
-    <div class="epic-sello">
-      <div class="epic-sello-inner">
-        <span class="epic-monograma">A &amp; A</span>
-        <span class="epic-label">Bienvenido</span>
-      </div>
-      <div class="epic-sello-goteo" aria-hidden="true"></div>
-    </div>
-    <div class="epic-onda epic-onda-1"></div>
-    <div class="epic-onda epic-onda-2"></div>
-    <div class="epic-onda epic-onda-3"></div>
-    <div class="epic-particulas" id="epic-particulas"></div>
-    <div class="epic-fundido"></div>
-  </div>
+</div>
 </div>
 
 <style>
   /* ═════════════════════════════════════════════════════
-     PORTADA — CUBIERTA DE LIBRO OSCURA
+     PORTADA — CUBIERTA DE LIBRO OSCURA + APERTURA 3D
   ═════════════════════════════════════════════════════ */
 
-  /* Sobrescribe fondo global — cover es cuero oscuro */
-  .cover-wrap {
+  /* Escenario 3D — contenedor con perspectiva */
+  .book-scene {
     position: fixed;
     inset: 0;
     z-index: 5;
+    perspective: 1800px;
+    perspective-origin: 100% 50%;
+    background: #F3E9D2;   /* fondo detrás por si algo falla */
+    overflow: hidden;
+  }
+
+  /* Interior — visible cuando la cubierta rota. Simula la primera
+     página del libro que se ve al abrirlo. */
+  .book-interior {
+    position: absolute;
+    inset: 0;
     background:
-      radial-gradient(ellipse at center, #1e2a3e 0%, #0d1522 100%);
+      radial-gradient(ellipse at 30% 50%, rgba(212, 200, 74, 0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at center, #F5EBCF 0%, #E8DCC0 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 400ms ease 400ms;
+    z-index: 1;
+  }
+  .book-interior-luz {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 50%,
+      rgba(255, 240, 200, 0.5) 0%,
+      transparent 65%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 800ms ease 300ms;
+  }
+  .book-interior-titulo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--color-tinta);
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 500ms ease 700ms, transform 700ms cubic-bezier(0.22, 0.61, 0.36, 1) 700ms;
+  }
+  .bi-linea {
+    width: 60px;
+    height: 1px;
+    background: rgba(30, 58, 95, 0.4);
+  }
+  .bi-marca {
+    font-family: var(--font-vibes);
+    font-size: clamp(3rem, 10vw, 5rem);
+    line-height: 1;
+    color: var(--color-tinta);
+  }
+
+  /* Cubierta — el elemento que rota */
+  .cover-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    background: radial-gradient(ellipse at center, #1e2a3e 0%, #0d1522 100%);
+    transform-origin: 0% 50%;
+    transform: rotateY(0deg);
+    transform-style: preserve-3d;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  /* ─── APERTURA DEL LIBRO ─────────────────────────────
+     Al añadir .abriendo al .book-scene: la cubierta rota
+     -180° sobre su eje izquierdo, en 1.4s con easing suave.
+     Un poco de sombra proyectada para dar peso.
+  ──────────────────────────────────────────────────── */
+  .book-scene.abriendo .cover-wrap {
+    animation: abrir-libro 1400ms cubic-bezier(0.55, 0.05, 0.35, 1) forwards;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
+  }
+  @keyframes abrir-libro {
+    0% {
+      transform: rotateY(0deg);
+    }
+    100% {
+      transform: rotateY(-172deg);
+    }
+  }
+  .book-scene.abriendo .book-interior {
+    opacity: 1;
+  }
+  .book-scene.abriendo .book-interior-luz {
+    opacity: 1;
+  }
+  .book-scene.abriendo .book-interior-titulo {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Al girar, sombra progresiva sobre la cubierta que simula
+     que menos luz llega según se aleja del lector */
+  .cover-wrap::before,
+  .cover-wrap::after {
+    transition: opacity 1s ease;
+  }
+  .book-scene.abriendo .cover-wrap::after {
+    background: radial-gradient(ellipse at center,
+      rgba(0, 0, 0, 0.15) 40%,
+      rgba(0, 0, 0, 0.75) 100%);
   }
 
   /* Textura de cuero/tela sobre el fondo */
@@ -476,180 +577,6 @@ const PASSWORD = 'genilla2027';
     transition: filter 500ms ease;
   }
 
-  /* ═════════ ANIMACIÓN ÉPICA (heredada) ═════════ */
-  .epic-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    pointer-events: none;
-    background: rgba(45, 35, 25, 0);
-    transition: background 500ms ease;
-    visibility: hidden;
-  }
-  .epic-overlay.activa {
-    background: rgba(15, 20, 30, 0.8);
-    visibility: visible;
-    backdrop-filter: blur(2px);
-  }
-
-  .epic-sello {
-    position: absolute;
-    top: 50%; left: 50%;
-    width: 200px; height: 200px;
-    transform: translate(-50%, -50%) translateY(-100vh) rotate(-25deg) scale(0.6);
-    opacity: 0;
-    z-index: 2;
-  }
-  .epic-overlay.activa .epic-sello {
-    animation: sello-caer 950ms cubic-bezier(0.55, 0, 0.35, 1) 200ms forwards;
-  }
-  @keyframes sello-caer {
-    0%   { transform: translate(-50%, -50%) translateY(-100vh) rotate(-25deg) scale(0.55); opacity: 0; }
-    35%  { transform: translate(-50%, -50%) translateY(-30vh) rotate(-18deg) scale(0.7); opacity: 0.5; }
-    62%  { transform: translate(-50%, -50%) translateY(0) rotate(-6deg) scale(1.18); opacity: 1; }
-    75%  { transform: translate(-50%, -50%) translateY(-8px) rotate(-4deg) scale(0.96); }
-    90%  { transform: translate(-50%, -50%) translateY(0) rotate(-5deg) scale(1.02); }
-    100% { transform: translate(-50%, -50%) translateY(0) rotate(-5deg) scale(1); opacity: 1; }
-  }
-
-  .epic-sello-inner {
-    width: 100%; height: 100%;
-    border-radius: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: radial-gradient(circle at 32% 28%,
-      rgba(196, 113, 79, 0.98) 0%,
-      rgba(158, 82, 55, 1) 55%,
-      rgba(100, 45, 25, 1) 100%);
-    color: #F3E9D2;
-    box-shadow:
-      inset 0 3px 6px rgba(255, 240, 220, 0.4),
-      inset 0 -6px 12px rgba(50, 20, 10, 0.5),
-      0 2px 4px rgba(30, 20, 10, 0.3);
-    position: relative;
-    transition: box-shadow 350ms cubic-bezier(0.34, 1.5, 0.64, 1);
-  }
-  .epic-overlay.activa .epic-sello-inner {
-    animation: sello-relieve 350ms cubic-bezier(0.34, 1.5, 0.64, 1) 750ms forwards;
-  }
-  @keyframes sello-relieve {
-    to {
-      box-shadow:
-        inset 0 4px 8px rgba(255, 240, 220, 0.5),
-        inset 0 -8px 18px rgba(50, 20, 10, 0.6),
-        0 22px 40px rgba(30, 20, 10, 0.55),
-        0 8px 16px rgba(30, 20, 10, 0.45),
-        0 0 60px rgba(196, 113, 79, 0.4);
-    }
-  }
-  .epic-sello-inner::before {
-    content: '';
-    position: absolute;
-    inset: 14px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(243, 233, 210, 0.5);
-  }
-  .epic-sello-inner::after {
-    content: '';
-    position: absolute;
-    inset: 20px;
-    border-radius: 50%;
-    border: 1px dashed rgba(243, 233, 210, 0.3);
-  }
-
-  .epic-monograma {
-    font-family: var(--font-vibes);
-    font-size: 3.5rem;
-    line-height: 1;
-    color: #F3E9D2;
-    text-shadow: 0 2px 3px rgba(50, 20, 10, 0.6);
-    z-index: 1;
-  }
-  .epic-label {
-    font-family: var(--font-sans);
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: rgba(243, 233, 210, 0.85);
-    margin-top: 0.2rem;
-    z-index: 1;
-  }
-
-  .epic-sello-goteo {
-    position: absolute;
-    inset: -20px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(158, 82, 55, 0.45) 40%, transparent 65%);
-    filter: blur(8px);
-    opacity: 0;
-  }
-  .epic-overlay.activa .epic-sello-goteo {
-    animation: goteo-aparecer 500ms ease-out 800ms forwards;
-  }
-  @keyframes goteo-aparecer {
-    from { opacity: 0; transform: scale(0.7); }
-    to   { opacity: 1; transform: scale(1.2); }
-  }
-
-  .epic-onda {
-    position: absolute;
-    top: 50%; left: 50%;
-    width: 220px; height: 220px;
-    margin: -110px 0 0 -110px;
-    border: 2px solid var(--color-teja);
-    border-radius: 50%;
-    opacity: 0;
-    transform: scale(0.3);
-  }
-  .epic-overlay.activa .epic-onda-1 { animation: onda 1.8s ease-out 800ms forwards; }
-  .epic-overlay.activa .epic-onda-2 { animation: onda 1.8s ease-out 950ms forwards; }
-  .epic-overlay.activa .epic-onda-3 { animation: onda 1.8s ease-out 1100ms forwards; }
-  @keyframes onda {
-    0%   { opacity: 0.8; transform: scale(0.35); border-width: 3px; }
-    100% { opacity: 0; transform: scale(6); border-width: 0.5px; }
-  }
-
-  .epic-particulas { position: absolute; inset: 0; pointer-events: none; }
-  .epic-particulas :global(.particula) {
-    position: absolute;
-    top: 50%; left: 50%;
-    pointer-events: none;
-    will-change: transform, opacity;
-  }
-  .epic-particulas :global(.p-hoja) {
-    width: 12px; height: 6px;
-    border-radius: 50% 10% 50% 10%;
-    background: var(--color-oliva);
-  }
-  .epic-particulas :global(.p-gota) {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--color-limon);
-    box-shadow: 0 0 6px rgba(212, 200, 74, 0.8);
-  }
-  .epic-particulas :global(.p-teja) {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    background: var(--color-teja);
-    opacity: 0.85;
-  }
-
-  .epic-fundido {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at center,
-      rgba(212, 200, 74, 0.2) 0%,
-      rgba(196, 113, 79, 0.4) 45%,
-      rgba(10, 15, 25, 0.95) 100%);
-    opacity: 0;
-  }
-  .epic-overlay.activa .epic-fundido {
-    animation: fundido-final 700ms ease-in 2100ms forwards;
-  }
-  @keyframes fundido-final { to { opacity: 1; } }
 </style>
 
 <script define:vars={{ WEDDING_DATE }}>
@@ -686,41 +613,17 @@ const PASSWORD = 'genilla2027';
     window.location.replace(DESTINO);
   }
 
+  const escena = document.querySelector('.book-scene') as HTMLElement;
   const contenedor = document.getElementById('form-acceso') as HTMLFormElement;
   const inputReal = document.getElementById('pwd-real') as HTMLInputElement;
   const display = document.getElementById('tinta-display') as HTMLElement;
   const pluma = document.getElementById('pluma') as HTMLElement;
   const gotitas = document.getElementById('gotitas') as HTMLElement;
   const btnEntrar = document.getElementById('btn-entrar') as HTMLButtonElement;
-  const epic = document.getElementById('epic-overlay') as HTMLElement;
-  const particulas = document.getElementById('epic-particulas') as HTMLElement;
 
-  function lanzarEpica() {
-    if (!epic || !particulas) return;
-    const total = 48;
-    for (let i = 0; i < total; i++) {
-      const p = document.createElement('span');
-      const tipo = i % 3 === 0 ? 'p-gota' : (i % 3 === 1 ? 'p-hoja' : 'p-teja');
-      p.className = `particula ${tipo}`;
-      const angulo = (Math.PI * 2 * i) / total + Math.random() * 0.3;
-      const distancia = 220 + Math.random() * 420;
-      const dx = Math.cos(angulo) * distancia;
-      const dy = Math.sin(angulo) * distancia;
-      const rot = (Math.random() - 0.5) * 720;
-      const dur = 1200 + Math.random() * 600;
-      const delay = 800 + Math.random() * 150;
-      p.style.transition = `transform ${dur}ms cubic-bezier(0.22, 0.61, 0.36, 1) ${delay}ms, opacity ${dur}ms ease-out ${delay}ms`;
-      p.style.transform = 'translate(-50%, -50%) rotate(0deg)';
-      p.style.opacity = '1';
-      particulas.appendChild(p);
-      void p.offsetWidth;
-      requestAnimationFrame(() => {
-        p.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) rotate(${rot}deg)`;
-        p.style.opacity = '0';
-      });
-    }
-    epic.classList.add('activa');
-    epic.setAttribute('aria-hidden', 'false');
+  function abrirLibro() {
+    if (!escena) return;
+    escena.classList.add('abriendo');
   }
 
   if (contenedor && inputReal && display && pluma && gotitas && btnEntrar) {
@@ -735,8 +638,10 @@ const PASSWORD = 'genilla2027';
       password,
       onCorrecto: () => {
         sessionStorage.setItem('boda_auth', 'ok');
-        lanzarEpica();
-        setTimeout(() => { window.location.href = DESTINO; }, 2800);
+        abrirLibro();
+        // Redirigir tras la animación completa (~1.6s para dejar
+        // ver la primera "página" del interior antes de saltar)
+        setTimeout(() => { window.location.href = DESTINO; }, 1900);
       },
       onError: () => { /* .error class aplicada por el motor */ },
     });
