@@ -96,33 +96,3 @@ body::after {
     transition-duration: 0.01ms !important;
   }
 }
-
-/* ─── Transiciones entre páginas (Astro View Transitions) ─────
-   Efecto de pase de página: la página saliente se desliza a la
-   izquierda con sombra, la entrante viene desde la derecha.
-────────────────────────────────────────────────────────────── */
-::view-transition-old(root) {
-  animation: 500ms cubic-bezier(0.32, 0.72, 0, 1) both page-out;
-}
-::view-transition-new(root) {
-  animation: 500ms cubic-bezier(0.32, 0.72, 0, 1) both page-in;
-}
-
-@keyframes page-out {
-  from { transform: translateX(0);      opacity: 1; }
-  to   { transform: translateX(-24%);   opacity: 0.35; }
-}
-@keyframes page-in {
-  from { transform: translateX(100%);   opacity: 0.6; }
-  to   { transform: translateX(0);      opacity: 1; }
-}
-
-/* Al ir atrás, invertir direcciones */
-@media (prefers-reduced-motion: no-preference) {
-  ::view-transition-old(root) {
-    box-shadow: -10px 0 30px rgba(0,0,0,0.15);
-  }
-  ::view-transition-new(root) {
-    box-shadow: -10px 0 30px rgba(0,0,0,0.25);
-  }
-}
