@@ -1,6 +1,7 @@
 ---
 import PaginaMarco from '../PaginaMarco.astro';
 import GotasTinta from '../GotasTinta.astro';
+import EnlaceAnterior from '../EnlaceAnterior.astro';
 
 // 8 huecos irregulares tipo álbum de recortes.
 // Cuando subas fotos con nombres 01.jpg, 02.jpg… aparecerán solas.
@@ -58,6 +59,8 @@ const HUECOS = [
         </figure>
       ))}
     </div>
+
+    <EnlaceAnterior href="/bienvenida/" label="Volver al inicio" />
   </div>
 
   <!-- Lightbox -->

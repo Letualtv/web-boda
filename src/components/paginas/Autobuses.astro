@@ -2,6 +2,7 @@
 import PaginaMarco from '../PaginaMarco.astro';
 import GotasTinta from '../GotasTinta.astro';
 import EnlaceSiguiente from '../EnlaceSiguiente.astro';
+import EnlaceAnterior from '../EnlaceAnterior.astro';
 ---
 
 <PaginaMarco titulo="Cómo llegar" scroll>
@@ -92,7 +93,10 @@ import EnlaceSiguiente from '../EnlaceSiguiente.astro';
       Si vais por vuestra cuenta, el recinto dispone de <strong>aparcamiento</strong> propio.
     </p>
 
-    <EnlaceSiguiente href="/galeria/" label="Recuerdos" />
+    <div class="nav-pareja">
+      <EnlaceAnterior href="/celebracion/" label="La celebración" />
+      <EnlaceSiguiente href="/galeria/" label="Recuerdos" />
+    </div>
   </div>
 </PaginaMarco>
 
@@ -236,5 +240,14 @@ import EnlaceSiguiente from '../EnlaceSiguiente.astro';
     font-size: clamp(0.85rem, 2vw, 0.95rem);
     max-width: 440px;
     margin: 1.5rem 0 0;
+  }
+
+  .nav-pareja {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
   }
 </style>
