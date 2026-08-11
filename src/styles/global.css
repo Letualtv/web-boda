@@ -46,22 +46,30 @@ body {
   }
 }
 
-/* ─── Textura de papel (fibra) ─────────────────────────────────
-   feTurbulence estático — no animado. Se aplica una vez a body.
+/* ─── Textura de papel — dos capas superpuestas ────────────────
+   Capa 1 (fibra fina): grano denso, casi imperceptible pero da mordiente
+   Capa 2 (fibra gruesa): pequeñas hebras/motas visibles tipo papel prensado
+   Capa 3 (manchas de tiempo): degradados suaves marrones asimétricos
 ──────────────────────────────────────────────────────────────── */
+
+/* Capa 1 — fibra fina de fondo */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.42 0 0 0 0 0.26 0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
-  background-size: 240px;
+  background-image:
+    /* Grano fino */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.38 0 0 0 0 0.22 0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E"),
+    /* Grano grueso (motas de fibra) */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.15' numOctaves='4' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.28 0 0 0 0 0.14 0 0 0 0.22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 220px, 380px;
   mix-blend-mode: multiply;
-  opacity: 0.55;
+  opacity: 0.75;
 }
 
-/* Manchas de tiempo — asimétricas */
+/* Capa 2 — hebras horizontales tipo papel hecho a mano + manchas de tiempo */
 body::after {
   content: '';
   position: fixed;
@@ -69,11 +77,25 @@ body::after {
   z-index: 1;
   pointer-events: none;
   background-image:
-    radial-gradient(ellipse 180px 120px at 12% 18%, rgba(184,145,106,0.08), transparent 70%),
-    radial-gradient(ellipse 140px 90px  at 88% 25%, rgba(184,145,106,0.06), transparent 70%),
-    radial-gradient(ellipse 220px 160px at 78% 82%, rgba(184,145,106,0.09), transparent 70%),
-    radial-gradient(ellipse 100px 80px  at 8%  78%, rgba(184,145,106,0.07), transparent 70%),
-    radial-gradient(ellipse 160px 100px at 45% 55%, rgba(184,145,106,0.04), transparent 70%);
+    /* Hebras finas horizontales (papel prensado) */
+    repeating-linear-gradient(
+      92deg,
+      transparent 0px,
+      transparent 3px,
+      rgba(120, 90, 55, 0.025) 3px,
+      rgba(120, 90, 55, 0.025) 4px,
+      transparent 4px,
+      transparent 7px
+    ),
+    /* Manchas de tiempo (té/óxido) */
+    radial-gradient(ellipse 300px 200px at 8% 12%,  rgba(150, 108, 68, 0.12), transparent 70%),
+    radial-gradient(ellipse 220px 160px at 92% 18%, rgba(150, 108, 68, 0.10), transparent 70%),
+    radial-gradient(ellipse 380px 260px at 78% 88%, rgba(150, 108, 68, 0.14), transparent 70%),
+    radial-gradient(ellipse 180px 140px at 5%  82%, rgba(150, 108, 68, 0.11), transparent 70%),
+    radial-gradient(ellipse 260px 180px at 45% 48%, rgba(150, 108, 68, 0.06), transparent 70%),
+    radial-gradient(ellipse 140px 110px at 62% 22%, rgba(180, 130, 85, 0.08), transparent 70%),
+    /* Viñeta oscura sutil en los bordes */
+    radial-gradient(ellipse at center, transparent 55%, rgba(80, 55, 30, 0.08) 100%);
 }
 
 /* ─── Utilidades ───────────────────────────────────────────── */
