@@ -9,6 +9,7 @@ interface Props {
 const { actual = '' } = Astro.props;
 
 const SECCIONES = [
+  { num: 'I',   titulo: 'Portada',          url: '/'             },
   { num: 'II',  titulo: 'Bienvenida',       url: '/bienvenida/'  },
   { num: 'III', titulo: 'Nuestra historia', url: '/historia/'    },
   { num: 'IV',  titulo: 'La celebración',   url: '/celebracion/' },
@@ -188,7 +189,7 @@ const norm = (u: string) => (base + u.replace(/^\/+/, '')).replace(/\/+/g, '/');
   });
 
   // Interceptar clicks en enlaces para animar salida direccional
-  const SECUENCIA = ['/bienvenida/', '/historia/', '/celebracion/', '/autobuses/', '/galeria/'];
+  const SECUENCIA = ['/', '/bienvenida/', '/historia/', '/celebracion/', '/autobuses/', '/galeria/'];
   const BASE = (window as any).BASE_URL || '/';
   const norm = (u: string) => u.replace(BASE.replace(/\/$/, ''), '').replace(/\/+/g, '/');
 
