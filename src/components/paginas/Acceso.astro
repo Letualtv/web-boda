@@ -48,12 +48,9 @@ const PASSWORD = 'genilla2027';
         <div class="gotitas" id="gotitas" aria-hidden="true"></div>
       </div>
 
-      <!-- botón sello -->
-      <button type="submit" class="btn-sello" id="btn-entrar" disabled>
-        <span class="sello-inner">
-          <span class="sello-monograma">A &amp; A</span>
-          <span class="sello-label">Entrar</span>
-        </span>
+      <!-- botón entrar simple -->
+      <button type="submit" class="btn-entrar" id="btn-entrar" disabled>
+        Entrar
       </button>
 
       <p class="mensaje-error" id="mensaje-error">esta no es la palabra</p>
@@ -188,32 +185,28 @@ const PASSWORD = 'genilla2027';
     transition: color 400ms ease;
   }
 
-  /* ─── Cada carácter — entra como tinta fluyendo ────────
-     Inicio: invisible + ligeramente comprimido + con "aura" difusa (text-shadow expandido).
-     Final: opaco + tamaño real + shadow colapsado (tinta absorbida por el papel).
+  /* ─── Cada carácter — tinta fresca que se seca ────────
+     Inicio: casi invisible, difuminado (blur simula tinta mojada
+     esparciéndose sobre el papel), color claro.
+     Final: nítido, opacidad plena, tono tinta profunda (tinta seca).
   ──────────────────────────────────────────────────────── */
   .tinta-display :global(.char) {
     display: inline-block;
     opacity: 0;
-    transform: translateY(3px) scaleY(0.85);
-    color: transparent;
-    text-shadow:
-      0 0 8px rgba(30, 58, 95, 0.55),
-      0 0 3px rgba(30, 58, 95, 0.7);
+    filter: blur(5px);
+    transform: translateY(2px);
+    color: var(--color-tinta-clara);
     transition:
-      opacity 450ms cubic-bezier(0.22, 0.61, 0.36, 1),
-      transform 520ms cubic-bezier(0.22, 0.61, 0.36, 1),
-      color 520ms cubic-bezier(0.22, 0.61, 0.36, 1) 60ms,
-      text-shadow 600ms cubic-bezier(0.4, 0, 0.6, 1) 120ms;
-    transform-origin: 50% 90%;
+      opacity 400ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      filter 550ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      transform 500ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      color 700ms ease 100ms;
   }
   .tinta-display :global(.char.entrando) {
     opacity: 1;
-    transform: translateY(0) scaleY(1);
+    filter: blur(0);
+    transform: translateY(0);
     color: var(--color-tinta);
-    text-shadow:
-      0 0 0.5px rgba(30, 58, 95, 0.25),
-      0 1px 0 rgba(30, 58, 95, 0.05);
   }
 
   /* ─── Pluma cursor ──────────────────────────────────── */
@@ -268,95 +261,37 @@ const PASSWORD = 'genilla2027';
     box-shadow: 0 0 2px rgba(30, 58, 95, 0.25);
   }
 
-  /* ─── Botón sello ───────────────────────────────────── */
-  .btn-sello {
+  /* ─── Botón entrar — simple, elegante ─────────────── */
+  .btn-entrar {
     background: transparent;
-    border: none;
-    padding: 0;
+    border: 1px solid rgba(30, 58, 95, 0.45);
+    color: var(--color-tinta);
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    padding: 0.95rem 3rem;
     cursor: pointer;
-    opacity: 0.35;
+    opacity: 0.4;
     pointer-events: none;
     transition:
-      opacity 500ms ease,
-      transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
-    transform: scale(0.9);
+      opacity 400ms ease,
+      background 250ms ease,
+      border-color 250ms ease,
+      color 250ms ease,
+      transform 200ms ease;
   }
-  .tinta-contenedor.tiene-texto .btn-sello {
+  .tinta-contenedor.tiene-texto .btn-entrar {
     opacity: 1;
     pointer-events: auto;
-    transform: scale(1);
   }
-
-  .sello-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.15rem;
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%,
-      rgba(196, 113, 79, 0.95) 0%,
-      rgba(158, 82, 55, 0.98) 55%,
-      rgba(122, 60, 40, 1) 100%);
-    color: #F3E9D2;
-    box-shadow:
-      inset 0 2px 3px rgba(255, 240, 220, 0.35),
-      inset 0 -3px 6px rgba(50, 20, 10, 0.4),
-      0 3px 8px rgba(30, 58, 95, 0.25),
-      0 1px 2px rgba(30, 58, 95, 0.15);
-    position: relative;
-    transition: transform 250ms ease, box-shadow 250ms ease;
+  .btn-entrar:hover {
+    background: rgba(30, 58, 95, 0.06);
+    border-color: var(--color-tinta);
   }
-  /* Doble círculo interior tipo sello grabado */
-  .sello-inner::before {
-    content: '';
-    position: absolute;
-    inset: 8px;
-    border-radius: 50%;
-    border: 1px solid rgba(243, 233, 210, 0.5);
-    pointer-events: none;
-  }
-  .sello-inner::after {
-    content: '';
-    position: absolute;
-    inset: 12px;
-    border-radius: 50%;
-    border: 1px dashed rgba(243, 233, 210, 0.25);
-    pointer-events: none;
-  }
-
-  .btn-sello:hover .sello-inner {
-    transform: rotate(-4deg) scale(1.05);
-    box-shadow:
-      inset 0 2px 3px rgba(255, 240, 220, 0.4),
-      inset 0 -3px 6px rgba(50, 20, 10, 0.45),
-      0 6px 14px rgba(30, 58, 95, 0.3),
-      0 2px 4px rgba(30, 58, 95, 0.15);
-  }
-  .btn-sello:active .sello-inner {
-    transform: rotate(-4deg) scale(0.98);
-  }
-
-  .sello-monograma {
-    font-family: var(--font-vibes);
-    font-size: 2.1rem;
-    line-height: 1;
-    color: #F3E9D2;
-    text-shadow: 0 1px 2px rgba(50, 20, 10, 0.5);
-    z-index: 1;
-  }
-  .sello-label {
-    font-family: var(--font-sans);
-    font-size: 0.55rem;
-    font-weight: 700;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: rgba(243, 233, 210, 0.85);
-    z-index: 1;
-    margin-top: 0.1rem;
-  }
+  .btn-entrar:active { transform: scale(0.97); }
+  .btn-entrar:disabled { cursor: default; }
 
   /* ─── Estados: error / correcto ─────────────────────── */
   .mensaje-error {
@@ -406,32 +341,41 @@ const PASSWORD = 'genilla2027';
     inset: 0;
     z-index: 100;
     pointer-events: none;
-    opacity: 0;
+    background: rgba(45, 35, 25, 0);
+    transition: background 500ms ease;
     visibility: hidden;
   }
   .epic-overlay.activa {
-    opacity: 1;
+    background: rgba(45, 35, 25, 0.75);   /* fondo gris oscuro para destacar el sello */
     visibility: visible;
+    backdrop-filter: blur(2px);
   }
 
-  /* ─── Sello de lacre que baja ────────────────────────── */
+  /* ─── Sello de lacre que baja y se estampa ───────────── */
   .epic-sello {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 180px;
-    height: 180px;
+    width: 200px;
+    height: 200px;
     transform: translate(-50%, -50%) translateY(-100vh) rotate(-25deg) scale(0.6);
     opacity: 0;
+    z-index: 2;
   }
   .epic-overlay.activa .epic-sello {
-    animation: sello-caer 900ms cubic-bezier(0.65, 0, 0.35, 1.4) 100ms forwards;
+    animation: sello-caer 950ms cubic-bezier(0.55, 0, 0.35, 1) 200ms forwards;
   }
   @keyframes sello-caer {
-    0%   { transform: translate(-50%, -50%) translateY(-100vh) rotate(-25deg) scale(0.6); opacity: 0; }
-    55%  { transform: translate(-50%, -50%) translateY(0) rotate(-8deg) scale(1.15); opacity: 1; }
-    72%  { transform: translate(-50%, -50%) translateY(0) rotate(-6deg) scale(0.95); opacity: 1; }
-    100% { transform: translate(-50%, -50%) translateY(0) rotate(-6deg) scale(1); opacity: 1; }
+    /* Caída fuerte desde arriba */
+    0%   { transform: translate(-50%, -50%) translateY(-100vh) rotate(-25deg) scale(0.55); opacity: 0; }
+    35%  { transform: translate(-50%, -50%) translateY(-30vh) rotate(-18deg) scale(0.7); opacity: 0.5; }
+    /* Impacto — golpe seco, escala máxima */
+    62%  { transform: translate(-50%, -50%) translateY(0) rotate(-6deg) scale(1.18); opacity: 1; }
+    /* Rebote hacia arriba */
+    75%  { transform: translate(-50%, -50%) translateY(-8px) rotate(-4deg) scale(0.96); }
+    /* Asentado final */
+    90%  { transform: translate(-50%, -50%) translateY(0) rotate(-5deg) scale(1.02); }
+    100% { transform: translate(-50%, -50%) translateY(0) rotate(-5deg) scale(1); opacity: 1; }
   }
 
   .epic-sello-inner {
@@ -448,12 +392,30 @@ const PASSWORD = 'genilla2027';
       rgba(158, 82, 55, 1) 55%,
       rgba(100, 45, 25, 1) 100%);
     color: #F3E9D2;
+    /* Relieve — arranca plano y crece al momento del impacto */
     box-shadow:
       inset 0 3px 6px rgba(255, 240, 220, 0.4),
       inset 0 -6px 12px rgba(50, 20, 10, 0.5),
-      0 8px 24px rgba(50, 20, 10, 0.5),
-      0 3px 8px rgba(30, 20, 10, 0.3);
+      0 2px 4px rgba(30, 20, 10, 0.3);
     position: relative;
+    transition: box-shadow 350ms cubic-bezier(0.34, 1.5, 0.64, 1);
+  }
+  /* Relieve profundo cuando termina de estamparse */
+  .epic-overlay.activa .epic-sello-inner {
+    animation: sello-relieve 350ms cubic-bezier(0.34, 1.5, 0.64, 1) 750ms forwards;
+  }
+  @keyframes sello-relieve {
+    to {
+      box-shadow:
+        inset 0 4px 8px rgba(255, 240, 220, 0.5),
+        inset 0 -8px 18px rgba(50, 20, 10, 0.6),
+        /* sombra proyectada gruesa — el sello se ha "hundido" en el papel */
+        0 22px 40px rgba(30, 20, 10, 0.55),
+        0 8px 16px rgba(30, 20, 10, 0.45),
+        0 3px 6px rgba(30, 20, 10, 0.35),
+        /* halo cálido alrededor del sello */
+        0 0 60px rgba(196, 113, 79, 0.4);
+    }
   }
   .epic-sello-inner::before {
     content: '';
@@ -488,42 +450,42 @@ const PASSWORD = 'genilla2027';
     margin-top: 0.2rem;
   }
 
-  /* Goteo alrededor del sello */
+  /* Goteo cálido alrededor del sello, aparece con el impacto */
   .epic-sello-goteo {
     position: absolute;
-    inset: -12px;
+    inset: -20px;
     border-radius: 50%;
     background: radial-gradient(circle,
-      rgba(158, 82, 55, 0.35) 45%,
+      rgba(158, 82, 55, 0.45) 40%,
       transparent 65%);
-    filter: blur(6px);
+    filter: blur(8px);
     opacity: 0;
   }
   .epic-overlay.activa .epic-sello-goteo {
-    animation: goteo-aparecer 400ms ease-out 700ms forwards;
+    animation: goteo-aparecer 500ms ease-out 800ms forwards;
   }
   @keyframes goteo-aparecer {
-    from { opacity: 0; transform: scale(0.8); }
-    to   { opacity: 1; transform: scale(1.15); }
+    from { opacity: 0; transform: scale(0.7); }
+    to   { opacity: 1; transform: scale(1.2); }
   }
 
-  /* ─── Ondas expansivas concéntricas ─────────────────── */
+  /* ─── Ondas expansivas concéntricas al impacto ─────── */
   .epic-onda {
     position: absolute;
     top: 50%; left: 50%;
-    width: 200px;
-    height: 200px;
-    margin: -100px 0 0 -100px;
+    width: 220px;
+    height: 220px;
+    margin: -110px 0 0 -110px;
     border: 2px solid var(--color-teja);
     border-radius: 50%;
     opacity: 0;
     transform: scale(0.3);
   }
-  .epic-overlay.activa .epic-onda-1 { animation: onda 1.6s ease-out 700ms forwards; }
-  .epic-overlay.activa .epic-onda-2 { animation: onda 1.6s ease-out 850ms forwards; }
-  .epic-overlay.activa .epic-onda-3 { animation: onda 1.6s ease-out 1000ms forwards; }
+  .epic-overlay.activa .epic-onda-1 { animation: onda 1.8s ease-out 800ms forwards; }
+  .epic-overlay.activa .epic-onda-2 { animation: onda 1.8s ease-out 950ms forwards; }
+  .epic-overlay.activa .epic-onda-3 { animation: onda 1.8s ease-out 1100ms forwards; }
   @keyframes onda {
-    0%   { opacity: 0.7; transform: scale(0.3); border-width: 3px; }
+    0%   { opacity: 0.8; transform: scale(0.35); border-width: 3px; }
     100% { opacity: 0; transform: scale(6); border-width: 0.5px; }
   }
 
@@ -608,24 +570,23 @@ const PASSWORD = 'genilla2027';
 
   function lanzarEpica() {
     if (!epic || !particulas) return;
-    // Generar 40-50 partículas en direcciones aleatorias
+    // Generar partículas que explotan al momento del impacto del sello (~800ms)
     const total = 48;
     for (let i = 0; i < total; i++) {
       const p = document.createElement('span');
       const tipo = i % 3 === 0 ? 'p-gota' : (i % 3 === 1 ? 'p-hoja' : 'p-teja');
       p.className = `particula ${tipo}`;
       const angulo = (Math.PI * 2 * i) / total + Math.random() * 0.3;
-      const distancia = 200 + Math.random() * 400;
+      const distancia = 220 + Math.random() * 420;
       const dx = Math.cos(angulo) * distancia;
       const dy = Math.sin(angulo) * distancia;
       const rot = (Math.random() - 0.5) * 720;
       const dur = 1200 + Math.random() * 600;
-      const delay = 700 + Math.random() * 200;
+      const delay = 800 + Math.random() * 150;   // sincronizado con impacto
       p.style.transition = `transform ${dur}ms cubic-bezier(0.22, 0.61, 0.36, 1) ${delay}ms, opacity ${dur}ms ease-out ${delay}ms`;
       p.style.transform = 'translate(-50%, -50%) rotate(0deg)';
       p.style.opacity = '1';
       particulas.appendChild(p);
-      // reflow + trigger
       void p.offsetWidth;
       requestAnimationFrame(() => {
         p.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) rotate(${rot}deg)`;
