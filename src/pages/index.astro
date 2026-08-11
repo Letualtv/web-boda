@@ -1,21 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Portada from '../components/paginas/Portada.astro';
-
-const BASE_URL = import.meta.env.BASE_URL;
 ---
 
 <Layout title="Alba & Antonio · 24·07·2027 · Priego de Córdoba">
   <div class="ruta-wrap">
     <Portada />
-
-    <!-- CTA discreto para acceder -->
-    <a class="cta-invitados" href={`${BASE_URL}acceso/`.replace(/\/+/g, '/')}>
-      Acceso invitados
-      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M9 18l6-6-6-6"/>
-      </svg>
-    </a>
   </div>
 </Layout>
 
@@ -28,29 +18,4 @@ const BASE_URL = import.meta.env.BASE_URL;
     justify-content: center;
     z-index: 2;
   }
-
-  .cta-invitados {
-    position: fixed;
-    bottom: clamp(1rem, 3vh, 2rem);
-    left: 50%;
-    transform: translateX(-50%);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.65rem 1.5rem;
-    border-radius: 999px;
-    background: rgba(243, 233, 210, 0.75);
-    border: 1px solid rgba(30, 58, 95, 0.22);
-    color: var(--color-tinta);
-    font-family: var(--font-sans);
-    font-size: 0.7rem;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    text-decoration: none;
-    backdrop-filter: blur(6px);
-    transition: background 250ms ease, transform 250ms ease;
-    z-index: 40;
-  }
-  .cta-invitados:hover { background: rgba(243, 233, 210, 0.95); }
-  .cta-invitados:active { transform: translateX(-50%) scale(0.96); }
 </style>
