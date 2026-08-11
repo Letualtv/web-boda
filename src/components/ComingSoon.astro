@@ -1,0 +1,230 @@
+---
+const BASE_URL = import.meta.env.BASE_URL;
+const WEDDING_DATE = '2027-07-24T12:00:00';
+---
+
+<style>
+  #cs-wrap {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    background: #0a1422;
+  }
+
+  /* Foto de fondo */
+  #cs-bg {
+    position: absolute;
+    inset: -6%;
+    background-image: url('/img/portada.jpg'), linear-gradient(160deg, #1f3d5c 0%, #0a1520 100%);
+    background-size: cover;
+    background-position: center;
+    filter: blur(10px) brightness(0.4);
+    z-index: 0;
+  }
+
+  #cs-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(6,12,22,0.35) 0%, rgba(6,12,22,0.6) 100%);
+    z-index: 1;
+  }
+
+  /* Contenido */
+  #cs-inner {
+    position: relative;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(0.6rem, 2vh, 1rem);
+    padding: clamp(4rem, 10vh, 6rem) clamp(1.5rem, 5vw, 3rem);
+    width: 100%;
+    max-width: 640px;
+  }
+
+  #cs-names {
+    font-family: 'Great Vibes', cursive;
+    color: #FAF6EE;
+    line-height: 1.05;
+  }
+  #cs-names span.name  { display: block; font-size: clamp(3.5rem, 14vw, 7rem); }
+  #cs-names span.amp   { display: block; font-size: clamp(1.8rem, 6vw, 3.2rem); color: #D4C84A; margin: -0.2em 0; }
+
+  /* Splitting.js — chars animables */
+  #cs-names .char { display: inline-block; will-change: transform, opacity; }
+
+  .cs-sep {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: clamp(120px, 35vw, 220px);
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  .cs-sep-ln  { flex: 1; height: 1px; background: rgba(212,200,74,0.35); }
+  .cs-sep-dia { width: 6px; height: 6px; background: #D4C84A; transform: rotate(45deg); opacity: 0.65; flex-shrink: 0; }
+
+  #cs-date {
+    font-family: 'Lato', system-ui, sans-serif;
+    font-size: clamp(0.7rem, 2.2vw, 1rem);
+    font-weight: 300;
+    letter-spacing: 0.45em;
+    color: rgba(250,246,238,0.65);
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  #cs-countdown {
+    display: flex;
+    gap: clamp(1.2rem, 5vw, 2.5rem);
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  .cs-unit { text-align: center; }
+  .cs-num {
+    font-family: 'Great Vibes', cursive;
+    font-size: clamp(2.2rem, 8vw, 4rem);
+    color: #FAF6EE;
+    display: block;
+    line-height: 1;
+  }
+  .cs-lbl {
+    font-family: 'Lato', system-ui, sans-serif;
+    font-size: clamp(0.6rem, 1.6vw, 0.8rem);
+    letter-spacing: 0.4em;
+    color: rgba(212,200,74,0.65);
+    text-transform: uppercase;
+    display: block;
+    margin-top: 0.1rem;
+  }
+
+  /* Enlace discreto acceso invitados */
+  #cs-acceso {
+    position: absolute;
+    bottom: clamp(3.5rem, 9vw, 5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4;
+    font-family: 'Lato', system-ui, sans-serif;
+    font-size: clamp(0.55rem, 1.4vw, 0.7rem);
+    letter-spacing: 0.45em;
+    color: rgba(250,246,238,0.2);
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color 0.3s;
+    white-space: nowrap;
+  }
+  #cs-acceso:hover { color: rgba(212,200,74,0.55); }
+</style>
+
+<div id="cs-wrap">
+  <div id="cs-bg"></div>
+  <div id="cs-overlay"></div>
+
+  <!-- Contenido central -->
+  <div id="cs-inner">
+
+    <!-- Nombres -->
+    <div id="cs-names">
+      <span class="name" id="cs-name-1">Alba</span>
+      <span class="amp" id="cs-amp">&amp;</span>
+      <span class="name" id="cs-name-2">Antonio</span>
+    </div>
+
+    <!-- Separador -->
+    <div class="cs-sep" id="cs-sep">
+      <div class="cs-sep-ln"></div>
+      <div class="cs-sep-dia"></div>
+      <div class="cs-sep-ln"></div>
+    </div>
+
+    <!-- Fecha y lugar -->
+    <p id="cs-date">24 &nbsp;·&nbsp; Julio &nbsp;·&nbsp; 2027<br>Priego de Córdoba</p>
+
+    <!-- Cuenta atrás -->
+    <div id="cs-countdown">
+      <div class="cs-unit">
+        <span class="cs-num" id="cs-dias">000</span>
+        <span class="cs-lbl">días</span>
+      </div>
+      <div class="cs-unit">
+        <span class="cs-num" id="cs-horas">00</span>
+        <span class="cs-lbl">horas</span>
+      </div>
+      <div class="cs-unit">
+        <span class="cs-num" id="cs-min">00</span>
+        <span class="cs-lbl">min</span>
+      </div>
+      <div class="cs-unit">
+        <span class="cs-num" id="cs-seg">00</span>
+        <span class="cs-lbl">seg</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Acceso invitados (discreto) -->
+  <a id="cs-acceso" href={`${BASE_URL}acceso/`}>Invitados &rarr;</a>
+</div>
+
+<script define:vars={{ WEDDING_DATE }}>
+  // Cuenta atrás
+  const target = new Date(WEDDING_DATE).getTime();
+  function pad(n, digits = 2) { return String(Math.floor(n)).padStart(digits, '0'); }
+
+  function tick() {
+    const diff = target - Date.now();
+    if (diff <= 0) {
+      ['cs-dias','cs-horas','cs-min','cs-seg'].forEach(id => {
+        document.getElementById(id).textContent = '00';
+      });
+      clearInterval(intervalId);
+      return;
+    }
+    document.getElementById('cs-dias').textContent  = pad(diff / (1000*60*60*24), 3);
+    document.getElementById('cs-horas').textContent = pad((diff % (1000*60*60*24)) / (1000*60*60));
+    document.getElementById('cs-min').textContent   = pad((diff % (1000*60*60)) / (1000*60));
+    document.getElementById('cs-seg').textContent   = pad((diff % (1000*60)) / 1000);
+  }
+  tick();
+  const intervalId = setInterval(tick, 1000);
+  document.addEventListener('astro:before-swap', () => clearInterval(intervalId), { once: true });
+</script>
+
+<script>
+  import { gsap } from 'gsap';
+  import Lenis from 'lenis';
+  import Splitting from 'splitting';
+
+  // Lenis — scroll suave (activo desde el inicio para cualquier página futura)
+  const lenis = new Lenis({
+    duration: 1.4,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    touchMultiplier: 2,
+  });
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+  document.addEventListener('astro:before-swap', () => lenis.destroy(), { once: true });
+
+  // Splitting — dividir cada nombre en caracteres individuales
+  Splitting({ target: '.name', by: 'chars' });
+
+  // Estado inicial: todo invisible
+  gsap.set('.name .char', { opacity: 0, y: 36 });
+  gsap.set('#cs-amp',     { opacity: 0, y: 16 });
+
+  // Timeline de entrada
+  gsap.timeline({ defaults: { ease: 'power3.out' } })
+    .to('#cs-name-1 .char',   { opacity: 1, y: 0, duration: 0.9, stagger: 0.08, delay: 0.3 })
+    .to('#cs-amp',            { opacity: 1, y: 0, duration: 0.55 }, '-=0.3')
+    .to('#cs-name-2 .char',   { opacity: 1, y: 0, duration: 0.9, stagger: 0.06 }, '-=0.3')
+    .to('#cs-sep',            { opacity: 1, y: 0, duration: 1 }, '-=0.4')
+    .to('#cs-date',           { opacity: 1, y: 0, duration: 1 }, '-=0.6')
+    .to('#cs-countdown',      { opacity: 1, y: 0, duration: 1 }, '-=0.5');
+</script>

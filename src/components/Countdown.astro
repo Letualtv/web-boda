@@ -1,64 +1,62 @@
 ---
-// Fecha objetivo: 24 de julio de 2027, 12:00h
 const WEDDING_DATE = '2027-07-24T12:00:00';
+
+// theme="dark" → texto azul (sobre fondo claro)
+// theme="light" → texto blanco (sobre fondo oscuro/foto)
+const { theme = 'dark' } = Astro.props;
+
+const numColor  = theme === 'light' ? 'rgba(250,246,238,0.95)' : '#2B5F8E';
+const lblColor  = theme === 'light' ? 'rgba(250,246,238,0.45)' : 'rgba(43,95,142,0.5)';
+const headColor = theme === 'light' ? 'rgba(250,246,238,0.4)'  : 'rgba(43,95,142,0.6)';
 ---
 
-<section class="py-16 flex flex-col items-center gap-8">
-  <p class="font-sans text-xs tracking-[0.4em] uppercase" style="color: rgba(43, 95, 142, 0.6)">Quedan</p>
+<div style="display:flex;flex-direction:column;align-items:center;gap:1.5rem;padding:1rem 0;">
+  <p style={`font-family:'Lato',system-ui,sans-serif;font-size:0.6rem;letter-spacing:0.5em;text-transform:uppercase;color:${headColor};margin:0;`}>
+    Quedan
+  </p>
 
-  <div id="countdown" class="flex gap-6 md:gap-12 text-center">
-    <div class="flex flex-col items-center gap-1">
-      <span id="dias" class="gsap-fade-up font-serif text-5xl md:text-7xl font-light text-azul tabular-nums">00</span>
-      <span class="font-sans text-xs tracking-widest uppercase" style="color: rgba(43, 95, 142, 0.5)">días</span>
-    </div>
-    <div class="flex flex-col items-center gap-1">
-      <span id="horas" class="gsap-fade-up font-serif text-5xl md:text-7xl font-light text-azul tabular-nums">00</span>
-      <span class="font-sans text-xs tracking-widest uppercase" style="color: rgba(43, 95, 142, 0.5)">horas</span>
-    </div>
-    <div class="flex flex-col items-center gap-1">
-      <span id="minutos" class="gsap-fade-up font-serif text-5xl md:text-7xl font-light text-azul tabular-nums">00</span>
-      <span class="font-sans text-xs tracking-widest uppercase" style="color: rgba(43, 95, 142, 0.5)">minutos</span>
-    </div>
-    <div class="flex flex-col items-center gap-1">
-      <span id="segundos" class="gsap-fade-up font-serif text-5xl md:text-7xl font-light text-azul tabular-nums">00</span>
-      <span class="font-sans text-xs tracking-widest uppercase" style="color: rgba(43, 95, 142, 0.5)">segundos</span>
-    </div>
+  <div id="countdown" style="display:flex;gap:clamp(1rem,5vw,3rem);text-align:center;align-items:flex-start;">
+    {[
+      { id: 'dias',     label: 'días'    },
+      { id: 'horas',    label: 'horas'   },
+      { id: 'minutos',  label: 'min'     },
+      { id: 'segundos', label: 'seg'     },
+    ].map(({ id, label }) => (
+      <div style="display:flex;flex-direction:column;align-items:center;gap:0.35rem;">
+        <span
+          id={id}
+          class="gsap-fade-up"
+          style={`font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:clamp(2.5rem,8vw,4rem);line-height:1;color:${numColor};font-variant-numeric:tabular-nums;`}
+        >00</span>
+        <span style={`font-family:'Lato',system-ui,sans-serif;font-size:0.5rem;letter-spacing:0.4em;text-transform:uppercase;color:${lblColor};`}>
+          {label}
+        </span>
+      </div>
+    ))}
   </div>
-</section>
+</div>
 
 <script define:vars={{ WEDDING_DATE }}>
   const target = new Date(WEDDING_DATE).getTime();
 
-  function pad(n) {
-    return String(Math.floor(n)).padStart(2, '0');
-  }
+  function pad(n) { return String(Math.floor(n)).padStart(2, '0'); }
 
   function tick() {
-    const now = Date.now();
-    const diff = target - now;
-
+    const diff = target - Date.now();
     if (diff <= 0) {
-      document.getElementById('dias').textContent     = '00';
-      document.getElementById('horas').textContent    = '00';
-      document.getElementById('minutos').textContent  = '00';
-      document.getElementById('segundos').textContent = '00';
+      ['dias','horas','minutos','segundos'].forEach(id => {
+        document.getElementById(id).textContent = '00';
+      });
       clearInterval(intervalId);
       return;
     }
-
-    const days    = diff / (1000 * 60 * 60 * 24);
-    const hours   = (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
-    const minutes = (diff % (1000 * 60 * 60)) / (1000 * 60);
-    const seconds = (diff % (1000 * 60)) / 1000;
-
-    document.getElementById('dias').textContent     = pad(days);
-    document.getElementById('horas').textContent    = pad(hours);
-    document.getElementById('minutos').textContent  = pad(minutes);
-    document.getElementById('segundos').textContent = pad(seconds);
+    document.getElementById('dias').textContent     = pad(diff / (1000*60*60*24));
+    document.getElementById('horas').textContent    = pad((diff % (1000*60*60*24)) / (1000*60*60));
+    document.getElementById('minutos').textContent  = pad((diff % (1000*60*60)) / (1000*60));
+    document.getElementById('segundos').textContent = pad((diff % (1000*60)) / 1000);
   }
 
   tick();
   const intervalId = setInterval(tick, 1000);
-  // Limpia el timer si se usan View Transitions de Astro en el futuro
   document.addEventListener('astro:before-swap', () => clearInterval(intervalId), { once: true });
 </script>

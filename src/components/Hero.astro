@@ -1,22 +1,8 @@
 ---
 import Countdown from './Countdown.astro';
-
-// Pon vuestra foto en public/img/portada.jpg
-// Si no existe, se usa el degradado de fondo como fallback
 ---
 
 <style>
-  /* Cuenta atrás en blanco sobre foto oscura */
-  :global(#countdown span[id]) {
-    color: rgba(250,246,238,0.95) !important;
-  }
-  :global(#countdown span:not([id])) {
-    color: rgba(250,246,238,0.35) !important;
-  }
-  :global(#countdown p) {
-    color: rgba(250,246,238,0.35) !important;
-  }
-
   /* Botón de calendario */
   #cal-btn {
     background: transparent;
@@ -130,7 +116,7 @@ import Countdown from './Countdown.astro';
 
     <!-- Cuenta atrás -->
     <div id="hero-countdown" class="gsap-fade-up" style="width:100%;">
-      <Countdown />
+      <Countdown theme="light" />
     </div>
 
     <!-- Botón añadir al calendario -->
