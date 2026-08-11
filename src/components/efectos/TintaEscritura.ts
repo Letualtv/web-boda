@@ -67,20 +67,25 @@ export function crearTintaEscritura(cfg: TintaEscrituraConfig) {
   }
 
   // ─── Cursor pluma sigue el final del texto ─────────────
+  // Se posiciona relativo al PADRE de la pluma (el contenedor positioned),
+  // no relativo al display — evita offset cuando el display no llena todo.
   function actualizarPluma() {
+    const padre = cfg.pluma.parentElement;
+    if (!padre) return;
+    const rectPadre = padre.getBoundingClientRect();
     const chars = cfg.displayVisible.querySelectorAll<HTMLElement>('.char');
-    const rectDisp = cfg.displayVisible.getBoundingClientRect();
     let x: number;
     let y: number;
     if (chars.length === 0) {
-      // pluma en el centro visualmente
-      x = rectDisp.width / 2;
-      y = rectDisp.height * 0.55;
+      // pluma en el centro del padre, a la altura del display
+      const rectDisp = cfg.displayVisible.getBoundingClientRect();
+      x = rectPadre.width / 2 - 10;   // -10 = mitad del ancho de la pluma
+      y = rectDisp.top + rectDisp.height * 0.55 - rectPadre.top;
     } else {
       const ultimo = chars[chars.length - 1];
       const r = ultimo.getBoundingClientRect();
-      x = r.right - rectDisp.left + 4;
-      y = r.top + r.height * 0.7 - rectDisp.top;
+      x = r.right - rectPadre.left + 4;
+      y = r.top + r.height * 0.7 - rectPadre.top;
     }
     cfg.pluma.style.transform = `translate(${x}px, ${y}px)`;
   }

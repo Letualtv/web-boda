@@ -2,6 +2,8 @@
 /**
  * Enlace discreto al final del contenido de una sección.
  * Integrado en el flujo, no flotante.
+ * Además, hace que cualquier click en la página (fuera de enlaces/botones/inputs)
+ * navegue también a la siguiente sección — pase de página con tap.
  */
 interface Props {
   href: string;
@@ -12,12 +14,30 @@ const base = import.meta.env.BASE_URL;
 const url = (base + href.replace(/^\/+/, '')).replace(/\/+/g, '/');
 ---
 
-<a class="enlace-siguiente" href={url}>
+<a class="enlace-siguiente" href={url} data-siguiente>
   <span>{label}</span>
   <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M9 18l6-6-6-6"/>
   </svg>
 </a>
+
+<script>
+  // Click en cualquier lado de la página → pasa a la siguiente sección
+  const enlace = document.querySelector<HTMLAnchorElement>('a[data-siguiente]');
+  if (enlace) {
+    const destino = enlace.href;
+    document.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      if (!t) return;
+      // Ignorar clicks sobre elementos interactivos y enlaces (incluida la propia flecha)
+      if (t.closest('a, button, input, textarea, select, label, [role="button"], .idx-overlay, .epic-overlay')) return;
+      // Ignorar si el usuario está seleccionando texto
+      const sel = window.getSelection();
+      if (sel && sel.toString().length > 0) return;
+      window.location.href = destino;
+    });
+  }
+</script>
 
 <style>
   .enlace-siguiente {
