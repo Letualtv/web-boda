@@ -58,46 +58,66 @@ import FlechasNav      from './FlechasNav.astro';
     width: 100%;
     will-change: transform;
     transform: translate3d(0, 0, 0);
-    /* Ligero cambio de escala en el arrastre — sensación de hoja levantándose */
-    transform-origin: center;
   }
 
-  /* Sombra del pliegue en desktop — más marcada al arrastrar */
+  /* Cada página lleva un borde-sombra que la hace parecer una hoja
+     apilada sobre las de abajo — muy sutil pero da profundidad. */
+  :global(.pagina-marco) {
+    box-shadow:
+      -3px 0 6px rgba(50, 30, 15, 0.06),
+      -6px 0 20px rgba(50, 30, 15, 0.04);
+    position: relative;
+    /* Fondo explícito para que la sombra tenga contra qué apoyar */
+    background: var(--color-papel);
+  }
+
+  /* Sombra fija del pliegue izquierdo (spine del libro) — se ve siempre */
   .libro::before {
     content: '';
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
-    width: 40px;
+    width: 24px;
     pointer-events: none;
     z-index: 3;
-    background: linear-gradient(to right, rgba(50, 30, 15, 0.22) 0%, rgba(50, 30, 15, 0.06) 60%, transparent 100%);
-    opacity: calc(0.35 + var(--drag-progreso) * 0.6);
-    transition: opacity 300ms ease;
+    background: linear-gradient(to right,
+      rgba(50, 30, 15, 0.18) 0%,
+      rgba(50, 30, 15, 0.05) 60%,
+      transparent 100%);
+    opacity: calc(0.7 + var(--drag-progreso) * 0.3);
+    transition: opacity 400ms ease;
   }
-  .libro.arrastrando::before {
-    transition: none;
-  }
-  @media (max-width: 899px) {
-    .libro::before { display: none; }
-  }
+  .libro.arrastrando::before { transition: none; }
 
-  /* Sombra sutil en el borde derecho durante el arrastre — el borde de la hoja */
+  /* Sombra en el borde derecho — aparece durante drag/pase, simula
+     la hoja que se levanta sobre las siguientes. */
   .libro::after {
     content: '';
     position: absolute;
     top: 0;
     bottom: 0;
     right: 0;
-    width: 30px;
+    width: 40px;
     pointer-events: none;
     z-index: 3;
-    background: linear-gradient(to left, rgba(30, 20, 10, 0.15) 0%, transparent 100%);
-    opacity: calc(var(--drag-progreso) * 0.8);
-    transition: opacity 300ms ease;
+    background: linear-gradient(to left,
+      rgba(30, 20, 10, 0.20) 0%,
+      rgba(30, 20, 10, 0.05) 50%,
+      transparent 100%);
+    opacity: 0;
+    transition: opacity 400ms ease;
   }
-  .libro.arrastrando::after { transition: none; }
+  .libro.arrastrando::after,
+  .libro.pasando::after {
+    opacity: calc(0.35 + var(--drag-progreso) * 0.65);
+    transition: none;
+  }
+  .libro.pasando::after {
+    /* Durante la transición programática (sin drag) mostramos sombra fija */
+    opacity: 0.6;
+    transition: opacity 350ms ease;
+  }
 
   /* Botón de índice */
   .btn-indice {

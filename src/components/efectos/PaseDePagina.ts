@@ -44,12 +44,18 @@ export function crearPaseDePagina(cfg: PaseDePaginaConfig) {
 
   function aplicarTransformacion(animar: boolean) {
     animando = animar;
+    // Curva tipo "hoja de papel" — arranca decidida, se asienta al final
     cfg.cinta.style.transition = animar
-      ? 'transform 550ms cubic-bezier(0.32, 0.72, 0, 1)'
+      ? 'transform 700ms cubic-bezier(0.22, 0.61, 0.36, 1)'
       : 'none';
     cfg.cinta.style.transform = `translate3d(${-paginaActual * anchoViewport()}px, 0, 0)`;
     if (animar) {
-      window.setTimeout(() => { animando = false; }, 560);
+      // marcar la cinta como "en pase" para efectos visuales
+      cfg.contenedor.classList.add('pasando');
+      window.setTimeout(() => {
+        animando = false;
+        cfg.contenedor.classList.remove('pasando');
+      }, 710);
     }
   }
 
