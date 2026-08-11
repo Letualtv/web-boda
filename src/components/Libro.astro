@@ -43,13 +43,43 @@ import FlechasNav      from './FlechasNav.astro';
 </div>
 
 <style>
+  /* ─── Libro con marco visible ──────────────────────────
+     El libro NO ocupa todo el viewport. Tiene márgenes que dejan
+     ver el "escritorio" alrededor. Bordes redondeados sutiles,
+     sombra externa (libro apoyado), spine izquierdo y filo de
+     hojas apiladas en el borde derecho.
+  ──────────────────────────────────────────────────────── */
   .libro {
     position: fixed;
-    inset: 0;
+    top: 8px;
+    right: 12px;
+    bottom: 8px;
+    left: 12px;
     overflow: hidden;
     z-index: 2;
+    border-radius: 3px;
+    background: var(--color-papel);
+    box-shadow:
+      /* Sombra externa larga — libro apoyado en mesa */
+      0 16px 40px rgba(0, 0, 0, 0.45),
+      0 4px 12px rgba(0, 0, 0, 0.35),
+      /* Borde apenas visible */
+      0 0 0 1px rgba(30, 20, 10, 0.25);
     --drag-progreso: 0;
     --drag-direccion: 0;
+  }
+
+  /* En desktop, más margen y el libro más centrado */
+  @media (min-width: 900px) {
+    .libro {
+      top: 40px;
+      bottom: 40px;
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+      width: min(900px, calc(100vw - 80px));
+      border-radius: 4px;
+    }
   }
 
   .cinta {
@@ -60,75 +90,72 @@ import FlechasNav      from './FlechasNav.astro';
     transform: translate3d(0, 0, 0);
   }
 
-  /* Cada página lleva un borde-sombra que la hace parecer una hoja
-     apilada sobre las de abajo — muy sutil pero da profundidad. */
+  /* Cada página lleva fondo de papel + textura */
   :global(.pagina-marco) {
-    box-shadow:
-      -3px 0 6px rgba(50, 30, 15, 0.06),
-      -6px 0 20px rgba(50, 30, 15, 0.04);
-    position: relative;
-    /* Fondo explícito para que la sombra tenga contra qué apoyar */
-    background: var(--color-papel);
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.38 0 0 0 0 0.22 0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.15' numOctaves='4' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.28 0 0 0 0 0.14 0 0 0 0.22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size: 220px, 380px;
+    background-color: var(--color-papel);
   }
 
-  /* Sombra fija del pliegue izquierdo (spine del libro) — se ve siempre */
+  /* ─── Filo derecho del libro — pila de hojas visible ───
+     Rayas horizontales sutiles simulando el corte de las hojas
+     apiladas del libro cerrado. Aparece por encima del contenido.
+  ──────────────────────────────────────────────────────── */
   .libro::before {
     content: '';
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 0;
-    width: 24px;
+    right: 0;
+    width: 4px;
     pointer-events: none;
-    z-index: 3;
-    background: linear-gradient(to right,
-      rgba(50, 30, 15, 0.18) 0%,
-      rgba(50, 30, 15, 0.05) 60%,
-      transparent 100%);
-    opacity: calc(0.7 + var(--drag-progreso) * 0.3);
-    transition: opacity 400ms ease;
+    z-index: 4;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        rgba(180, 150, 105, 0.55) 0px,
+        rgba(180, 150, 105, 0.55) 1px,
+        rgba(120, 90, 55, 0.35) 1px,
+        rgba(120, 90, 55, 0.35) 2px
+      );
+    box-shadow:
+      -2px 0 4px rgba(30, 20, 10, 0.18) inset,
+      -1px 0 0 rgba(60, 40, 20, 0.3) inset;
   }
-  .libro.arrastrando::before { transition: none; }
 
-  /* Sombra en el borde derecho — aparece durante drag/pase, simula
-     la hoja que se levanta sobre las siguientes. */
+  /* Spine izquierdo — sombra oscura de la costura del libro */
   .libro::after {
     content: '';
     position: absolute;
     top: 0;
     bottom: 0;
-    right: 0;
-    width: 40px;
+    left: 0;
+    width: 32px;
     pointer-events: none;
-    z-index: 3;
-    background: linear-gradient(to left,
-      rgba(30, 20, 10, 0.20) 0%,
-      rgba(30, 20, 10, 0.05) 50%,
+    z-index: 4;
+    background: linear-gradient(to right,
+      rgba(30, 15, 5, 0.35) 0%,
+      rgba(30, 15, 5, 0.18) 30%,
+      rgba(30, 15, 5, 0.05) 70%,
       transparent 100%);
-    opacity: 0;
+    opacity: calc(0.7 + var(--drag-progreso) * 0.3);
     transition: opacity 400ms ease;
   }
-  .libro.arrastrando::after,
-  .libro.pasando::after {
-    opacity: calc(0.35 + var(--drag-progreso) * 0.65);
-    transition: none;
-  }
-  .libro.pasando::after {
-    /* Durante la transición programática (sin drag) mostramos sombra fija */
-    opacity: 0.6;
-    transition: opacity 350ms ease;
-  }
+  .libro.arrastrando::after { transition: none; }
 
-  /* Botón de índice */
+
+  /* Botón de índice — dentro del libro, esquina superior derecha */
   .btn-indice {
-    position: fixed;
-    top: clamp(0.75rem, 2vw, 1.25rem);
-    right: clamp(0.75rem, 2vw, 1.25rem);
-    width: 42px;
-    height: 42px;
+    position: absolute;
+    top: clamp(0.75rem, 2vh, 1.25rem);
+    right: clamp(1rem, 3vw, 1.75rem);   /* deja hueco al filo de hojas */
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: rgba(243, 233, 210, 0.55);
-    border: 1px solid rgba(30, 58, 95, 0.15);
+    background: rgba(243, 233, 210, 0.85);
+    border: 1px solid rgba(30, 58, 95, 0.2);
     color: var(--color-tinta);
     z-index: 45;
     cursor: pointer;
@@ -141,10 +168,10 @@ import FlechasNav      from './FlechasNav.astro';
     backdrop-filter: blur(4px);
   }
   .btn-indice.visible {
-    opacity: 0.75;
+    opacity: 0.85;
     pointer-events: auto;
   }
-  .btn-indice:hover  { opacity: 1; background: rgba(243, 233, 210, 0.85); }
+  .btn-indice:hover  { opacity: 1; background: rgba(243, 233, 210, 0.95); }
   .btn-indice:active { transform: scale(0.95); }
 </style>
 
