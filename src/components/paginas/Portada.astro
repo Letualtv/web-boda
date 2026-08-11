@@ -10,7 +10,7 @@ const PASSWORD = 'genilla2027';
     <div class="book-interior-luz"></div>
     <div class="book-interior-titulo">
       <span class="bi-linea"></span>
-      <span class="bi-marca">A · A</span>
+      <span class="bi-marca">Alba <em>&amp;</em> Antonio</span>
       <span class="bi-linea"></span>
     </div>
   </div>
@@ -173,15 +173,27 @@ const PASSWORD = 'genilla2027';
     transition: opacity 500ms ease 700ms, transform 700ms cubic-bezier(0.22, 0.61, 0.36, 1) 700ms;
   }
   .bi-linea {
-    width: 60px;
+    width: 40px;
     height: 1px;
     background: rgba(30, 58, 95, 0.4);
+    flex-shrink: 0;
   }
   .bi-marca {
     font-family: var(--font-vibes);
-    font-size: clamp(3rem, 10vw, 5rem);
+    font-size: clamp(2.2rem, 8vw, 4rem);
     line-height: 1;
     color: var(--color-tinta);
+    white-space: nowrap;
+  }
+  .bi-marca em {
+    font-style: normal;
+    color: var(--color-teja);
+    font-size: 0.7em;
+    margin: 0 0.15em;
+  }
+  @media (max-width: 480px) {
+    .book-interior-titulo { flex-direction: column; gap: 0.5rem; }
+    .bi-linea { width: 100px; }
   }
 
   /* Cubierta — el elemento que rota */
