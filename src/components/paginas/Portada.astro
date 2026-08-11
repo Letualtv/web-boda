@@ -553,6 +553,28 @@ const PASSWORD = 'genilla2027';
   }
   .btn-entrar:active { transform: scale(0.97); }
 
+  /* ─── Modo autenticado: oculta el input, muestra solo el botón "Abrir" ─── */
+  .tinta-contenedor.autenticado .pwd-real,
+  .tinta-contenedor.autenticado .linea-escritura {
+    display: none;
+  }
+  .tinta-contenedor.autenticado {
+    gap: 0.75rem;
+  }
+  .tinta-contenedor.autenticado .btn-entrar {
+    /* Botón más presente en modo autenticado */
+    background: rgba(212, 200, 74, 0.12);
+    border-color: rgba(212, 200, 74, 0.75);
+    color: #F3E9D2;
+    padding: 1rem 3rem;
+  }
+  .tinta-contenedor.autenticado .btn-entrar::before {
+    content: '→ ';
+    color: rgba(212, 200, 74, 0.85);
+    margin-right: 0.4em;
+    letter-spacing: 0;
+  }
+
   .mensaje-error {
     font-family: var(--font-serif);
     font-style: italic;
@@ -608,11 +630,6 @@ const PASSWORD = 'genilla2027';
   const BASE_URL = import.meta.env.BASE_URL;
   const DESTINO = (BASE_URL + 'bienvenida/').replace(/\/+/g, '/');
 
-  // Si ya está autenticado, redirigir directo a bienvenida
-  if (sessionStorage.getItem('boda_auth') === 'ok') {
-    window.location.replace(DESTINO);
-  }
-
   const escena = document.querySelector('.book-scene') as HTMLElement;
   const contenedor = document.getElementById('form-acceso') as HTMLFormElement;
   const inputReal = document.getElementById('pwd-real') as HTMLInputElement;
@@ -621,12 +638,26 @@ const PASSWORD = 'genilla2027';
   const gotitas = document.getElementById('gotitas') as HTMLElement;
   const btnEntrar = document.getElementById('btn-entrar') as HTMLButtonElement;
 
+  const yaAutenticado = sessionStorage.getItem('boda_auth') === 'ok';
+
   function abrirLibro() {
     if (!escena) return;
     escena.classList.add('abriendo');
+    setTimeout(() => { window.location.href = DESTINO; }, 1900);
   }
 
-  if (contenedor && inputReal && display && pluma && gotitas && btnEntrar) {
+  // Si ya está autenticado: activa modo "abrir directo" — no pide contraseña,
+  // el botón está siempre activo y al pulsarlo abre el libro.
+  if (yaAutenticado && contenedor && btnEntrar) {
+    contenedor.classList.add('autenticado', 'tiene-texto');
+    btnEntrar.disabled = false;
+    btnEntrar.textContent = 'Abrir';
+    contenedor.addEventListener('submit', (e) => {
+      e.preventDefault();
+      abrirLibro();
+    });
+  } else if (contenedor && inputReal && display && pluma && gotitas && btnEntrar) {
+    // Modo normal: pedir contraseña
     const password = contenedor.dataset.password || '';
 
     const tinta = crearTintaEscritura({
@@ -639,9 +670,6 @@ const PASSWORD = 'genilla2027';
       onCorrecto: () => {
         sessionStorage.setItem('boda_auth', 'ok');
         abrirLibro();
-        // Redirigir tras la animación completa (~1.6s para dejar
-        // ver la primera "página" del interior antes de saltar)
-        setTimeout(() => { window.location.href = DESTINO; }, 1900);
       },
       onError: () => { /* .error class aplicada por el motor */ },
     });
