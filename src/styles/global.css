@@ -1,89 +1,111 @@
 @import "tailwindcss";
 
 @theme {
-  /* Paleta de colores de la boda */
-  --color-limon:     #D4C84A;
-  --color-azul:      #2B5F8E;
-  --color-marfil:    #FAF6EE;
-  --color-oliva:     #6B7A3E;
-  --color-vino:      #7A2D3E;
-  --color-terracota: #C4714F;
+  /* ─── Paleta del libro ─────────────────────────────────────── */
+  --color-papel:        #F3E9D2;
+  --color-papel-sombra: #E8DCC0;
+  --color-tinta:        #1E3A5F;
+  --color-tinta-clara:  #3D5A80;
+  --color-limon:        #D4C84A;
+  --color-oliva:        #6B7A3E;
+  --color-teja:         #C4714F;
+  --color-vino:         #7A2D3E;
 
-  /* Tipografía */
-  --font-serif: "Cormorant Garamond", Georgia, serif;
-  --font-sans:  Lato, system-ui, sans-serif;
+  /* ─── Tipografías ──────────────────────────────────────────── */
+  --font-serif:  "Cormorant Garamond", Georgia, serif;
+  --font-sans:   Lato, system-ui, sans-serif;
+  --font-vibes:  "Great Vibes", cursive;
+  --font-brush:  "Alex Brush", cursive;
 }
 
-html {
-  scroll-behavior: smooth;
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; /* el libro gestiona su propio scroll interno */
+  background: var(--color-papel);
+  color: var(--color-tinta);
+  font-family: var(--font-serif);
+  overscroll-behavior: none;
 }
 
 body {
-  background-color: var(--color-marfil);
-  color: #2a2a2a;
-  font-family: var(--font-sans);
+  position: relative;
 }
 
-/* Textura sutil de fondo */
+/* Fondo tipo "mesa donde reposa el libro" en pantallas muy grandes */
+@media (min-width: 1600px) {
+  body {
+    background: var(--color-papel-sombra);
+  }
+}
+
+/* ─── Textura de papel (fibra) ─────────────────────────────────
+   feTurbulence estático — no animado. Se aplica una vez a body.
+──────────────────────────────────────────────────────────────── */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23FAF6EE'/%3E%3Crect width='1' height='1' fill='%23F0EBE0' opacity='0.4'/%3E%3C/svg%3E");
+  z-index: 1;
   pointer-events: none;
-  z-index: -1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.42 0 0 0 0 0.26 0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
+  background-size: 240px;
+  mix-blend-mode: multiply;
+  opacity: 0.55;
 }
 
-/* Separador de sección estilo cenefa andaluza */
-.separador {
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(
-    to right,
-    transparent,
-    var(--color-limon),
-    var(--color-terracota),
-    var(--color-limon),
-    transparent
-  );
-  margin: 2rem auto;
-  max-width: 400px;
-}
-
-/* Clase para animaciones de entrada — GSAP las activa al hacer scroll */
-.gsap-fade-up {
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-/* ─── Grain overlay ─────────────────────────────────────────────────────────
-   SVG feTurbulence como background-image data URI (técnica ibelick / CSS-Tricks)
-   El elemento es 400% del viewport y se anima con steps() para simular
-   el grano cinematográfico sin ninguna dependencia npm.
-──────────────────────────────────────────────────────────────────────────── */
-#grain {
+/* Manchas de tiempo — asimétricas */
+body::after {
+  content: '';
   position: fixed;
-  inset: -150%;
-  width: 400%;
-  height: 400%;
-  z-index: 9999;
+  inset: 0;
+  z-index: 1;
   pointer-events: none;
-  opacity: 0.055;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 600'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 180px;
-  animation: grain-shift 8s steps(10) infinite;
+  background-image:
+    radial-gradient(ellipse 180px 120px at 12% 18%, rgba(184,145,106,0.08), transparent 70%),
+    radial-gradient(ellipse 140px 90px  at 88% 25%, rgba(184,145,106,0.06), transparent 70%),
+    radial-gradient(ellipse 220px 160px at 78% 82%, rgba(184,145,106,0.09), transparent 70%),
+    radial-gradient(ellipse 100px 80px  at 8%  78%, rgba(184,145,106,0.07), transparent 70%),
+    radial-gradient(ellipse 160px 100px at 45% 55%, rgba(184,145,106,0.04), transparent 70%);
 }
 
-@keyframes grain-shift {
-  0%   { transform: translate(0,    0);    }
-  10%  { transform: translate(-5%,  -10%); }
-  20%  { transform: translate(-15%, 5%);   }
-  30%  { transform: translate(7%,   -25%); }
-  40%  { transform: translate(-5%,  25%);  }
-  50%  { transform: translate(-15%, 10%);  }
-  60%  { transform: translate(15%,  0%);   }
-  70%  { transform: translate(0%,   15%);  }
-  80%  { transform: translate(3%,   35%);  }
-  90%  { transform: translate(-10%, 10%);  }
+/* ─── Utilidades ───────────────────────────────────────────── */
+.font-vibes { font-family: var(--font-vibes); }
+.font-brush { font-family: var(--font-brush); }
+.font-serif { font-family: var(--font-serif); }
+.font-sans  { font-family: var(--font-sans); }
+
+/* Selección de texto en tinta */
+::selection {
+  background: rgba(212, 200, 74, 0.35);
+  color: var(--color-tinta);
+}
+
+/* Scroll suave para páginas con contenido interno */
+.pagina-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(30,58,95,0.3) transparent;
+}
+.pagina-scroll::-webkit-scrollbar { width: 6px; }
+.pagina-scroll::-webkit-scrollbar-thumb {
+  background: rgba(30,58,95,0.25);
+  border-radius: 3px;
+}
+
+/* Reducir motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

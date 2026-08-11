@@ -1,0 +1,328 @@
+---
+import PaginaMarco from '../PaginaMarco.astro';
+const PASSWORD = 'genilla2027';
+---
+
+<PaginaMarco titulo="Acceso" esquinaSupDer="/img/svg/esquinas/olivo-sup-der.svg">
+  <div class="acceso-inner">
+    <h2 class="titulo">Palabra de entrada</h2>
+
+    <p class="instrucciones">Escríbela con calma…</p>
+
+    <form id="form-acceso" class="tinta-contenedor vacio" data-password={PASSWORD} novalidate>
+      <!-- input real invisible pero accesible -->
+      <input
+        id="pwd-real"
+        type="password"
+        autocomplete="current-password"
+        autocapitalize="none"
+        autocorrect="off"
+        spellcheck="false"
+        aria-label="Palabra de entrada"
+        class="pwd-real"
+      />
+
+      <!-- placeholder cuando vacío -->
+      <span class="placeholder">— escríbela aquí —</span>
+
+      <!-- display visible caligráfico -->
+      <div class="tinta-display" id="tinta-display" aria-hidden="true"></div>
+
+      <!-- cursor pluma -->
+      <span class="pluma" id="pluma">
+        <svg viewBox="0 0 24 32" width="18" height="26" fill="none" stroke="#1E3A5F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 28 L20 4 L22 8 L8 30 Z" fill="#1E3A5F" fill-opacity="0.85"/>
+          <path d="M4 28 L8 30" stroke="#F3E9D2" stroke-width="1"/>
+          <line x1="6" y1="29" x2="10" y2="27" stroke="#F3E9D2" stroke-width="0.6"/>
+        </svg>
+      </span>
+
+      <!-- línea inferior tipo cuaderno -->
+      <span class="linea-cuaderno"></span>
+
+      <!-- contenedor de gotitas -->
+      <div class="gotitas" id="gotitas" aria-hidden="true"></div>
+
+      <!-- botón entrar — aparece con 3+ caracteres -->
+      <button type="submit" class="btn-entrar" id="btn-entrar" disabled>
+        Entrar
+      </button>
+
+      <p class="mensaje-error" id="mensaje-error">esta no es la palabra</p>
+    </form>
+
+    <p class="nota">Pregúntanos si no la recuerdas</p>
+  </div>
+</PaginaMarco>
+
+<style>
+  .acceso-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(1rem, 3vh, 1.75rem);
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+  }
+
+  .titulo {
+    font-family: var(--font-brush);
+    font-weight: 400;
+    font-size: clamp(2.2rem, 7vw, 3.2rem);
+    color: var(--color-tinta);
+    line-height: 1;
+    margin: 0;
+  }
+
+  .instrucciones {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-tinta-clara);
+    font-size: clamp(0.85rem, 2vw, 1rem);
+    margin: 0;
+  }
+
+  /* ─── Contenedor de tinta ─────────────────────────── */
+  .tinta-contenedor {
+    position: relative;
+    width: 100%;
+    min-height: 90px;
+    padding: 1rem 0.5rem;
+    margin: 1rem 0;
+  }
+
+  .pwd-real {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0;
+    border: none;
+    background: transparent;
+    font-size: 16px; /* previene zoom iOS */
+    z-index: 5;
+    cursor: text;
+  }
+
+  .placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: rgba(30, 58, 95, 0.35);
+    font-size: clamp(0.9rem, 2.4vw, 1.1rem);
+    letter-spacing: 0.15em;
+    pointer-events: none;
+    transition: opacity 300ms ease;
+    z-index: 2;
+  }
+  .tinta-contenedor:not(.vacio) .placeholder,
+  .tinta-contenedor.con-foco .placeholder { opacity: 0; }
+
+  /* Display caligráfico */
+  .tinta-display {
+    position: relative;
+    min-height: 3rem;
+    font-family: var(--font-brush);
+    color: var(--color-tinta);
+    font-size: clamp(1.8rem, 5.5vw, 2.6rem);
+    letter-spacing: 0.15em;
+    line-height: 1.2;
+    text-align: center;
+    word-break: break-all;
+    z-index: 3;
+    padding: 0 2rem 0.5rem;
+  }
+
+  /* Cada carácter */
+  .tinta-display :global(.char) {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 200ms ease, transform 300ms ease, color 400ms ease;
+  }
+  .tinta-display :global(.char.entrando) {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Cuando ya se ha "ocultado" — se vuelve un punto/manchita */
+  .tinta-display :global(.char.mancha) {
+    color: transparent;
+    position: relative;
+    width: 0.75em;
+    text-align: center;
+  }
+  .tinta-display :global(.char.mancha::after) {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 55%;
+    width: 8px;
+    height: 8px;
+    background: var(--color-tinta);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.75;
+  }
+
+  /* Pluma cursor */
+  .pluma {
+    position: absolute;
+    top: 1rem;
+    left: 0.5rem;
+    width: 18px;
+    height: 26px;
+    pointer-events: none;
+    z-index: 4;
+    transition: transform 100ms ease-out;
+    transform-origin: 50% 90%;
+    display: none;
+  }
+  .tinta-contenedor.con-foco .pluma { display: block; }
+  .tinta-contenedor.escribiendo .pluma {
+    animation: pluma-rotar 250ms ease-in-out infinite alternate;
+  }
+  @keyframes pluma-rotar {
+    from { rotate: -1.5deg; }
+    to   { rotate:  1.5deg; }
+  }
+
+  /* Línea inferior tipo cuaderno */
+  .linea-cuaderno {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: var(--color-tinta-clara);
+    opacity: 0.3;
+    transition: opacity 400ms ease;
+  }
+  .tinta-contenedor.con-foco .linea-cuaderno { opacity: 0.6; }
+
+  /* Contenedor de gotitas */
+  .gotitas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .gotitas :global(.gotita) {
+    position: absolute;
+    background: var(--color-tinta);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Botón entrar */
+  .btn-entrar {
+    margin-top: 1rem;
+    background: transparent;
+    border: 1px solid rgba(30, 58, 95, 0.4);
+    color: var(--color-tinta);
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    padding: 0.9rem 3.5rem;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 400ms ease, background 250ms ease, border-color 250ms ease;
+  }
+  .tinta-contenedor.tiene-texto .btn-entrar {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .btn-entrar:hover {
+    background: rgba(30, 58, 95, 0.06);
+    border-color: var(--color-tinta);
+  }
+  .btn-entrar:disabled { opacity: 0; }
+
+  /* Mensaje de error */
+  .mensaje-error {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-vino);
+    font-size: 0.95rem;
+    margin: 0.75rem 0 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 300ms ease;
+  }
+  .tinta-contenedor.error .mensaje-error { opacity: 1; }
+  .tinta-contenedor.error .tinta-display,
+  .tinta-contenedor.error .pluma svg path { color: var(--color-vino); }
+  .tinta-contenedor.error {
+    animation: temblor 400ms ease-in-out 2;
+  }
+  @keyframes temblor {
+    0%, 100% { transform: translateX(0); }
+    25%      { transform: translateX(-5px); }
+    75%      { transform: translateX(5px); }
+  }
+
+  .tinta-contenedor.correcto {
+    filter: saturate(0.7);
+    transition: filter 500ms ease;
+  }
+
+  .nota {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-tinta-clara);
+    font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+    opacity: 0.7;
+    margin: 0;
+  }
+</style>
+
+<script>
+  import { crearTintaEscritura } from '../efectos/TintaEscritura';
+
+  const contenedor = document.getElementById('form-acceso') as HTMLFormElement;
+  const inputReal = document.getElementById('pwd-real') as HTMLInputElement;
+  const display = document.getElementById('tinta-display') as HTMLElement;
+  const pluma = document.getElementById('pluma') as HTMLElement;
+  const gotitas = document.getElementById('gotitas') as HTMLElement;
+  const btnEntrar = document.getElementById('btn-entrar') as HTMLButtonElement;
+
+  if (contenedor && inputReal && display && pluma && gotitas && btnEntrar) {
+    const password = contenedor.dataset.password || '';
+
+    const tinta = crearTintaEscritura({
+      contenedor,
+      inputReal,
+      displayVisible: display,
+      pluma,
+      gotitas,
+      password,
+      onCorrecto: () => {
+        document.dispatchEvent(new CustomEvent('boda:autenticado'));
+      },
+      onError: () => { /* clase .error ya aplicada por el motor */ },
+    });
+
+    inputReal.addEventListener('input', () => {
+      if (inputReal.value.length >= 3) {
+        contenedor.classList.add('tiene-texto');
+        btnEntrar.disabled = false;
+      } else {
+        contenedor.classList.remove('tiene-texto');
+        btnEntrar.disabled = true;
+      }
+    });
+
+    contenedor.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (inputReal.value.length >= 3) tinta.verificar();
+    });
+  }
+</script>

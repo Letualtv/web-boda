@@ -1,0 +1,235 @@
+---
+import PaginaMarco from '../PaginaMarco.astro';
+---
+
+<PaginaMarco titulo="Cómo llegar" scroll>
+  <div class="autobuses-inner">
+    <h2 class="titulo">Cómo llegar</h2>
+
+    <div class="separador">
+      <span class="linea"></span>
+      <span class="diamante"></span>
+      <span class="linea"></span>
+    </div>
+
+    <p class="intro">
+      Habrá autobuses de cortesía para ir y volver.
+      Estas son las paradas y los horarios.
+    </p>
+
+    <div class="rutas">
+      <!-- Ida -->
+      <section class="ruta">
+        <div class="ruta-cabecera">
+          <span class="bus-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="4" width="16" height="14" rx="2"/>
+              <line x1="4" y1="12" x2="20" y2="12"/>
+              <circle cx="8" cy="20" r="1.5"/>
+              <circle cx="16" cy="20" r="1.5"/>
+              <path d="M6 8h4"/><path d="M14 8h4"/>
+            </svg>
+          </span>
+          <div>
+            <h3 class="ruta-titulo">Ida</h3>
+            <p class="ruta-hora">Salida · 11:30 h</p>
+          </div>
+        </div>
+        <ul class="paradas">
+          <li>
+            <span class="parada-hora">11:30</span>
+            <span class="parada-lugar">
+              <a href="https://maps.google.com/?q=Plaza+de+Andalucía+Priego+de+Córdoba" target="_blank" rel="noopener">
+                Plaza de Andalucía · Priego de Córdoba
+              </a>
+            </span>
+          </li>
+          <li>
+            <span class="parada-hora">11:45</span>
+            <span class="parada-lugar">
+              <a href="https://maps.google.com/?q=Priego+de+Córdoba" target="_blank" rel="noopener">
+                [Segunda parada — pendiente]
+              </a>
+            </span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Vuelta -->
+      <section class="ruta">
+        <div class="ruta-cabecera">
+          <span class="bus-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" style="transform:scaleX(-1)">
+              <rect x="4" y="4" width="16" height="14" rx="2"/>
+              <line x1="4" y1="12" x2="20" y2="12"/>
+              <circle cx="8" cy="20" r="1.5"/>
+              <circle cx="16" cy="20" r="1.5"/>
+              <path d="M6 8h4"/><path d="M14 8h4"/>
+            </svg>
+          </span>
+          <div>
+            <h3 class="ruta-titulo">Vuelta</h3>
+            <p class="ruta-hora">Dos salidas · 01:00 h y 04:00 h</p>
+          </div>
+        </div>
+        <ul class="paradas">
+          <li>
+            <span class="parada-hora">01:00</span>
+            <span class="parada-lugar">Del recinto a Priego de Córdoba</span>
+          </li>
+          <li>
+            <span class="parada-hora">04:00</span>
+            <span class="parada-lugar">Última salida del recinto</span>
+          </li>
+        </ul>
+      </section>
+    </div>
+
+    <p class="nota">
+      Si vais por vuestra cuenta, el recinto dispone de <strong>aparcamiento</strong> propio.
+    </p>
+  </div>
+</PaginaMarco>
+
+<style>
+  .autobuses-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.25rem;
+    width: 100%;
+    max-width: 560px;
+  }
+
+  .titulo {
+    font-family: var(--font-brush);
+    font-weight: 400;
+    font-size: clamp(2.5rem, 7vw, 3.6rem);
+    color: var(--color-tinta);
+    line-height: 1;
+    margin: 0;
+  }
+
+  .separador {
+    display: flex; align-items: center; gap: 0.75rem;
+    width: clamp(120px, 30vw, 180px);
+    margin: 0.5rem 0 1rem;
+  }
+  .separador .linea {
+    flex: 1; height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-tinta-clara), transparent);
+  }
+  .separador .diamante {
+    width: 6px; height: 6px;
+    background: var(--color-tinta-clara);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  .intro {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-tinta-clara);
+    font-size: clamp(0.9rem, 2.2vw, 1.05rem);
+    max-width: 400px;
+    margin: 0 0 1rem;
+  }
+
+  .rutas {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .ruta {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: left;
+    max-width: 480px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .ruta-cabecera {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .bus-icon {
+    color: var(--color-teja);
+    display: flex;
+    align-items: center;
+  }
+
+  .ruta-titulo {
+    font-family: var(--font-brush);
+    font-weight: 400;
+    color: var(--color-tinta);
+    font-size: clamp(1.4rem, 4vw, 1.7rem);
+    margin: 0;
+    line-height: 1;
+  }
+
+  .ruta-hora {
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    color: var(--color-tinta-clara);
+    text-transform: uppercase;
+    margin: 0.3rem 0 0;
+    text-align: left;
+  }
+
+  .paradas {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    border-top: 1px solid rgba(30, 58, 95, 0.15);
+    padding-top: 1rem;
+  }
+
+  .paradas li {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 1rem;
+    align-items: baseline;
+    font-family: var(--font-serif);
+    font-size: clamp(0.95rem, 2.2vw, 1.05rem);
+    color: var(--color-tinta);
+  }
+
+  .parada-hora {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    color: var(--color-teja);
+    letter-spacing: 0.1em;
+    font-size: 0.85em;
+  }
+
+  .parada-lugar a {
+    color: var(--color-tinta);
+    text-decoration: underline;
+    text-decoration-color: rgba(30, 58, 95, 0.25);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 250ms ease;
+  }
+  .parada-lugar a:hover { text-decoration-color: var(--color-tinta); }
+
+  .nota {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-tinta-clara);
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    max-width: 440px;
+    margin: 1.5rem 0 0;
+  }
+</style>

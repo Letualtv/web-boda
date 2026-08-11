@@ -1,0 +1,192 @@
+---
+import PaginaMarco from '../PaginaMarco.astro';
+const WEDDING_DATE = '2027-07-24T12:30:00';
+---
+
+<PaginaMarco
+  titulo="Portada"
+  esquinaSupIzq="/img/svg/esquinas/olivo-sup-izq.svg"
+  esquinaInfDer="/img/png/limones/limon-inf-der.png"
+>
+  <div class="portada-inner">
+    <p class="invitacion">Estáis invitados a la boda de</p>
+
+    <h1 class="nombres">
+      <span class="nombre">Alba</span>
+      <span class="amp">&amp;</span>
+      <span class="nombre">Antonio</span>
+    </h1>
+
+    <div class="separador-diamante">
+      <span class="linea"></span>
+      <span class="diamante"></span>
+      <span class="linea"></span>
+    </div>
+
+    <p class="fecha">24 · Julio · 2027</p>
+    <p class="lugar">Priego de Córdoba</p>
+
+    <div class="countdown" id="countdown-portada">
+      <div class="unidad">
+        <span class="num" data-cd="dias">000</span>
+        <span class="lbl">días</span>
+      </div>
+      <div class="unidad">
+        <span class="num" data-cd="horas">00</span>
+        <span class="lbl">horas</span>
+      </div>
+      <div class="unidad">
+        <span class="num" data-cd="min">00</span>
+        <span class="lbl">min</span>
+      </div>
+      <div class="unidad">
+        <span class="num" data-cd="seg">00</span>
+        <span class="lbl">seg</span>
+      </div>
+    </div>
+
+    <p class="pasar-pagina">
+      <span>Desliza para entrar</span>
+      <span class="flechita">→</span>
+    </p>
+  </div>
+</PaginaMarco>
+
+<style>
+  .portada-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(0.75rem, 2.5vh, 1.2rem);
+    text-align: center;
+  }
+
+  .invitacion {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    color: var(--color-tinta-clara);
+    letter-spacing: 0.15em;
+    margin: 0;
+  }
+
+  .nombres {
+    font-family: var(--font-vibes);
+    font-weight: 400;
+    color: var(--color-tinta);
+    line-height: 1;
+    margin: 0.5rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .nombres .nombre { font-size: clamp(4rem, 15vw, 7rem); }
+  .nombres .amp    { font-size: clamp(2rem, 7vw, 3.5rem); color: var(--color-teja); margin: -0.15em 0; }
+
+  .separador-diamante {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: clamp(160px, 40vw, 260px);
+    margin: 0.5rem 0;
+  }
+  .separador-diamante .linea {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-limon), transparent);
+  }
+  .separador-diamante .diamante {
+    width: 7px;
+    height: 7px;
+    background: var(--color-limon);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  .fecha {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: clamp(0.85rem, 2.2vw, 1.1rem);
+    color: var(--color-tinta);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .lugar {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(0.9rem, 2.2vw, 1.15rem);
+    color: var(--color-tinta-clara);
+    letter-spacing: 0.05em;
+    margin: 0;
+  }
+
+  /* Countdown */
+  .countdown {
+    display: flex;
+    gap: clamp(1rem, 4vw, 2.2rem);
+    margin-top: 1.2rem;
+  }
+  .unidad { text-align: center; display: flex; flex-direction: column; gap: 0.15rem; }
+  .num {
+    font-family: var(--font-vibes);
+    font-size: clamp(2.4rem, 8vw, 3.8rem);
+    color: var(--color-tinta);
+    line-height: 1;
+    display: block;
+  }
+  .lbl {
+    font-family: var(--font-sans);
+    font-size: clamp(0.55rem, 1.4vw, 0.7rem);
+    letter-spacing: 0.35em;
+    color: var(--color-tinta-clara);
+    text-transform: uppercase;
+  }
+
+  .pasar-pagina {
+    margin-top: clamp(1.5rem, 4vh, 2.5rem);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-sans);
+    font-size: clamp(0.65rem, 1.6vw, 0.78rem);
+    color: var(--color-tinta-clara);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+  .flechita {
+    display: inline-block;
+    animation: flechita 1.8s ease-in-out infinite;
+  }
+  @keyframes flechita {
+    0%, 100% { transform: translateX(0); opacity: 0.5; }
+    50%      { transform: translateX(6px); opacity: 1; }
+  }
+</style>
+
+<script define:vars={{ WEDDING_DATE }}>
+  const target = new Date(WEDDING_DATE).getTime();
+  const pad = (n, d = 2) => String(Math.floor(n)).padStart(d, '0');
+  const $ = (k) => document.querySelector(`#countdown-portada [data-cd="${k}"]`);
+
+  function tick() {
+    const diff = target - Date.now();
+    if (diff <= 0) {
+      ['dias','horas','min','seg'].forEach(k => { const el = $(k); if (el) el.textContent = '00'; });
+      return;
+    }
+    const dias  = diff / (1000*60*60*24);
+    const horas = (diff % (1000*60*60*24)) / (1000*60*60);
+    const min   = (diff % (1000*60*60)) / (1000*60);
+    const seg   = (diff % (1000*60)) / 1000;
+    if ($('dias'))  $('dias').textContent  = pad(dias, 3);
+    if ($('horas')) $('horas').textContent = pad(horas);
+    if ($('min'))   $('min').textContent   = pad(min);
+    if ($('seg'))   $('seg').textContent   = pad(seg);
+  }
+  tick();
+  setInterval(tick, 1000);
+</script>

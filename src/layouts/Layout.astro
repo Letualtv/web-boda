@@ -7,8 +7,8 @@ interface Props {
 }
 
 const {
-  title = 'Nuestra Boda · 24·07·2027',
-  description = 'Nos casamos el 24 de julio de 2027. Guarda la fecha.',
+  title = 'Alba & Antonio · 24·07·2027',
+  description = 'Invitación de boda · Priego de Córdoba · 24 de julio de 2027',
 } = Astro.props;
 ---
 
@@ -16,9 +16,9 @@ const {
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#F3E9D2" />
     <meta name="description" content={description} />
-    <!-- Evitar indexación en buscadores -->
     <meta name="robots" content="noindex, nofollow" />
     <title>{title}</title>
 
@@ -26,16 +26,18 @@ const {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Lato:wght@300;400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Great+Vibes&family=Lato:wght@300;400;700&display=swap"
       rel="stylesheet"
     />
 
-    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
-    <!-- Grain overlay — SVG feTurbulence, sin dependencias -->
-    <div id="grain" aria-hidden="true"></div>
+    <noscript>
+      <div style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#F3E9D2;color:#1E3A5F;font-family:'Cormorant Garamond',Georgia,serif;font-size:1.2rem;text-align:center;padding:2rem;z-index:9999;">
+        Esta invitación necesita JavaScript activado. Por favor, actívalo para verla.
+      </div>
+    </noscript>
     <slot />
   </body>
 </html>

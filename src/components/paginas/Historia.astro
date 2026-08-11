@@ -1,0 +1,120 @@
+---
+import PaginaMarco from '../PaginaMarco.astro';
+---
+
+<PaginaMarco
+  titulo="Nuestra historia"
+  fondoAcuarela="/img/png/acuarelas/mancha-verde-01.png"
+  scroll
+>
+  <div class="historia-inner">
+    <h2 class="titulo">Nuestra historia</h2>
+
+    <div class="separador">
+      <span class="linea"></span>
+      <span class="diamante"></span>
+      <span class="linea"></span>
+    </div>
+
+    <div class="cuerpo">
+      <p class="parrafo">
+        <span class="capitular">N</span>os conocimos un verano en Priego, entre calles blancas
+        y macetas de gitanilla. No hubo trueno ni relámpago — solo una conversación que
+        duró horas, un café que se enfrió sin darnos cuenta y la sensación de que ya nos
+        conocíamos de siempre.
+      </p>
+
+      <p class="parrafo">
+        Desde entonces han pasado cosas: viajes cortos y algún viaje largo, una casa
+        que empezamos a llamar nuestra, tardes de olivar y noches de terraza. Aprendimos
+        que los planes se rompen y los mejores días son los que aparecen sin avisar.
+      </p>
+
+      <p class="parrafo">
+        El 24 de julio de 2027 queremos volver al principio, al pueblo blanco, a las
+        calles que nos vieron empezar. Y hacerlo con vosotros — que sois parte de esta
+        historia tanto como nosotros.
+      </p>
+    </div>
+
+    <p class="ornamento" aria-hidden="true">✦</p>
+  </div>
+</PaginaMarco>
+
+<style>
+  .historia-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.25rem;
+    width: 100%;
+    max-width: 560px;
+  }
+
+  .titulo {
+    font-family: var(--font-brush);
+    font-weight: 400;
+    font-size: clamp(2.5rem, 7vw, 3.6rem);
+    color: var(--color-tinta);
+    line-height: 1;
+    margin: 0;
+  }
+
+  .separador {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: clamp(120px, 30vw, 180px);
+    margin: 0.5rem 0 1rem;
+  }
+  .separador .linea {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-oliva), transparent);
+  }
+  .separador .diamante {
+    width: 6px; height: 6px;
+    background: var(--color-oliva);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  .cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .parrafo {
+    font-family: var(--font-serif);
+    font-size: clamp(1rem, 2.3vw, 1.1rem);
+    line-height: 1.75;
+    color: var(--color-tinta);
+    text-align: justify;
+    text-align-last: center;
+    margin: 0;
+    hyphens: auto;
+  }
+
+  .capitular {
+    float: left;
+    font-family: var(--font-vibes);
+    font-size: 4em;
+    line-height: 0.8;
+    color: var(--color-oliva);
+    padding: 0.1em 0.15em 0 0;
+    margin-top: 0.1em;
+  }
+
+  .ornamento {
+    color: var(--color-limon);
+    font-size: 1.5rem;
+    margin: 1rem 0 0;
+    opacity: 0.6;
+  }
+
+  @media (max-width: 640px) {
+    .parrafo { text-align: left; text-align-last: left; }
+  }
+</style>

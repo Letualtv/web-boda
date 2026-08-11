@@ -1,0 +1,116 @@
+---
+import PaginaMarco from '../PaginaMarco.astro';
+---
+
+<PaginaMarco
+  titulo="Bienvenida"
+  esquinaSupIzq="/img/svg/azulejos/azulejo-sup-izq.svg"
+  esquinaInfDer="/img/svg/azulejos/azulejo-inf-der.svg"
+>
+  <div class="bienvenida-inner">
+    <h2 class="titulo">Bienvenidos</h2>
+
+    <div class="separador">
+      <span class="linea"></span>
+      <span class="diamante"></span>
+      <span class="linea"></span>
+    </div>
+
+    <div class="cuerpo">
+      <p class="parrafo">
+        <span class="capitular">Q</span>ueridos amigos y familia, gracias por acompañarnos en el
+        camino que nos ha traído hasta aquí. Este libro guarda todos los detalles del día que
+        celebraremos juntos.
+      </p>
+
+      <p class="parrafo">
+        Pasad las páginas con calma, porque cada una es un pedacito de nosotros —
+        del sitio, del recorrido y de la gente que ha hecho todo esto posible.
+      </p>
+    </div>
+
+    <p class="firma">Alba &amp; Antonio</p>
+  </div>
+</PaginaMarco>
+
+<style>
+  .bienvenida-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.25rem;
+    width: 100%;
+  }
+
+  .titulo {
+    font-family: var(--font-brush);
+    font-weight: 400;
+    font-size: clamp(2.8rem, 9vw, 4.5rem);
+    color: var(--color-tinta);
+    line-height: 1;
+    margin: 0;
+  }
+
+  .separador {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: clamp(120px, 30vw, 180px);
+    margin: 0.5rem 0 1.5rem;
+  }
+  .separador .linea {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-limon), transparent);
+  }
+  .separador .diamante {
+    width: 6px; height: 6px;
+    background: var(--color-limon);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  .cuerpo {
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .parrafo {
+    font-family: var(--font-serif);
+    font-size: clamp(1rem, 2.4vw, 1.15rem);
+    line-height: 1.7;
+    color: var(--color-tinta);
+    text-align: justify;
+    text-align-last: center;
+    margin: 0;
+    hyphens: auto;
+  }
+
+  .capitular {
+    float: left;
+    font-family: var(--font-vibes);
+    font-size: 4em;
+    line-height: 0.8;
+    color: var(--color-limon);
+    padding: 0.1em 0.15em 0 0;
+    margin-top: 0.1em;
+  }
+
+  .firma {
+    font-family: var(--font-vibes);
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    color: var(--color-teja);
+    align-self: flex-end;
+    margin: 1.5rem 0 0;
+    line-height: 1;
+    transform: rotate(-3deg);
+  }
+
+  @media (max-width: 640px) {
+    .parrafo { text-align: left; text-align-last: left; }
+    .firma { align-self: center; }
+  }
+</style>
