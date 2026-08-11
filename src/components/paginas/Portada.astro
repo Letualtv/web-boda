@@ -93,33 +93,49 @@ const WEDDING_DATE = '2027-07-24T12:30:00';
   .palabra {
     display: inline-block;
     position: relative;
-    overflow: hidden;
   }
 
   /* Alba y Antonio grandes, & mediano y teja */
   .palabra-1, .palabra-3 { font-size: clamp(4rem, 15vw, 7rem); }
   .palabra-2             { font-size: clamp(2rem, 7vw, 3.5rem); color: var(--color-teja); margin: -0.15em 0; }
 
-  /* El span interior se anima con clip-path de izquierda a derecha */
+  /* El span interior se anima con clip-path.
+     Los porcentajes de inset dejan margen para no cortar
+     ascendentes/descendentes de Great Vibes. */
   .reveal {
     display: inline-block;
-    /* Estado inicial: solo la parte izquierda visible (nada) */
-    clip-path: inset(0 100% 0 0);
-    -webkit-clip-path: inset(0 100% 0 0);
+    /* Estado inicial: cubierto por la derecha */
+    clip-path: inset(-20% 100% -20% -5%);
+    -webkit-clip-path: inset(-20% 100% -20% -5%);
     transition: clip-path 900ms cubic-bezier(0.65, 0.05, 0.36, 1);
     -webkit-transition: -webkit-clip-path 900ms cubic-bezier(0.65, 0.05, 0.36, 1);
-    /* pequeño padding para que el clip no corte descendentes */
-    padding: 0.15em 0.05em;
-    margin: -0.15em -0.05em;
+    will-change: clip-path;
   }
 
-  .nombres-wrap.dibujando .palabra-1 .reveal { clip-path: inset(0 0 0 0); -webkit-clip-path: inset(0 0 0 0); transition-delay: 0.3s; }
-  .nombres-wrap.dibujando .palabra-2 .reveal { clip-path: inset(0 0 0 0); -webkit-clip-path: inset(0 0 0 0); transition-delay: 1.3s; transition-duration: 500ms; }
-  .nombres-wrap.dibujando .palabra-3 .reveal { clip-path: inset(0 0 0 0); -webkit-clip-path: inset(0 0 0 0); transition-delay: 1.9s; transition-duration: 1100ms; }
+  /* Estado final: visible con márgenes negativos para no recortar */
+  .nombres-wrap.dibujando .palabra-1 .reveal,
+  .nombres-wrap.dibujando .palabra-2 .reveal,
+  .nombres-wrap.dibujando .palabra-3 .reveal {
+    clip-path: inset(-20% -5% -20% -5%);
+    -webkit-clip-path: inset(-20% -5% -20% -5%);
+  }
+  .nombres-wrap.dibujando .palabra-1 .reveal { transition-delay: 0.3s; }
+  .nombres-wrap.dibujando .palabra-2 .reveal { transition-delay: 1.3s; transition-duration: 500ms; }
+  .nombres-wrap.dibujando .palabra-3 .reveal { transition-delay: 1.9s; transition-duration: 1100ms; }
 
-  /* Fallback prefers-reduced-motion */
+  /* Ya vistos previamente — se muestran directos sin animar */
+  .nombres-wrap.ya-visto .reveal {
+    clip-path: inset(-20% -5% -20% -5%) !important;
+    -webkit-clip-path: inset(-20% -5% -20% -5%) !important;
+    transition: none !important;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .reveal { clip-path: none !important; -webkit-clip-path: none !important; transition: none !important; }
+    .reveal {
+      clip-path: inset(-20% -5% -20% -5%) !important;
+      -webkit-clip-path: inset(-20% -5% -20% -5%) !important;
+      transition: none !important;
+    }
   }
 
   .separador-diamante {
@@ -205,13 +221,23 @@ const WEDDING_DATE = '2027-07-24T12:30:00';
 </style>
 
 <script>
-  // Trigger de la animación reveal — un frame después del mount para
-  // que la clase inicial (clip-path:inset(0 100% 0 0)) esté aplicada.
+  // Animación reveal — solo se ejecuta en la primera visita de la sesión.
+  // En recargas/vueltas atrás desde otras páginas, se muestran directos.
+  const KEY_ANIM = 'boda_nombres_vistos';
   const nombres = document.getElementById('nombres-anim');
+
   if (nombres) {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => nombres.classList.add('dibujando'));
-    });
+    if (sessionStorage.getItem(KEY_ANIM) === 'ok') {
+      nombres.classList.add('ya-visto');
+    } else {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => nombres.classList.add('dibujando'));
+      });
+      // Marcar como vistos al terminar la última transición (Antonio ~3s)
+      setTimeout(() => {
+        sessionStorage.setItem(KEY_ANIM, 'ok');
+      }, 3200);
+    }
   }
 </script>
 
