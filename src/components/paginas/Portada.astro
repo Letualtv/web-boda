@@ -277,6 +277,77 @@ const PASSWORD = 'genilla2027';
     z-index: 10;
   }
 
+  /* ─── Entrada ceremonial escalonada del cover ────────
+     Cada elemento aparece con un pequeño delay. El marco
+     dorado se dibuja creciendo desde el centro. Los nombres
+     aparecen con brillo suave.
+  ──────────────────────────────────────────────────── */
+  @keyframes cover-aparecer {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes cover-nombres-glow {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+      text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0),
+        0 0 0 rgba(212, 200, 74, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+      text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.5),
+        0 0 25px rgba(212, 200, 74, 0.2);
+    }
+  }
+  @keyframes cover-frame-dibujar {
+    from { opacity: 0; transform: scale(0.94); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  .cover-frame {
+    opacity: 0;
+    animation: cover-frame-dibujar 900ms cubic-bezier(0.22, 0.61, 0.36, 1) 150ms forwards;
+  }
+  .cover-nombres {
+    opacity: 0;
+    animation: cover-nombres-glow 1100ms cubic-bezier(0.22, 0.61, 0.36, 1) 500ms forwards;
+  }
+  .cover-sep {
+    opacity: 0;
+    animation: cover-aparecer 700ms cubic-bezier(0.22, 0.61, 0.36, 1) 950ms forwards;
+  }
+  .cover-fecha {
+    opacity: 0;
+    animation: cover-aparecer 700ms cubic-bezier(0.22, 0.61, 0.36, 1) 1150ms forwards;
+  }
+  .cover-lugar {
+    opacity: 0;
+    animation: cover-aparecer 700ms cubic-bezier(0.22, 0.61, 0.36, 1) 1300ms forwards;
+  }
+  .cover-countdown {
+    opacity: 0;
+    animation: cover-aparecer 700ms cubic-bezier(0.22, 0.61, 0.36, 1) 1500ms forwards;
+  }
+  .tinta-contenedor {
+    opacity: 0;
+    animation: cover-aparecer 800ms cubic-bezier(0.22, 0.61, 0.36, 1) 1700ms forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cover-frame, .cover-nombres, .cover-sep, .cover-fecha,
+    .cover-lugar, .cover-countdown, .tinta-contenedor {
+      opacity: 1 !important;
+      animation: none !important;
+      transform: none !important;
+    }
+    .cover-nombres {
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 0 25px rgba(212, 200, 74, 0.2);
+    }
+  }
+
   /* Marco dorado sutil alrededor del contenido */
   .cover-frame {
     position: absolute;
