@@ -1,23 +1,32 @@
 ---
-// Contraportada — cierre del libro. Misma estética que la portada
-// pero con tono despedida.
+// Contraportada — cierre del libro con entrada ceremonial escalonada
+// y partículas doradas flotando en el fondo.
 ---
 
 <div class="contraportada-scene">
   <div class="cp-wrap">
+    <!-- Partículas doradas flotando de fondo -->
+    <div class="cp-particulas" aria-hidden="true">
+      {Array.from({ length: 18 }).map((_, i) => (
+        <span class="p-luz" style={`--i:${i}; left:${(i * 5.7) % 100}%; top:${(i * 13.3) % 100}%; --dur:${8 + (i % 5) * 2}s; --dly:${i * 0.35}s;`}></span>
+      ))}
+    </div>
+
     <div class="cp-inner">
       <div class="cp-frame" aria-hidden="true"></div>
 
       <p class="cp-preludio">Y hasta aquí</p>
 
       <h1 class="cp-nombres">
-        Alba <em>&amp;</em> Antonio
+        <span class="cp-alba">Alba</span>
+        <span class="cp-amp">&amp;</span>
+        <span class="cp-antonio">Antonio</span>
       </h1>
 
       <div class="cp-sep">
         <span class="lin"></span>
         <span class="limon" aria-hidden="true">
-          <svg viewBox="0 0 40 40" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 40 40" width="26" height="26" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M20 8 Q26 4 30 6 Q29 12 22 12 Z" fill="#D4C84A" opacity="0.85"/>
             <ellipse cx="20" cy="24" rx="9" ry="11" fill="#D4C84A"/>
             <circle cx="16" cy="21" r="0.7" fill="#8a7d20" opacity="0.6"/>
@@ -112,6 +121,23 @@
   .cp-frame::before { top: 6px; }
   .cp-frame::after  { bottom: 6px; }
 
+  /* ─── Entrada escalonada ceremonial ─────────────────── */
+  @keyframes cp-aparecer {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes cp-aparecer-brillo {
+    from { opacity: 0; transform: translateY(14px); text-shadow: 0 0 0 rgba(212, 200, 74, 0); }
+    to   {
+      opacity: 1; transform: translateY(0);
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 0 30px rgba(212, 200, 74, 0.35);
+    }
+  }
+  @keyframes cp-linea-crecer {
+    from { transform: scaleX(0); opacity: 0; }
+    to   { transform: scaleX(1); opacity: 1; }
+  }
+
   .cp-preludio {
     font-family: var(--font-serif);
     font-style: italic;
@@ -120,6 +146,8 @@
     letter-spacing: 0.3em;
     text-transform: lowercase;
     margin: 0;
+    opacity: 0;
+    animation: cp-aparecer 800ms cubic-bezier(0.22, 0.61, 0.36, 1) 300ms forwards;
   }
 
   .cp-nombres {
@@ -129,27 +157,39 @@
     font-size: clamp(2.6rem, 9vw, 4rem);
     line-height: 1;
     margin: 0;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.1em;
+    flex-wrap: wrap;
+    justify-content: center;
     text-shadow:
       0 1px 2px rgba(0, 0, 0, 0.5),
       0 0 20px rgba(212, 200, 74, 0.15);
   }
-  .cp-nombres em {
-    font-style: normal;
-    color: #D4C84A;
-    font-size: 0.7em;
-    margin: 0 0.1em;
+  .cp-alba,
+  .cp-antonio,
+  .cp-amp {
+    display: inline-block;
+    opacity: 0;
+    animation: cp-aparecer-brillo 1s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
   }
+  .cp-alba    { animation-delay: 700ms; }
+  .cp-amp     { animation-delay: 1150ms; color: #D4C84A; font-size: 0.7em; }
+  .cp-antonio { animation-delay: 1500ms; }
 
   .cp-sep {
     display: flex;
     align-items: center;
     gap: 0.9rem;
     width: clamp(140px, 40vw, 220px);
+    opacity: 0;
+    animation: cp-aparecer 700ms cubic-bezier(0.22, 0.61, 0.36, 1) 2050ms forwards;
   }
   .cp-sep .lin {
     flex: 1;
-    height: 1px;
+    height: 2px;
     background: linear-gradient(to right, transparent, rgba(212, 200, 74, 0.55), transparent);
+    transform-origin: center;
   }
 
   .cp-despedida {
@@ -159,6 +199,8 @@
     line-height: 1.6;
     margin: 0;
     max-width: 340px;
+    opacity: 0;
+    animation: cp-aparecer 900ms cubic-bezier(0.22, 0.61, 0.36, 1) 2400ms forwards;
   }
   .cp-despedida strong {
     font-weight: 400;
@@ -175,6 +217,8 @@
     font-size: clamp(0.85rem, 2vw, 0.95rem);
     letter-spacing: 0.1em;
     margin: -0.5rem 0 0;
+    opacity: 0;
+    animation: cp-aparecer 700ms cubic-bezier(0.22, 0.61, 0.36, 1) 2900ms forwards;
   }
 
   .cp-fin {
@@ -182,18 +226,59 @@
     align-items: center;
     gap: 1.5rem;
     margin-top: 1.5rem;
+    opacity: 0;
+    animation: cp-aparecer 1000ms cubic-bezier(0.22, 0.61, 0.36, 1) 3400ms forwards;
   }
   .fin-lin {
     width: 40px;
-    height: 1px;
+    height: 2px;
     background: rgba(212, 200, 74, 0.5);
   }
   .fin-txt {
     font-family: var(--font-serif);
     font-style: italic;
-    color: rgba(212, 200, 74, 0.85);
-    font-size: clamp(0.95rem, 2.4vw, 1.15rem);
-    letter-spacing: 0.35em;
+    color: rgba(212, 200, 74, 0.9);
+    font-size: clamp(1.1rem, 2.8vw, 1.4rem);
+    letter-spacing: 0.4em;
     text-transform: uppercase;
+    text-shadow: 0 0 15px rgba(212, 200, 74, 0.3);
+  }
+
+  /* ─── Partículas doradas flotando en el fondo ────────── */
+  .cp-particulas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+    overflow: hidden;
+  }
+  @keyframes flotar {
+    0%   { transform: translate(0, 0) scale(0.8); opacity: 0; }
+    15%  { opacity: 1; }
+    50%  { transform: translate(20px, -40px) scale(1); }
+    85%  { opacity: 1; }
+    100% { transform: translate(-10px, -80px) scale(0.7); opacity: 0; }
+  }
+  .p-luz {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: rgba(212, 200, 74, 0.9);
+    box-shadow:
+      0 0 8px rgba(212, 200, 74, 0.7),
+      0 0 3px rgba(255, 240, 200, 1);
+    animation: flotar var(--dur, 10s) ease-in-out var(--dly, 0s) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cp-preludio, .cp-alba, .cp-amp, .cp-antonio,
+    .cp-sep, .cp-despedida, .cp-lugar, .cp-fin {
+      opacity: 1 !important;
+      animation: none !important;
+      transform: none !important;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 0 30px rgba(212, 200, 74, 0.35);
+    }
+    .p-luz { animation: none; opacity: 0.6; }
   }
 </style>
