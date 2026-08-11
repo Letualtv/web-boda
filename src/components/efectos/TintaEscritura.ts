@@ -1,6 +1,6 @@
 /**
  * Motor de efecto tinta para el input de contraseña.
- * - Renderiza caracteres con fuente caligráfica
+ * - Renderiza caracteres con fuente caligráfica (visibles, sin conversión a puntos)
  * - Cursor pluma que sigue el texto
  * - Gotitas de tinta con pool reciclado (máx 8 activas)
  * - Estados: vacío / escribiendo / error / correcto
@@ -19,7 +19,6 @@ export interface TintaEscrituraConfig {
 
 const MAX_GOTITAS = 8;
 const POOL_GOTITAS = 12;
-const OCULTAR_TRAS_MS = 500;
 
 export function crearTintaEscritura(cfg: TintaEscrituraConfig) {
   const gotitasPool: HTMLElement[] = [];
@@ -35,11 +34,10 @@ export function crearTintaEscritura(cfg: TintaEscrituraConfig) {
     gotitasPool.push(g);
   }
 
-  // ─── Reveal chars: cada carácter aparece y a los 500ms se convierte en manchita ──
+  // ─── Renderizar caracteres visibles ────────────────────
   function renderDisplay() {
     const valor = cfg.inputReal.value;
     const previos = cfg.displayVisible.querySelectorAll<HTMLElement>('.char');
-    const nuevosN = valor.length - previos.length;
 
     // Reset si borró
     if (valor.length < previos.length) {
@@ -49,48 +47,40 @@ export function crearTintaEscritura(cfg: TintaEscrituraConfig) {
     }
 
     // Añadir chars nuevos
-    for (let i = 0; i < nuevosN; i++) {
-      const ch = valor[previos.length + i];
-      crearChar(ch, false);
+    for (let i = previos.length; i < valor.length; i++) {
+      crearChar(valor[i], false);
     }
   }
 
-  function crearChar(letra: string, yaOculto: boolean) {
+  function crearChar(letra: string, sinAnimacion: boolean) {
     const span = document.createElement('span');
     span.className = 'char';
     span.textContent = letra === ' ' ? ' ' : letra;
     cfg.displayVisible.appendChild(span);
-    // fuerza reflow para animación
-    void span.offsetWidth;
-    span.classList.add('entrando');
-
-    if (!yaOculto) {
-      setTimeout(() => convertirEnMancha(span), OCULTAR_TRAS_MS);
+    if (sinAnimacion) {
+      span.classList.add('entrando');
     } else {
-      span.classList.add('mancha');
+      // reflow + animación
+      void span.offsetWidth;
+      requestAnimationFrame(() => span.classList.add('entrando'));
     }
-  }
-
-  function convertirEnMancha(span: HTMLElement) {
-    if (!span.isConnected) return;
-    span.classList.add('mancha');
   }
 
   // ─── Cursor pluma sigue el final del texto ─────────────
   function actualizarPluma() {
     const chars = cfg.displayVisible.querySelectorAll<HTMLElement>('.char');
-    const rectContenedor = cfg.displayVisible.getBoundingClientRect();
+    const rectDisp = cfg.displayVisible.getBoundingClientRect();
     let x: number;
     let y: number;
     if (chars.length === 0) {
-      const r = cfg.displayVisible.getBoundingClientRect();
-      x = 0;
-      y = r.height / 2;
+      // pluma en el centro visualmente
+      x = rectDisp.width / 2;
+      y = rectDisp.height * 0.55;
     } else {
       const ultimo = chars[chars.length - 1];
       const r = ultimo.getBoundingClientRect();
-      x = r.right - rectContenedor.left;
-      y = r.top + r.height / 2 - rectContenedor.top;
+      x = r.right - rectDisp.left + 4;
+      y = r.top + r.height * 0.7 - rectDisp.top;
     }
     cfg.pluma.style.transform = `translate(${x}px, ${y}px)`;
   }
@@ -98,7 +88,6 @@ export function crearTintaEscritura(cfg: TintaEscrituraConfig) {
   // ─── Motor de gotitas ──────────────────────────────────
   function lanzarGotitas() {
     if (gotitasActivas.size >= MAX_GOTITAS) {
-      // reciclar la más antigua
       const primera = gotitasActivas.values().next().value;
       if (primera) resetearGotita(primera);
     }
@@ -114,11 +103,11 @@ export function crearTintaEscritura(cfg: TintaEscrituraConfig) {
     const plumaRect = cfg.pluma.getBoundingClientRect();
     const contRect = cfg.gotitas.getBoundingClientRect();
     const x0 = plumaRect.left + plumaRect.width / 2 - contRect.left;
-    const y0 = plumaRect.top + plumaRect.height * 0.7 - contRect.top;
+    const y0 = plumaRect.bottom - contRect.top - 6;
 
-    const radio = 1 + Math.random() * 2.5;
-    const dx = (Math.random() - 0.5) * 10;
-    const dy = 8 + Math.random() * 18;
+    const radio = 1 + Math.random() * 2.2;
+    const dx = (Math.random() - 0.5) * 12;
+    const dy = 10 + Math.random() * 20;
     const dur = 400 + Math.random() * 400;
     const opac = 0.4 + Math.random() * 0.3;
 
@@ -132,19 +121,17 @@ export function crearTintaEscritura(cfg: TintaEscrituraConfig) {
 
     gotitasActivas.add(g);
 
-    // fase 1: caer con gravedad
     requestAnimationFrame(() => {
       g.style.transition = `transform ${dur}ms cubic-bezier(0.4, 0, 1, 0.6), opacity ${dur + 500}ms ease-out`;
       g.style.transform = `translate(${dx}px, ${dy}px)`;
-      g.style.opacity = String(opac * 0.9);
+      g.style.opacity = String(opac * 0.85);
     });
 
-    // fase 2: reposo 2s, luego fade
     setTimeout(() => {
       g.style.transition = `opacity 500ms ease-out`;
       g.style.opacity = '0';
       setTimeout(() => resetearGotita(g), 500);
-    }, dur + 2000);
+    }, dur + 1500);
   }
 
   function resetearGotita(g: HTMLElement) {
@@ -157,7 +144,7 @@ export function crearTintaEscritura(cfg: TintaEscrituraConfig) {
   function ponerError() {
     cfg.contenedor.classList.add('error');
     cfg.contenedor.classList.remove('escribiendo');
-    setTimeout(() => cfg.contenedor.classList.remove('error'), 1200);
+    setTimeout(() => cfg.contenedor.classList.remove('error'), 1400);
   }
 
   function ponerCorrecto() {
@@ -171,13 +158,15 @@ export function crearTintaEscritura(cfg: TintaEscrituraConfig) {
     cfg.contenedor.classList.add('escribiendo');
     cfg.contenedor.classList.remove('error', 'vacio');
     renderDisplay();
-    actualizarPluma();
+    // pluma sigue al carácter tras el próximo frame (fuente ya calculada)
+    requestAnimationFrame(actualizarPluma);
     lanzarGotitas();
   });
 
   cfg.inputReal.addEventListener('focus', () => {
     cfg.contenedor.classList.add('con-foco');
     if (!cfg.inputReal.value) cfg.contenedor.classList.add('vacio');
+    requestAnimationFrame(actualizarPluma);
   });
 
   cfg.inputReal.addEventListener('blur', () => {
@@ -185,12 +174,15 @@ export function crearTintaEscritura(cfg: TintaEscrituraConfig) {
     if (!cfg.inputReal.value) cfg.contenedor.classList.add('vacio');
   });
 
-  // Detener rotación de pluma tras 500ms sin teclear
+  // Detener rotación de pluma tras 400ms sin teclear
   setInterval(() => {
-    if (performance.now() - ultimoTiempoTecla > 500) {
+    if (performance.now() - ultimoTiempoTecla > 400) {
       cfg.contenedor.classList.remove('escribiendo');
     }
   }, 200);
+
+  // Recolocar pluma al redimensionar
+  window.addEventListener('resize', () => requestAnimationFrame(actualizarPluma));
 
   // Verificación
   function verificar() {
@@ -204,15 +196,16 @@ export function crearTintaEscritura(cfg: TintaEscrituraConfig) {
       setTimeout(() => {
         cfg.inputReal.value = '';
         renderDisplay();
-        actualizarPluma();
+        requestAnimationFrame(actualizarPluma);
         cfg.inputReal.focus();
-      }, 800);
+        cfg.contenedor.classList.add('vacio');
+      }, 900);
     }
   }
 
   // Estado inicial
   cfg.contenedor.classList.add('vacio');
-  actualizarPluma();
+  requestAnimationFrame(actualizarPluma);
 
   return { verificar };
 }

@@ -45,6 +45,8 @@ const {
     <img class="deco esquina esquina-inf-der" src={esquinaInfDer} alt="" aria-hidden="true" onerror="this.style.display='none'" />
   )}
 
+  <slot name="decoracion" />
+
   <div class="pagina-contenido">
     {separadorInicial && (
       <img class="deco separador" src={separadorInicial} alt="" aria-hidden="true" onerror="this.style.display='none'" />

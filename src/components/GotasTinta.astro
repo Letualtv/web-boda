@@ -1,0 +1,65 @@
+---
+/**
+ * Manchas y gotas de tinta decorativas — sutiles, colocadas en los márgenes.
+ * Sirven de recuerdo visual de la pluma escribiendo por el libro.
+ * Cada instancia tiene su propia composición aleatoria basada en `variante`.
+ */
+interface Props {
+  variante?: 1 | 2 | 3;
+}
+const { variante = 1 } = Astro.props;
+
+const composiciones = {
+  1: [
+    { x: '8%',  y: '15%', r: 3.5, o: 0.4 },
+    { x: '11%', y: '17%', r: 1.2, o: 0.55 },
+    { x: '92%', y: '35%', r: 2.5, o: 0.35 },
+    { x: '94%', y: '38%', r: 1,   o: 0.5 },
+    { x: '5%',  y: '72%', r: 2,   o: 0.4 },
+    { x: '90%', y: '85%', r: 4,   o: 0.3 },
+    { x: '87%', y: '88%', r: 1.5, o: 0.45 },
+  ],
+  2: [
+    { x: '90%', y: '12%', r: 3,   o: 0.4 },
+    { x: '92%', y: '15%', r: 1.5, o: 0.55 },
+    { x: '10%', y: '45%', r: 2.5, o: 0.35 },
+    { x: '13%', y: '48%', r: 1,   o: 0.5 },
+    { x: '88%', y: '78%', r: 2.5, o: 0.4 },
+    { x: '6%',  y: '92%', r: 3.5, o: 0.3 },
+  ],
+  3: [
+    { x: '4%',  y: '25%', r: 2.5, o: 0.4 },
+    { x: '7%',  y: '28%', r: 1,   o: 0.55 },
+    { x: '95%', y: '55%', r: 3,   o: 0.35 },
+    { x: '92%', y: '58%', r: 1.2, o: 0.5 },
+    { x: '85%', y: '92%', r: 2,   o: 0.4 },
+    { x: '15%', y: '85%', r: 3,   o: 0.3 },
+  ],
+};
+
+const puntos = composiciones[variante];
+---
+
+<div class="gotas-tinta-deco" aria-hidden="true">
+  {puntos.map((p) => (
+    <span
+      class="mancha"
+      style={`left:${p.x};top:${p.y};width:${p.r * 2}px;height:${p.r * 2}px;opacity:${p.o};`}
+    ></span>
+  ))}
+</div>
+
+<style>
+  .gotas-tinta-deco {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .mancha {
+    position: absolute;
+    background: radial-gradient(circle at 40% 40%, rgba(30, 58, 95, 0.9) 0%, rgba(30, 58, 95, 0.6) 50%, transparent 100%);
+    border-radius: 50%;
+    filter: blur(0.3px);
+  }
+</style>

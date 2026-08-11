@@ -1,8 +1,10 @@
 ---
 import PaginaMarco from '../PaginaMarco.astro';
+import GotasTinta from '../GotasTinta.astro';
 ---
 
 <PaginaMarco titulo="Cómo llegar" scroll>
+  <GotasTinta slot="decoracion" variante={1} />
   <div class="autobuses-inner">
     <h2 class="titulo">Cómo llegar</h2>
 
@@ -75,11 +77,11 @@ import PaginaMarco from '../PaginaMarco.astro';
         <ul class="paradas">
           <li>
             <span class="parada-hora">01:00</span>
-            <span class="parada-lugar">Del recinto a Priego de Córdoba</span>
+            <span class="parada-lugar">Salida desde Finca Genilla a Priego de Córdoba</span>
           </li>
           <li>
             <span class="parada-hora">04:00</span>
-            <span class="parada-lugar">Última salida del recinto</span>
+            <span class="parada-lugar">Última salida desde Finca Genilla</span>
           </li>
         </ul>
       </section>

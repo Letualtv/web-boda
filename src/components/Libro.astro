@@ -48,6 +48,8 @@ import FlechasNav      from './FlechasNav.astro';
     inset: 0;
     overflow: hidden;
     z-index: 2;
+    --drag-progreso: 0;
+    --drag-direccion: 0;
   }
 
   .cinta {
@@ -56,7 +58,46 @@ import FlechasNav      from './FlechasNav.astro';
     width: 100%;
     will-change: transform;
     transform: translate3d(0, 0, 0);
+    /* Ligero cambio de escala en el arrastre — sensación de hoja levantándose */
+    transform-origin: center;
   }
+
+  /* Sombra del pliegue en desktop — más marcada al arrastrar */
+  .libro::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    pointer-events: none;
+    z-index: 3;
+    background: linear-gradient(to right, rgba(50, 30, 15, 0.22) 0%, rgba(50, 30, 15, 0.06) 60%, transparent 100%);
+    opacity: calc(0.35 + var(--drag-progreso) * 0.6);
+    transition: opacity 300ms ease;
+  }
+  .libro.arrastrando::before {
+    transition: none;
+  }
+  @media (max-width: 899px) {
+    .libro::before { display: none; }
+  }
+
+  /* Sombra sutil en el borde derecho durante el arrastre — el borde de la hoja */
+  .libro::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 30px;
+    pointer-events: none;
+    z-index: 3;
+    background: linear-gradient(to left, rgba(30, 20, 10, 0.15) 0%, transparent 100%);
+    opacity: calc(var(--drag-progreso) * 0.8);
+    transition: opacity 300ms ease;
+  }
+  .libro.arrastrando::after { transition: none; }
 
   /* Botón de índice */
   .btn-indice {

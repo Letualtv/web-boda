@@ -1,5 +1,6 @@
 ---
 import PaginaMarco from '../PaginaMarco.astro';
+import GotasTinta from '../GotasTinta.astro';
 
 // 8 huecos irregulares tipo álbum de recortes.
 // Cuando subas fotos con nombres 01.jpg, 02.jpg… aparecerán solas.
@@ -16,6 +17,7 @@ const HUECOS = [
 ---
 
 <PaginaMarco titulo="Recuerdos" scroll>
+  <GotasTinta slot="decoracion" variante={2} />
   <div class="galeria-inner">
     <h2 class="titulo">Recuerdos</h2>
 

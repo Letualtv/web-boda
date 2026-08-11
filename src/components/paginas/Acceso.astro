@@ -13,8 +13,8 @@ const PASSWORD = 'genilla2027';
       <!-- input real invisible pero accesible -->
       <input
         id="pwd-real"
-        type="password"
-        autocomplete="current-password"
+        type="text"
+        autocomplete="off"
         autocapitalize="none"
         autocorrect="off"
         spellcheck="false"
@@ -22,30 +22,38 @@ const PASSWORD = 'genilla2027';
         class="pwd-real"
       />
 
-      <!-- placeholder cuando vacío -->
-      <span class="placeholder">— escríbela aquí —</span>
+      <div class="linea-escritura">
+        <!-- placeholder cuando vacío -->
+        <span class="placeholder">Escríbela aquí</span>
 
-      <!-- display visible caligráfico -->
-      <div class="tinta-display" id="tinta-display" aria-hidden="true"></div>
+        <!-- display visible caligráfico -->
+        <div class="tinta-display" id="tinta-display" aria-hidden="true"></div>
 
-      <!-- cursor pluma -->
-      <span class="pluma" id="pluma">
-        <svg viewBox="0 0 24 32" width="18" height="26" fill="none" stroke="#1E3A5F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 28 L20 4 L22 8 L8 30 Z" fill="#1E3A5F" fill-opacity="0.85"/>
-          <path d="M4 28 L8 30" stroke="#F3E9D2" stroke-width="1"/>
-          <line x1="6" y1="29" x2="10" y2="27" stroke="#F3E9D2" stroke-width="0.6"/>
-        </svg>
-      </span>
+        <!-- cursor pluma -->
+        <span class="pluma" id="pluma">
+          <svg viewBox="0 0 24 32" width="20" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- cuerpo de pluma -->
+            <path d="M4 28 L18 4 L22 6 L8 30 Z" fill="#1E3A5F" fill-opacity="0.9" stroke="#1E3A5F" stroke-width="0.8" stroke-linejoin="round"/>
+            <!-- punta metálica -->
+            <path d="M4 28 L8 30 L6 26 Z" fill="#0f2338"/>
+            <!-- reflejo -->
+            <line x1="16" y1="8" x2="7" y2="26" stroke="#F3E9D2" stroke-width="0.7" stroke-linecap="round" opacity="0.6"/>
+          </svg>
+        </span>
 
-      <!-- línea inferior tipo cuaderno -->
-      <span class="linea-cuaderno"></span>
+        <!-- línea inferior tipo cuaderno -->
+        <span class="linea-cuaderno"></span>
 
-      <!-- contenedor de gotitas -->
-      <div class="gotitas" id="gotitas" aria-hidden="true"></div>
+        <!-- contenedor de gotitas -->
+        <div class="gotitas" id="gotitas" aria-hidden="true"></div>
+      </div>
 
-      <!-- botón entrar — aparece con 3+ caracteres -->
-      <button type="submit" class="btn-entrar" id="btn-entrar" disabled>
-        Entrar
+      <!-- botón sello -->
+      <button type="submit" class="btn-sello" id="btn-entrar" disabled>
+        <span class="sello-inner">
+          <span class="sello-monograma">A &amp; A</span>
+          <span class="sello-label">Entrar</span>
+        </span>
       </button>
 
       <p class="mensaje-error" id="mensaje-error">esta no es la palabra</p>
@@ -60,16 +68,16 @@ const PASSWORD = 'genilla2027';
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: clamp(1rem, 3vh, 1.75rem);
+    gap: clamp(1rem, 3vh, 1.5rem);
     width: 100%;
-    max-width: 480px;
+    max-width: 520px;
     text-align: center;
   }
 
   .titulo {
     font-family: var(--font-brush);
     font-weight: 400;
-    font-size: clamp(2.2rem, 7vw, 3.2rem);
+    font-size: clamp(2.2rem, 7vw, 3.4rem);
     color: var(--color-tinta);
     line-height: 1;
     margin: 0;
@@ -83,25 +91,38 @@ const PASSWORD = 'genilla2027';
     margin: 0;
   }
 
-  /* ─── Contenedor de tinta ─────────────────────────── */
+  /* ─── Contenedor global ─────────────────────────────── */
   .tinta-contenedor {
     position: relative;
     width: 100%;
-    min-height: 90px;
-    padding: 1rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.75rem;
     margin: 1rem 0;
   }
 
+  /* ─── Input real invisible ──────────────────────────── */
   .pwd-real {
     position: absolute;
     top: 0; left: 0;
-    width: 100%; height: 100%;
+    width: 100%; height: 100px;
     opacity: 0;
     border: none;
     background: transparent;
-    font-size: 16px; /* previene zoom iOS */
-    z-index: 5;
+    font-size: 16px;
+    z-index: 10;
     cursor: text;
+  }
+
+  /* ─── Línea de escritura ────────────────────────────── */
+  .linea-escritura {
+    position: relative;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
   }
 
   .placeholder {
@@ -111,103 +132,107 @@ const PASSWORD = 'genilla2027';
     transform: translate(-50%, -50%);
     font-family: var(--font-serif);
     font-style: italic;
-    color: rgba(30, 58, 95, 0.35);
-    font-size: clamp(0.9rem, 2.4vw, 1.1rem);
-    letter-spacing: 0.15em;
+    color: rgba(30, 58, 95, 0.4);
+    font-size: clamp(0.95rem, 2.4vw, 1.1rem);
+    letter-spacing: 0.08em;
     pointer-events: none;
     transition: opacity 300ms ease;
     z-index: 2;
+    white-space: nowrap;
+    max-width: 90%;
+    text-align: center;
   }
   .tinta-contenedor:not(.vacio) .placeholder,
   .tinta-contenedor.con-foco .placeholder { opacity: 0; }
 
-  /* Display caligráfico */
+  /* ─── Display caligráfico ───────────────────────────── */
   .tinta-display {
     position: relative;
-    min-height: 3rem;
     font-family: var(--font-brush);
     color: var(--color-tinta);
-    font-size: clamp(1.8rem, 5.5vw, 2.6rem);
-    letter-spacing: 0.15em;
-    line-height: 1.2;
+    font-size: clamp(2.2rem, 7vw, 3.4rem);
+    letter-spacing: 0.08em;
+    line-height: 1;
     text-align: center;
-    word-break: break-all;
     z-index: 3;
-    padding: 0 2rem 0.5rem;
+    padding: 0 30px 8px;
+    min-height: 3.6rem;
+    max-width: 100%;
+    display: inline-flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    justify-content: center;
+    transition: color 400ms ease;
   }
 
-  /* Cada carácter */
+  /* ─── Cada carácter — entra como tinta fluyendo ────────
+     Inicio: invisible + ligeramente comprimido + con "aura" difusa (text-shadow expandido).
+     Final: opaco + tamaño real + shadow colapsado (tinta absorbida por el papel).
+  ──────────────────────────────────────────────────────── */
   .tinta-display :global(.char) {
     display: inline-block;
     opacity: 0;
-    transform: translateY(6px);
-    transition: opacity 200ms ease, transform 300ms ease, color 400ms ease;
+    transform: translateY(3px) scaleY(0.85);
+    color: transparent;
+    text-shadow:
+      0 0 8px rgba(30, 58, 95, 0.55),
+      0 0 3px rgba(30, 58, 95, 0.7);
+    transition:
+      opacity 450ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      transform 520ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      color 520ms cubic-bezier(0.22, 0.61, 0.36, 1) 60ms,
+      text-shadow 600ms cubic-bezier(0.4, 0, 0.6, 1) 120ms;
+    transform-origin: 50% 90%;
   }
   .tinta-display :global(.char.entrando) {
     opacity: 1;
-    transform: translateY(0);
-  }
-  /* Cuando ya se ha "ocultado" — se vuelve un punto/manchita */
-  .tinta-display :global(.char.mancha) {
-    color: transparent;
-    position: relative;
-    width: 0.75em;
-    text-align: center;
-  }
-  .tinta-display :global(.char.mancha::after) {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 55%;
-    width: 8px;
-    height: 8px;
-    background: var(--color-tinta);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0.75;
+    transform: translateY(0) scaleY(1);
+    color: var(--color-tinta);
+    text-shadow:
+      0 0 0.5px rgba(30, 58, 95, 0.25),
+      0 1px 0 rgba(30, 58, 95, 0.05);
   }
 
-  /* Pluma cursor */
+  /* ─── Pluma cursor ──────────────────────────────────── */
   .pluma {
     position: absolute;
-    top: 1rem;
-    left: 0.5rem;
-    width: 18px;
-    height: 26px;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 28px;
     pointer-events: none;
     z-index: 4;
     transition: transform 100ms ease-out;
-    transform-origin: 50% 90%;
-    display: none;
+    transform-origin: 30% 90%;
+    opacity: 0;
   }
-  .tinta-contenedor.con-foco .pluma { display: block; }
+  .tinta-contenedor.con-foco .pluma { opacity: 1; }
   .tinta-contenedor.escribiendo .pluma {
-    animation: pluma-rotar 250ms ease-in-out infinite alternate;
+    animation: pluma-rotar 200ms ease-in-out infinite alternate;
   }
   @keyframes pluma-rotar {
-    from { rotate: -1.5deg; }
-    to   { rotate:  1.5deg; }
+    from { rotate: -3deg; }
+    to   { rotate:  3deg; }
   }
 
-  /* Línea inferior tipo cuaderno */
+  /* ─── Línea inferior ────────────────────────────────── */
   .linea-cuaderno {
     position: absolute;
-    bottom: 0.5rem;
-    left: 10%;
-    right: 10%;
+    bottom: 0;
+    left: 8%;
+    right: 8%;
     height: 1px;
     background: var(--color-tinta-clara);
-    opacity: 0.3;
-    transition: opacity 400ms ease;
+    opacity: 0.35;
+    transition: opacity 400ms ease, background 400ms ease;
   }
-  .tinta-contenedor.con-foco .linea-cuaderno { opacity: 0.6; }
+  .tinta-contenedor.con-foco .linea-cuaderno { opacity: 0.65; }
 
-  /* Contenedor de gotitas */
+  /* ─── Contenedor gotitas ────────────────────────────── */
   .gotitas {
     position: absolute;
     top: 0; left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     pointer-events: none;
     z-index: 2;
   }
@@ -217,56 +242,123 @@ const PASSWORD = 'genilla2027';
     border-radius: 50%;
     opacity: 0;
     pointer-events: none;
+    box-shadow: 0 0 2px rgba(30, 58, 95, 0.25);
   }
 
-  /* Botón entrar */
-  .btn-entrar {
-    margin-top: 1rem;
+  /* ─── Botón sello ───────────────────────────────────── */
+  .btn-sello {
     background: transparent;
-    border: 1px solid rgba(30, 58, 95, 0.4);
-    color: var(--color-tinta);
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.5em;
-    text-transform: uppercase;
-    padding: 0.9rem 3.5rem;
+    border: none;
+    padding: 0;
     cursor: pointer;
-    opacity: 0;
+    opacity: 0.35;
     pointer-events: none;
-    transition: opacity 400ms ease, background 250ms ease, border-color 250ms ease;
+    transition:
+      opacity 500ms ease,
+      transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: scale(0.9);
   }
-  .tinta-contenedor.tiene-texto .btn-entrar {
+  .tinta-contenedor.tiene-texto .btn-sello {
     opacity: 1;
     pointer-events: auto;
+    transform: scale(1);
   }
-  .btn-entrar:hover {
-    background: rgba(30, 58, 95, 0.06);
-    border-color: var(--color-tinta);
-  }
-  .btn-entrar:disabled { opacity: 0; }
 
-  /* Mensaje de error */
+  .sello-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15rem;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%,
+      rgba(196, 113, 79, 0.95) 0%,
+      rgba(158, 82, 55, 0.98) 55%,
+      rgba(122, 60, 40, 1) 100%);
+    color: #F3E9D2;
+    box-shadow:
+      inset 0 2px 3px rgba(255, 240, 220, 0.35),
+      inset 0 -3px 6px rgba(50, 20, 10, 0.4),
+      0 3px 8px rgba(30, 58, 95, 0.25),
+      0 1px 2px rgba(30, 58, 95, 0.15);
+    position: relative;
+    transition: transform 250ms ease, box-shadow 250ms ease;
+  }
+  /* Doble círculo interior tipo sello grabado */
+  .sello-inner::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    border: 1px solid rgba(243, 233, 210, 0.5);
+    pointer-events: none;
+  }
+  .sello-inner::after {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border-radius: 50%;
+    border: 1px dashed rgba(243, 233, 210, 0.25);
+    pointer-events: none;
+  }
+
+  .btn-sello:hover .sello-inner {
+    transform: rotate(-4deg) scale(1.05);
+    box-shadow:
+      inset 0 2px 3px rgba(255, 240, 220, 0.4),
+      inset 0 -3px 6px rgba(50, 20, 10, 0.45),
+      0 6px 14px rgba(30, 58, 95, 0.3),
+      0 2px 4px rgba(30, 58, 95, 0.15);
+  }
+  .btn-sello:active .sello-inner {
+    transform: rotate(-4deg) scale(0.98);
+  }
+
+  .sello-monograma {
+    font-family: var(--font-vibes);
+    font-size: 2.1rem;
+    line-height: 1;
+    color: #F3E9D2;
+    text-shadow: 0 1px 2px rgba(50, 20, 10, 0.5);
+    z-index: 1;
+  }
+  .sello-label {
+    font-family: var(--font-sans);
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: rgba(243, 233, 210, 0.85);
+    z-index: 1;
+    margin-top: 0.1rem;
+  }
+
+  /* ─── Estados: error / correcto ─────────────────────── */
   .mensaje-error {
     font-family: var(--font-serif);
     font-style: italic;
     color: var(--color-vino);
     font-size: 0.95rem;
-    margin: 0.75rem 0 0;
+    margin: 0;
     opacity: 0;
     pointer-events: none;
     transition: opacity 300ms ease;
+    min-height: 1.2em;
   }
   .tinta-contenedor.error .mensaje-error { opacity: 1; }
-  .tinta-contenedor.error .tinta-display,
-  .tinta-contenedor.error .pluma svg path { color: var(--color-vino); }
+
+  .tinta-contenedor.error .tinta-display { color: var(--color-vino); }
+  .tinta-contenedor.error .linea-cuaderno { background: var(--color-vino); opacity: 0.6; }
+
   .tinta-contenedor.error {
     animation: temblor 400ms ease-in-out 2;
   }
   @keyframes temblor {
     0%, 100% { transform: translateX(0); }
-    25%      { transform: translateX(-5px); }
-    75%      { transform: translateX(5px); }
+    25%      { transform: translateX(-6px); }
+    75%      { transform: translateX(6px); }
   }
 
   .tinta-contenedor.correcto {
@@ -278,7 +370,7 @@ const PASSWORD = 'genilla2027';
     font-family: var(--font-serif);
     font-style: italic;
     color: var(--color-tinta-clara);
-    font-size: clamp(0.75rem, 1.8vw, 0.9rem);
+    font-size: clamp(0.8rem, 1.9vw, 0.95rem);
     opacity: 0.7;
     margin: 0;
   }
