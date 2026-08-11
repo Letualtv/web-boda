@@ -4,17 +4,28 @@ import GotasTinta from '../GotasTinta.astro';
 import EnlaceSiguiente from '../EnlaceSiguiente.astro';
 import LimonMini from '../LimonMini.astro';
 
-// 8 huecos irregulares tipo álbum de recortes.
-// Cuando subas fotos con nombres 01.jpg, 02.jpg… aparecerán solas.
+// ─── ÁLBUM ─────────────────────────────────────────────────
+// Cómo añadir/cambiar fotos y textos:
+// 1. Sube el archivo a  public/img/galeria/  con nombre 01.jpg, 02.jpg, ...
+//    (formato JPG, máx ~1600px ancho, < 400 KB)
+// 2. Edita el `texto` de la línea correspondiente aquí abajo.
+//    Déjalo vacío ("") si no quieres pie de foto en esa polaroid.
+// 3. `tam` controla el tamaño en el mosaico:
+//      cuadrado   → 1 col × 2 filas
+//      vertical   → 1 col × 3 filas (más alta)
+//      horizontal → 2 col × 2 filas (más ancha)
+// 4. `rot` es la rotación en grados (-3 a 3 queda natural).
+// 5. `tape` es el color del washi en la parte superior: limon | oliva | teja.
+//
 const HUECOS = [
-  { archivo: '01', tam: 'cuadrado',    rot: -2, tape: 'limon' },
-  { archivo: '02', tam: 'vertical',    rot: 1.5, tape: 'oliva' },
-  { archivo: '03', tam: 'horizontal',  rot: -1, tape: 'teja' },
-  { archivo: '04', tam: 'cuadrado',    rot: 2.5, tape: 'limon' },
-  { archivo: '05', tam: 'vertical',    rot: -1.5, tape: 'oliva' },
-  { archivo: '06', tam: 'cuadrado',    rot: 1, tape: 'teja' },
-  { archivo: '07', tam: 'horizontal',  rot: -2.5, tape: 'limon' },
-  { archivo: '08', tam: 'cuadrado',    rot: 0.5, tape: 'oliva' },
+  { archivo: '01', tam: 'cuadrado',    rot: -2,   tape: 'limon', texto: 'nuestro primer viaje' },
+  { archivo: '02', tam: 'vertical',    rot: 1.5,  tape: 'oliva', texto: 'verano en Priego' },
+  { archivo: '03', tam: 'horizontal',  rot: -1,   tape: 'teja',  texto: 'la casa de siempre' },
+  { archivo: '04', tam: 'cuadrado',    rot: 2.5,  tape: 'limon', texto: '' },
+  { archivo: '05', tam: 'vertical',    rot: -1.5, tape: 'oliva', texto: 'los dos' },
+  { archivo: '06', tam: 'cuadrado',    rot: 1,    tape: 'teja',  texto: '' },
+  { archivo: '07', tam: 'horizontal',  rot: -2.5, tape: 'limon', texto: 'aquel día de campo' },
+  { archivo: '08', tam: 'cuadrado',    rot: 0.5,  tape: 'oliva', texto: '' },
 ];
 ---
 
@@ -35,9 +46,9 @@ const HUECOS = [
     </p>
 
     <div class="album">
-      {HUECOS.map(({ archivo, tam, rot, tape }) => (
+      {HUECOS.map(({ archivo, tam, rot, tape, texto }) => (
         <figure
-          class={`marco marco-${tam} tape-${tape}`}
+          class={`marco marco-${tam} tape-${tape} ${texto ? 'con-pie' : ''}`}
           style={`transform: rotate(${rot}deg);`}
           data-archivo={archivo}
         >
@@ -45,7 +56,7 @@ const HUECOS = [
             <img
               class="foto"
               src={`/img/galeria/${archivo}.jpg`}
-              alt=""
+              alt={texto || ''}
               loading="lazy"
               onerror="this.classList.add('vacio')"
             />
@@ -57,6 +68,9 @@ const HUECOS = [
               </svg>
             </div>
           </div>
+          {texto && (
+            <figcaption class="pie-polaroid">{texto}</figcaption>
+          )}
         </figure>
       ))}
     </div>
@@ -136,7 +150,12 @@ const HUECOS = [
     box-shadow: 0 2px 8px rgba(30, 58, 95, 0.12), 0 6px 24px rgba(30, 58, 95, 0.06);
     transition: transform 300ms ease, box-shadow 300ms ease;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
   }
+  /* Cuando lleva pie manuscrito hay que reservarle sitio */
+  .marco.con-pie { padding-bottom: 44px; }
+
   .marco:hover {
     transform: rotate(0deg) scale(1.04) !important;
     box-shadow: 0 6px 20px rgba(30, 58, 95, 0.2);
@@ -192,6 +211,25 @@ const HUECOS = [
   .tape-limon::before { background: rgba(212, 200, 74, 0.55); }
   .tape-oliva::before { background: rgba(107, 122, 62, 0.4); }
   .tape-teja::before  { background: rgba(196, 113, 79, 0.4); }
+
+  /* Pie manuscrito de polaroid */
+  .pie-polaroid {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: 4px;
+    text-align: center;
+    font-family: var(--font-brush);
+    color: var(--color-tinta);
+    font-size: 1rem;
+    line-height: 1.1;
+    padding: 2px 4px;
+    max-height: 36px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Ligera rotación de tinta a mano */
+    transform: rotate(-0.5deg);
+  }
 
   /* Lightbox */
   .lightbox {
