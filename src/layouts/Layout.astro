@@ -1,7 +1,5 @@
 ---
 import '../styles/global.css';
-import { ClientRouter } from 'astro:transitions';
-import GestosSwipe from '../components/GestosSwipe.astro';
 
 interface Props {
   title?: string;
@@ -24,7 +22,6 @@ const {
     <meta name="robots" content="noindex, nofollow" />
     <title>{title}</title>
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -33,7 +30,6 @@ const {
     />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <ClientRouter fallback="swap" />
   </head>
   <body>
     <noscript>
@@ -42,6 +38,5 @@ const {
       </div>
     </noscript>
     <slot />
-    <GestosSwipe />
   </body>
 </html>

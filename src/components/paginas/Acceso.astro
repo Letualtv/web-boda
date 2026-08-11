@@ -554,61 +554,49 @@ const PASSWORD = 'genilla2027';
   const BASE_URL = import.meta.env.BASE_URL;
   const DESTINO = (BASE_URL + 'bienvenida/').replace(/\/+/g, '/');
 
-  // ⚠ Con Astro ClientRouter, este script se cachea. Debe re-inicializarse
-  // en cada navegación via astro:page-load (dispara también en el load inicial).
-  function inicializarAcceso() {
-    // Solo actuar si estamos en /acceso/
-    const contenedor = document.getElementById('form-acceso') as HTMLFormElement | null;
-    if (!contenedor) return;
+  const contenedor = document.getElementById('form-acceso') as HTMLFormElement;
+  const inputReal = document.getElementById('pwd-real') as HTMLInputElement;
+  const display = document.getElementById('tinta-display') as HTMLElement;
+  const pluma = document.getElementById('pluma') as HTMLElement;
+  const gotitas = document.getElementById('gotitas') as HTMLElement;
+  const btnEntrar = document.getElementById('btn-entrar') as HTMLButtonElement;
+  const epic = document.getElementById('epic-overlay') as HTMLElement;
+  const particulas = document.getElementById('epic-particulas') as HTMLElement;
 
-    const inputReal = document.getElementById('pwd-real') as HTMLInputElement;
-    const display = document.getElementById('tinta-display') as HTMLElement;
-    const pluma = document.getElementById('pluma') as HTMLElement;
-    const gotitas = document.getElementById('gotitas') as HTMLElement;
-    const btnEntrar = document.getElementById('btn-entrar') as HTMLButtonElement;
-    const epic = document.getElementById('epic-overlay') as HTMLElement;
-    const particulas = document.getElementById('epic-particulas') as HTMLElement;
+  // Si ya está autenticado, saltar directo
+  if (sessionStorage.getItem('boda_auth') === 'ok') {
+    window.location.replace(DESTINO);
+  }
 
-    // Si ya está autenticado, saltar directo
-    if (sessionStorage.getItem('boda_auth') === 'ok') {
-      window.location.replace(DESTINO);
-      return;
+  function lanzarEpica() {
+    if (!epic || !particulas) return;
+    const total = 48;
+    for (let i = 0; i < total; i++) {
+      const p = document.createElement('span');
+      const tipo = i % 3 === 0 ? 'p-gota' : (i % 3 === 1 ? 'p-hoja' : 'p-teja');
+      p.className = `particula ${tipo}`;
+      const angulo = (Math.PI * 2 * i) / total + Math.random() * 0.3;
+      const distancia = 220 + Math.random() * 420;
+      const dx = Math.cos(angulo) * distancia;
+      const dy = Math.sin(angulo) * distancia;
+      const rot = (Math.random() - 0.5) * 720;
+      const dur = 1200 + Math.random() * 600;
+      const delay = 800 + Math.random() * 150;
+      p.style.transition = `transform ${dur}ms cubic-bezier(0.22, 0.61, 0.36, 1) ${delay}ms, opacity ${dur}ms ease-out ${delay}ms`;
+      p.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+      p.style.opacity = '1';
+      particulas.appendChild(p);
+      void p.offsetWidth;
+      requestAnimationFrame(() => {
+        p.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) rotate(${rot}deg)`;
+        p.style.opacity = '0';
+      });
     }
+    epic.classList.add('activa');
+    epic.setAttribute('aria-hidden', 'false');
+  }
 
-    if (!inputReal || !display || !pluma || !gotitas || !btnEntrar) return;
-
-    // Evitar doble inicialización si el nodo ya fue procesado
-    if (contenedor.dataset.inicializado === 'ok') return;
-    contenedor.dataset.inicializado = 'ok';
-
-    function lanzarEpica() {
-      if (!epic || !particulas) return;
-      const total = 48;
-      for (let i = 0; i < total; i++) {
-        const p = document.createElement('span');
-        const tipo = i % 3 === 0 ? 'p-gota' : (i % 3 === 1 ? 'p-hoja' : 'p-teja');
-        p.className = `particula ${tipo}`;
-        const angulo = (Math.PI * 2 * i) / total + Math.random() * 0.3;
-        const distancia = 220 + Math.random() * 420;
-        const dx = Math.cos(angulo) * distancia;
-        const dy = Math.sin(angulo) * distancia;
-        const rot = (Math.random() - 0.5) * 720;
-        const dur = 1200 + Math.random() * 600;
-        const delay = 800 + Math.random() * 150;
-        p.style.transition = `transform ${dur}ms cubic-bezier(0.22, 0.61, 0.36, 1) ${delay}ms, opacity ${dur}ms ease-out ${delay}ms`;
-        p.style.transform = 'translate(-50%, -50%) rotate(0deg)';
-        p.style.opacity = '1';
-        particulas.appendChild(p);
-        void p.offsetWidth;
-        requestAnimationFrame(() => {
-          p.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) rotate(${rot}deg)`;
-          p.style.opacity = '0';
-        });
-      }
-      epic.classList.add('activa');
-      epic.setAttribute('aria-hidden', 'false');
-    }
-
+  if (contenedor && inputReal && display && pluma && gotitas && btnEntrar) {
     const password = contenedor.dataset.password || '';
 
     const tinta = crearTintaEscritura({
@@ -646,7 +634,4 @@ const PASSWORD = 'genilla2027';
     // Auto-focus para invitar a escribir directamente
     setTimeout(() => inputReal.focus(), 100);
   }
-
-  // Ejecutar en carga inicial y en cada navegación
-  document.addEventListener('astro:page-load', inicializarAcceso);
 </script>
