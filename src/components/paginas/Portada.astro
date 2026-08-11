@@ -1,210 +1,659 @@
 ---
 import PaginaMarco from '../PaginaMarco.astro';
 const WEDDING_DATE = '2027-07-24T12:30:00';
+const PASSWORD = 'genilla2027';
 ---
 
-<PaginaMarco
-  titulo="Portada"
-  esquinaSupIzq="/img/svg/esquinas/olivo-sup-izq.svg"
-  esquinaInfDer="/img/png/limones/limon-inf-der.png"
->
-  <div class="portada-inner">
-    <p class="invitacion">Estáis invitados a la boda de</p>
+<div class="cover-wrap">
+  <PaginaMarco titulo="Portada" clase="cover-marco">
+    <div class="cover-inner">
+      <!-- Marco decorativo dorado -->
+      <div class="cover-frame" aria-hidden="true"></div>
 
-    <h1 class="nombres-wrap">
-      <span class="palabra palabra-1">Alba</span>
-      <span class="palabra palabra-2">&amp;</span>
-      <span class="palabra palabra-3">Antonio</span>
-    </h1>
-
-    <div class="separador-limon">
-      <span class="linea"></span>
-      <span class="limon-mini" aria-hidden="true">
-        <svg viewBox="0 0 40 40" width="28" height="28" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Hoja pequeña -->
-          <path d="M20 8 Q26 4 30 6 Q29 12 22 12 Z" fill="#C4714F" opacity="0.85"/>
-          <line x1="22" y1="11" x2="27" y2="7" stroke="#9E5237" stroke-width="0.5" opacity="0.7"/>
-          <!-- Limón en tono teja -->
-          <ellipse cx="20" cy="24" rx="9" ry="11" fill="#C4714F"/>
-          <ellipse cx="20" cy="24" rx="9" ry="11" fill="none" stroke="#9E5237" stroke-width="0.6" opacity="0.5"/>
-          <circle cx="16" cy="21" r="0.7" fill="#9E5237" opacity="0.5"/>
-          <circle cx="22" cy="22" r="0.6" fill="#9E5237" opacity="0.5"/>
-          <circle cx="18" cy="27" r="0.7" fill="#9E5237" opacity="0.5"/>
-          <circle cx="23" cy="28" r="0.5" fill="#9E5237" opacity="0.5"/>
-          <path d="M20 34 Q20 36 21 36" stroke="#9E5237" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+      <!-- Ornamento superior -->
+      <div class="cover-ornamento" aria-hidden="true">
+        <svg viewBox="0 0 200 30" width="100%" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="15" x2="80" y2="15" stroke="#D4C84A" stroke-width="0.7" opacity="0.7"/>
+          <circle cx="100" cy="15" r="4" fill="none" stroke="#D4C84A" stroke-width="0.8" opacity="0.7"/>
+          <circle cx="100" cy="15" r="1.5" fill="#D4C84A" opacity="0.85"/>
+          <line x1="120" y1="15" x2="200" y2="15" stroke="#D4C84A" stroke-width="0.7" opacity="0.7"/>
         </svg>
-      </span>
-      <span class="linea"></span>
+      </div>
+
+      <p class="cover-invitacion">Invitación de boda</p>
+
+      <h1 class="cover-nombres">
+        <span class="palabra p-1">Alba</span>
+        <span class="palabra p-2">&amp;</span>
+        <span class="palabra p-3">Antonio</span>
+      </h1>
+
+      <div class="cover-sep">
+        <span class="lin"></span>
+        <span class="limon" aria-hidden="true">
+          <svg viewBox="0 0 40 40" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 8 Q26 4 30 6 Q29 12 22 12 Z" fill="#D4C84A" opacity="0.85"/>
+            <ellipse cx="20" cy="24" rx="9" ry="11" fill="#D4C84A"/>
+            <circle cx="16" cy="21" r="0.7" fill="#8a7d20" opacity="0.6"/>
+            <circle cx="22" cy="22" r="0.6" fill="#8a7d20" opacity="0.6"/>
+            <circle cx="18" cy="27" r="0.7" fill="#8a7d20" opacity="0.6"/>
+          </svg>
+        </span>
+        <span class="lin"></span>
+      </div>
+
+      <p class="cover-fecha">24 · Julio · 2027</p>
+      <p class="cover-lugar">Priego de Córdoba</p>
+
+      <!-- Cuenta atrás compacta -->
+      <div class="cover-countdown" id="countdown-portada">
+        <div class="unidad">
+          <span class="num" data-cd="dias">000</span>
+          <span class="lbl">días</span>
+        </div>
+        <div class="unidad">
+          <span class="num" data-cd="horas">00</span>
+          <span class="lbl">horas</span>
+        </div>
+        <div class="unidad">
+          <span class="num" data-cd="min">00</span>
+          <span class="lbl">min</span>
+        </div>
+      </div>
+
+      <!-- Formulario de contraseña integrado -->
+      <form id="form-acceso" class="tinta-contenedor vacio" data-password={PASSWORD} novalidate>
+        <input
+          id="pwd-real"
+          type="text"
+          autocomplete="off"
+          autocapitalize="none"
+          autocorrect="off"
+          spellcheck="false"
+          aria-label="Palabra de entrada"
+          class="pwd-real"
+        />
+
+        <div class="linea-escritura">
+          <span class="placeholder">Palabra de entrada</span>
+          <div class="tinta-display" id="tinta-display" aria-hidden="true"></div>
+          <span class="pluma" id="pluma">
+            <svg viewBox="0 0 24 32" width="18" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 28 L18 4 L22 6 L8 30 Z" fill="#F3E9D2" fill-opacity="0.95" stroke="#F3E9D2" stroke-width="0.6" stroke-linejoin="round"/>
+              <path d="M4 28 L8 30 L6 26 Z" fill="#D4C84A"/>
+            </svg>
+          </span>
+          <span class="linea-cuaderno"></span>
+          <div class="gotitas" id="gotitas" aria-hidden="true"></div>
+        </div>
+
+        <button type="submit" class="btn-entrar" id="btn-entrar" disabled>
+          Abrir
+        </button>
+
+        <p class="mensaje-error" id="mensaje-error">esta no es la palabra</p>
+      </form>
+
+      <!-- Ornamento inferior -->
+      <div class="cover-ornamento cover-ornamento-abajo" aria-hidden="true">
+        <svg viewBox="0 0 200 30" width="100%" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="0" y1="15" x2="80" y2="15" stroke="#D4C84A" stroke-width="0.7" opacity="0.7"/>
+          <circle cx="100" cy="15" r="4" fill="none" stroke="#D4C84A" stroke-width="0.8" opacity="0.7"/>
+          <circle cx="100" cy="15" r="1.5" fill="#D4C84A" opacity="0.85"/>
+          <line x1="120" y1="15" x2="200" y2="15" stroke="#D4C84A" stroke-width="0.7" opacity="0.7"/>
+        </svg>
+      </div>
     </div>
+  </PaginaMarco>
 
-    <p class="fecha">24 · Julio · 2027</p>
-    <p class="lugar">Priego de Córdoba</p>
-
-    <div class="countdown" id="countdown-portada">
-      <div class="unidad">
-        <span class="num" data-cd="dias">000</span>
-        <span class="lbl">días</span>
+  <!-- Overlay épico al acertar -->
+  <div id="epic-overlay" class="epic-overlay" aria-hidden="true">
+    <div class="epic-sello">
+      <div class="epic-sello-inner">
+        <span class="epic-monograma">A &amp; A</span>
+        <span class="epic-label">Bienvenido</span>
       </div>
-      <div class="unidad">
-        <span class="num" data-cd="horas">00</span>
-        <span class="lbl">horas</span>
-      </div>
-      <div class="unidad">
-        <span class="num" data-cd="min">00</span>
-        <span class="lbl">min</span>
-      </div>
-      <div class="unidad">
-        <span class="num" data-cd="seg">00</span>
-        <span class="lbl">seg</span>
-      </div>
+      <div class="epic-sello-goteo" aria-hidden="true"></div>
     </div>
-
-    <a class="cta-entrar" id="cta-entrar" href={`${import.meta.env.BASE_URL}acceso/`.replace(/\/+/g, '/')}>
-      <span>Entrar</span>
-      <span class="flechita">→</span>
-    </a>
+    <div class="epic-onda epic-onda-1"></div>
+    <div class="epic-onda epic-onda-2"></div>
+    <div class="epic-onda epic-onda-3"></div>
+    <div class="epic-particulas" id="epic-particulas"></div>
+    <div class="epic-fundido"></div>
   </div>
-</PaginaMarco>
+</div>
 
 <style>
-  .portada-inner {
+  /* ═════════════════════════════════════════════════════
+     PORTADA — CUBIERTA DE LIBRO OSCURA
+  ═════════════════════════════════════════════════════ */
+
+  /* Sobrescribe fondo global — cover es cuero oscuro */
+  .cover-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+    background:
+      radial-gradient(ellipse at center, #1e2a3e 0%, #0d1522 100%);
+  }
+
+  /* Textura de cuero/tela sobre el fondo */
+  .cover-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.7 0 0 0 0 0.55 0 0 0 0 0.3 0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3C/svg%3E");
+    background-size: 260px;
+    mix-blend-mode: overlay;
+    opacity: 0.35;
+  }
+
+  /* Viñeta oscura para dar profundidad tipo cuero */
+  .cover-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.55) 100%);
+  }
+
+  :global(.cover-marco) {
+    background: transparent !important;
+  }
+  :global(.cover-marco .fondo-acuarela),
+  :global(.cover-marco .esquina) {
+    display: none;
+  }
+
+  /* Contenido del cover */
+  .cover-inner {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: clamp(0.75rem, 2.5vh, 1.2rem);
+    gap: clamp(0.75rem, 2vh, 1.25rem);
+    width: 100%;
+    max-width: 460px;
+    padding: clamp(2rem, 6vh, 3rem) 0;
     text-align: center;
+    z-index: 10;
   }
 
-  .invitacion {
+  /* Marco dorado sutil alrededor del contenido */
+  .cover-frame {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -1rem;
+    right: -1rem;
+    border: 1px solid rgba(212, 200, 74, 0.35);
+    pointer-events: none;
+  }
+  .cover-frame::before,
+  .cover-frame::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    height: 1px;
+    background: rgba(212, 200, 74, 0.2);
+  }
+  .cover-frame::before { top: 6px; }
+  .cover-frame::after  { bottom: 6px; }
+
+  .cover-ornamento {
+    width: 60%;
+    max-width: 220px;
+    opacity: 0.9;
+  }
+
+  .cover-invitacion {
     font-family: var(--font-serif);
     font-style: italic;
     font-weight: 300;
-    font-size: clamp(0.9rem, 2vw, 1.1rem);
-    color: var(--color-tinta-clara);
-    letter-spacing: 0.15em;
+    font-size: clamp(0.8rem, 2vw, 0.95rem);
+    color: rgba(243, 233, 210, 0.55);
+    letter-spacing: 0.4em;
+    text-transform: lowercase;
     margin: 0;
   }
 
-  /* ─── Nombres ─────────────────────────────────────── */
-  .nombres-wrap {
+  .cover-nombres {
     font-family: var(--font-vibes);
     font-weight: 400;
-    color: var(--color-tinta);
+    color: #F3E9D2;
     line-height: 1;
-    margin: 0.5rem 0;
+    margin: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0;
+    text-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.5),
+      0 0 20px rgba(212, 200, 74, 0.15);
+  }
+  .cover-nombres .p-1,
+  .cover-nombres .p-3 { font-size: clamp(3.2rem, 12vw, 5rem); }
+  .cover-nombres .p-2 {
+    font-size: clamp(1.6rem, 5vw, 2.5rem);
+    color: #D4C84A;
+    margin: -0.1em 0;
   }
 
-  .palabra { display: inline-block; }
-  .palabra-1, .palabra-3 { font-size: clamp(4rem, 15vw, 7rem); }
-  .palabra-2             { font-size: clamp(2rem, 7vw, 3.5rem); color: var(--color-teja); margin: -0.15em 0; }
-
-  .separador-limon {
+  .cover-sep {
     display: flex;
     align-items: center;
-    gap: 0.9rem;
-    width: clamp(180px, 45vw, 300px);
-    margin: 0.5rem 0;
+    gap: 0.75rem;
+    width: clamp(140px, 40vw, 220px);
   }
-  .separador-limon .linea {
+  .cover-sep .lin {
     flex: 1;
     height: 1px;
-    background: linear-gradient(to right, transparent, var(--color-teja), transparent);
-    opacity: 0.7;
-  }
-  .separador-limon .limon-mini {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: linear-gradient(to right, transparent, rgba(212, 200, 74, 0.55), transparent);
   }
 
-  .fecha {
+  .cover-fecha {
     font-family: var(--font-sans);
     font-weight: 300;
-    font-size: clamp(0.85rem, 2.2vw, 1.1rem);
-    color: var(--color-tinta);
-    letter-spacing: 0.4em;
+    font-size: clamp(0.75rem, 2vw, 0.9rem);
+    color: rgba(243, 233, 210, 0.85);
+    letter-spacing: 0.45em;
     text-transform: uppercase;
     margin: 0;
   }
-  .lugar {
+  .cover-lugar {
     font-family: var(--font-brush);
-    font-size: clamp(1.6rem, 5vw, 2.4rem);
-    color: var(--color-teja);
-    letter-spacing: 0.02em;
+    font-size: clamp(1.4rem, 4.5vw, 2rem);
+    color: #D4C84A;
     line-height: 1;
-    margin: 0.2rem 0 0;
+    margin: 0.15rem 0 0;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
   }
 
-  /* Countdown */
-  .countdown {
+  /* Cuenta atrás compacta */
+  .cover-countdown {
     display: flex;
-    gap: clamp(1rem, 4vw, 2.2rem);
-    margin-top: 1.2rem;
+    gap: clamp(0.85rem, 3vw, 1.5rem);
+    margin: 0.5rem 0 0.75rem;
   }
-  .unidad { text-align: center; display: flex; flex-direction: column; gap: 0.15rem; }
-  .num {
+  .cover-countdown .unidad { text-align: center; display: flex; flex-direction: column; gap: 0.1rem; }
+  .cover-countdown .num {
     font-family: var(--font-vibes);
-    font-size: clamp(2.4rem, 8vw, 3.8rem);
-    color: var(--color-tinta);
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
+    color: #F3E9D2;
     line-height: 1;
-    display: block;
   }
-  .lbl {
+  .cover-countdown .lbl {
     font-family: var(--font-sans);
-    font-size: clamp(0.55rem, 1.4vw, 0.7rem);
+    font-size: clamp(0.5rem, 1.3vw, 0.62rem);
     letter-spacing: 0.35em;
-    color: var(--color-tinta-clara);
+    color: rgba(212, 200, 74, 0.7);
     text-transform: uppercase;
   }
 
-  .cta-entrar {
-    margin-top: clamp(1.75rem, 5vh, 2.75rem);
-    display: inline-flex;
+  /* ─── Formulario contraseña sobre cover oscuro ─────── */
+  .tinta-contenedor {
+    position: relative;
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0.65rem;
-    padding: 0.95rem 2.5rem;
+    gap: 1.25rem;
+    margin-top: 0.5rem;
+  }
+
+  .pwd-real {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 70px;
+    opacity: 0;
+    border: none;
     background: transparent;
-    border: 1px solid rgba(30, 58, 95, 0.45);
-    color: var(--color-tinta);
+    font-size: 16px;
+    z-index: 10;
+    cursor: text;
+  }
+
+  .linea-escritura {
+    position: relative;
+    width: 100%;
+    height: 70px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: rgba(243, 233, 210, 0.35);
+    font-size: clamp(0.85rem, 2.2vw, 1rem);
+    letter-spacing: 0.15em;
+    pointer-events: none;
+    transition: opacity 300ms ease;
+    white-space: nowrap;
+  }
+  .tinta-contenedor:not(.vacio) .placeholder,
+  .tinta-contenedor.con-foco .placeholder { opacity: 0; }
+
+  .tinta-display {
+    position: relative;
+    font-family: var(--font-brush);
+    color: #F3E9D2;
+    font-size: clamp(1.6rem, 5.5vw, 2.2rem);
+    letter-spacing: 0.08em;
+    line-height: 1;
+    text-align: center;
+    z-index: 3;
+    padding: 0 24px 6px;
+    min-height: 2.4rem;
+    display: inline-flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  }
+
+  .tinta-display :global(.char) {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(-8px);
+    color: #F3E9D2;
+    transition:
+      opacity 220ms ease-out,
+      transform 300ms cubic-bezier(0.34, 1.45, 0.64, 1);
+  }
+  .tinta-display :global(.char.entrando) {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .pluma {
+    position: absolute;
+    top: 0; left: 0;
+    width: 18px;
+    height: 24px;
+    pointer-events: none;
+    z-index: 4;
+    opacity: 0;
+    transition: transform 100ms ease-out;
+    transform-origin: 30% 90%;
+  }
+  .tinta-contenedor.con-foco .pluma { opacity: 1; }
+  .tinta-contenedor.escribiendo .pluma {
+    animation: pluma-rotar 200ms ease-in-out infinite alternate;
+  }
+  @keyframes pluma-rotar {
+    from { rotate: -3deg; }
+    to   { rotate:  3deg; }
+  }
+
+  .linea-cuaderno {
+    position: absolute;
+    bottom: 0;
+    left: 8%;
+    right: 8%;
+    height: 1px;
+    background: rgba(212, 200, 74, 0.45);
+    transition: background 400ms ease;
+  }
+  .tinta-contenedor.con-foco .linea-cuaderno { background: #D4C84A; }
+
+  .gotitas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .gotitas :global(.gotita) {
+    position: absolute;
+    background: #D4C84A;
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 0 3px rgba(212, 200, 74, 0.5);
+  }
+
+  .btn-entrar {
+    background: transparent;
+    border: 1px solid rgba(212, 200, 74, 0.5);
+    color: #D4C84A;
     font-family: var(--font-sans);
-    font-size: clamp(0.7rem, 1.8vw, 0.8rem);
+    font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.5em;
     text-transform: uppercase;
-    text-decoration: none;
-    transition: background 300ms ease, border-color 300ms ease, color 300ms ease;
+    padding: 0.85rem 2.5rem;
+    cursor: pointer;
+    opacity: 0.4;
+    pointer-events: none;
+    transition:
+      opacity 400ms ease,
+      background 250ms ease,
+      color 250ms ease,
+      transform 200ms ease;
   }
-  .cta-entrar:hover {
-    background: rgba(30, 58, 95, 0.06);
-    border-color: var(--color-tinta);
+  .tinta-contenedor.tiene-texto .btn-entrar {
+    opacity: 1;
+    pointer-events: auto;
   }
-  .cta-entrar:active { transform: scale(0.98); }
-  .flechita {
-    display: inline-block;
-    transition: transform 300ms ease;
+  .btn-entrar:hover {
+    background: rgba(212, 200, 74, 0.1);
+    border-color: #D4C84A;
+    color: #F3E9D2;
   }
-  .cta-entrar:hover .flechita {
-    transform: translateX(4px);
+  .btn-entrar:active { transform: scale(0.97); }
+
+  .mensaje-error {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: #E68787;
+    font-size: 0.9rem;
+    margin: 0;
+    opacity: 0;
+    transition: opacity 300ms ease;
+    min-height: 1.2em;
   }
+  .tinta-contenedor.error .mensaje-error { opacity: 1; }
+  .tinta-contenedor.error {
+    animation: temblor 400ms ease-in-out 2;
+  }
+  @keyframes temblor {
+    0%, 100% { transform: translateX(0); }
+    25%      { transform: translateX(-5px); }
+    75%      { transform: translateX(5px); }
+  }
+  .tinta-contenedor.correcto {
+    filter: saturate(0.7);
+    transition: filter 500ms ease;
+  }
+
+  /* ═════════ ANIMACIÓN ÉPICA (heredada) ═════════ */
+  .epic-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    background: rgba(45, 35, 25, 0);
+    transition: background 500ms ease;
+    visibility: hidden;
+  }
+  .epic-overlay.activa {
+    background: rgba(15, 20, 30, 0.8);
+    visibility: visible;
+    backdrop-filter: blur(2px);
+  }
+
+  .epic-sello {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 200px; height: 200px;
+    transform: translate(-50%, -50%) translateY(-100vh) rotate(-25deg) scale(0.6);
+    opacity: 0;
+    z-index: 2;
+  }
+  .epic-overlay.activa .epic-sello {
+    animation: sello-caer 950ms cubic-bezier(0.55, 0, 0.35, 1) 200ms forwards;
+  }
+  @keyframes sello-caer {
+    0%   { transform: translate(-50%, -50%) translateY(-100vh) rotate(-25deg) scale(0.55); opacity: 0; }
+    35%  { transform: translate(-50%, -50%) translateY(-30vh) rotate(-18deg) scale(0.7); opacity: 0.5; }
+    62%  { transform: translate(-50%, -50%) translateY(0) rotate(-6deg) scale(1.18); opacity: 1; }
+    75%  { transform: translate(-50%, -50%) translateY(-8px) rotate(-4deg) scale(0.96); }
+    90%  { transform: translate(-50%, -50%) translateY(0) rotate(-5deg) scale(1.02); }
+    100% { transform: translate(-50%, -50%) translateY(0) rotate(-5deg) scale(1); opacity: 1; }
+  }
+
+  .epic-sello-inner {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 32% 28%,
+      rgba(196, 113, 79, 0.98) 0%,
+      rgba(158, 82, 55, 1) 55%,
+      rgba(100, 45, 25, 1) 100%);
+    color: #F3E9D2;
+    box-shadow:
+      inset 0 3px 6px rgba(255, 240, 220, 0.4),
+      inset 0 -6px 12px rgba(50, 20, 10, 0.5),
+      0 2px 4px rgba(30, 20, 10, 0.3);
+    position: relative;
+    transition: box-shadow 350ms cubic-bezier(0.34, 1.5, 0.64, 1);
+  }
+  .epic-overlay.activa .epic-sello-inner {
+    animation: sello-relieve 350ms cubic-bezier(0.34, 1.5, 0.64, 1) 750ms forwards;
+  }
+  @keyframes sello-relieve {
+    to {
+      box-shadow:
+        inset 0 4px 8px rgba(255, 240, 220, 0.5),
+        inset 0 -8px 18px rgba(50, 20, 10, 0.6),
+        0 22px 40px rgba(30, 20, 10, 0.55),
+        0 8px 16px rgba(30, 20, 10, 0.45),
+        0 0 60px rgba(196, 113, 79, 0.4);
+    }
+  }
+  .epic-sello-inner::before {
+    content: '';
+    position: absolute;
+    inset: 14px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(243, 233, 210, 0.5);
+  }
+  .epic-sello-inner::after {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border-radius: 50%;
+    border: 1px dashed rgba(243, 233, 210, 0.3);
+  }
+
+  .epic-monograma {
+    font-family: var(--font-vibes);
+    font-size: 3.5rem;
+    line-height: 1;
+    color: #F3E9D2;
+    text-shadow: 0 2px 3px rgba(50, 20, 10, 0.6);
+    z-index: 1;
+  }
+  .epic-label {
+    font-family: var(--font-sans);
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(243, 233, 210, 0.85);
+    margin-top: 0.2rem;
+    z-index: 1;
+  }
+
+  .epic-sello-goteo {
+    position: absolute;
+    inset: -20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(158, 82, 55, 0.45) 40%, transparent 65%);
+    filter: blur(8px);
+    opacity: 0;
+  }
+  .epic-overlay.activa .epic-sello-goteo {
+    animation: goteo-aparecer 500ms ease-out 800ms forwards;
+  }
+  @keyframes goteo-aparecer {
+    from { opacity: 0; transform: scale(0.7); }
+    to   { opacity: 1; transform: scale(1.2); }
+  }
+
+  .epic-onda {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 220px; height: 220px;
+    margin: -110px 0 0 -110px;
+    border: 2px solid var(--color-teja);
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  .epic-overlay.activa .epic-onda-1 { animation: onda 1.8s ease-out 800ms forwards; }
+  .epic-overlay.activa .epic-onda-2 { animation: onda 1.8s ease-out 950ms forwards; }
+  .epic-overlay.activa .epic-onda-3 { animation: onda 1.8s ease-out 1100ms forwards; }
+  @keyframes onda {
+    0%   { opacity: 0.8; transform: scale(0.35); border-width: 3px; }
+    100% { opacity: 0; transform: scale(6); border-width: 0.5px; }
+  }
+
+  .epic-particulas { position: absolute; inset: 0; pointer-events: none; }
+  .epic-particulas :global(.particula) {
+    position: absolute;
+    top: 50%; left: 50%;
+    pointer-events: none;
+    will-change: transform, opacity;
+  }
+  .epic-particulas :global(.p-hoja) {
+    width: 12px; height: 6px;
+    border-radius: 50% 10% 50% 10%;
+    background: var(--color-oliva);
+  }
+  .epic-particulas :global(.p-gota) {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--color-limon);
+    box-shadow: 0 0 6px rgba(212, 200, 74, 0.8);
+  }
+  .epic-particulas :global(.p-teja) {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--color-teja);
+    opacity: 0.85;
+  }
+
+  .epic-fundido {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center,
+      rgba(212, 200, 74, 0.2) 0%,
+      rgba(196, 113, 79, 0.4) 45%,
+      rgba(10, 15, 25, 0.95) 100%);
+    opacity: 0;
+  }
+  .epic-overlay.activa .epic-fundido {
+    animation: fundido-final 700ms ease-in 2100ms forwards;
+  }
+  @keyframes fundido-final { to { opacity: 1; } }
 </style>
 
-<script>
-  const cta = document.getElementById('cta-entrar') as HTMLAnchorElement | null;
-  if (cta) {
-    const destino = cta.href;
-    cta.addEventListener('click', (e) => {
-      e.preventDefault();
-      (window as any).navegarBoda(destino, 'adelante');
-    });
-  }
-</script>
-
 <script define:vars={{ WEDDING_DATE }}>
+  // Cuenta atrás
   const target = new Date(WEDDING_DATE).getTime();
   const pad = (n, d = 2) => String(Math.floor(n)).padStart(d, '0');
   const $ = (k) => document.querySelector(`#countdown-portada [data-cd="${k}"]`);
@@ -212,18 +661,99 @@ const WEDDING_DATE = '2027-07-24T12:30:00';
   function tick() {
     const diff = target - Date.now();
     if (diff <= 0) {
-      ['dias','horas','min','seg'].forEach(k => { const el = $(k); if (el) el.textContent = '00'; });
+      ['dias','horas','min'].forEach(k => { const el = $(k); if (el) el.textContent = '00'; });
       return;
     }
     const dias  = diff / (1000*60*60*24);
     const horas = (diff % (1000*60*60*24)) / (1000*60*60);
     const min   = (diff % (1000*60*60)) / (1000*60);
-    const seg   = (diff % (1000*60)) / 1000;
     if ($('dias'))  $('dias').textContent  = pad(dias, 3);
     if ($('horas')) $('horas').textContent = pad(horas);
     if ($('min'))   $('min').textContent   = pad(min);
-    if ($('seg'))   $('seg').textContent   = pad(seg);
   }
   tick();
   setInterval(tick, 1000);
+</script>
+
+<script>
+  import { crearTintaEscritura } from '../efectos/TintaEscritura';
+
+  const BASE_URL = import.meta.env.BASE_URL;
+  const DESTINO = (BASE_URL + 'bienvenida/').replace(/\/+/g, '/');
+
+  // Si ya está autenticado, redirigir directo a bienvenida
+  if (sessionStorage.getItem('boda_auth') === 'ok') {
+    window.location.replace(DESTINO);
+  }
+
+  const contenedor = document.getElementById('form-acceso') as HTMLFormElement;
+  const inputReal = document.getElementById('pwd-real') as HTMLInputElement;
+  const display = document.getElementById('tinta-display') as HTMLElement;
+  const pluma = document.getElementById('pluma') as HTMLElement;
+  const gotitas = document.getElementById('gotitas') as HTMLElement;
+  const btnEntrar = document.getElementById('btn-entrar') as HTMLButtonElement;
+  const epic = document.getElementById('epic-overlay') as HTMLElement;
+  const particulas = document.getElementById('epic-particulas') as HTMLElement;
+
+  function lanzarEpica() {
+    if (!epic || !particulas) return;
+    const total = 48;
+    for (let i = 0; i < total; i++) {
+      const p = document.createElement('span');
+      const tipo = i % 3 === 0 ? 'p-gota' : (i % 3 === 1 ? 'p-hoja' : 'p-teja');
+      p.className = `particula ${tipo}`;
+      const angulo = (Math.PI * 2 * i) / total + Math.random() * 0.3;
+      const distancia = 220 + Math.random() * 420;
+      const dx = Math.cos(angulo) * distancia;
+      const dy = Math.sin(angulo) * distancia;
+      const rot = (Math.random() - 0.5) * 720;
+      const dur = 1200 + Math.random() * 600;
+      const delay = 800 + Math.random() * 150;
+      p.style.transition = `transform ${dur}ms cubic-bezier(0.22, 0.61, 0.36, 1) ${delay}ms, opacity ${dur}ms ease-out ${delay}ms`;
+      p.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+      p.style.opacity = '1';
+      particulas.appendChild(p);
+      void p.offsetWidth;
+      requestAnimationFrame(() => {
+        p.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px)) rotate(${rot}deg)`;
+        p.style.opacity = '0';
+      });
+    }
+    epic.classList.add('activa');
+    epic.setAttribute('aria-hidden', 'false');
+  }
+
+  if (contenedor && inputReal && display && pluma && gotitas && btnEntrar) {
+    const password = contenedor.dataset.password || '';
+
+    const tinta = crearTintaEscritura({
+      contenedor,
+      inputReal,
+      displayVisible: display,
+      pluma,
+      gotitas,
+      password,
+      onCorrecto: () => {
+        sessionStorage.setItem('boda_auth', 'ok');
+        lanzarEpica();
+        setTimeout(() => { window.location.href = DESTINO; }, 2800);
+      },
+      onError: () => { /* .error class aplicada por el motor */ },
+    });
+
+    inputReal.addEventListener('input', () => {
+      if (inputReal.value.length >= 3) {
+        contenedor.classList.add('tiene-texto');
+        btnEntrar.disabled = false;
+      } else {
+        contenedor.classList.remove('tiene-texto');
+        btnEntrar.disabled = true;
+      }
+    });
+
+    contenedor.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (inputReal.value.length >= 3) tinta.verificar();
+    });
+  }
 </script>
