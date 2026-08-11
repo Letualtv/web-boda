@@ -2,6 +2,7 @@
 import PaginaMarco from '../PaginaMarco.astro';
 import GotasTinta from '../GotasTinta.astro';
 import EnlaceSiguiente from '../EnlaceSiguiente.astro';
+import LimonMini from '../LimonMini.astro';
 ---
 
 <PaginaMarco titulo="Etiqueta" scroll>
@@ -11,7 +12,7 @@ import EnlaceSiguiente from '../EnlaceSiguiente.astro';
 
     <div class="separador">
       <span class="linea"></span>
-      <span class="diamante"></span>
+      <LimonMini tam={24} />
       <span class="linea"></span>
     </div>
 
@@ -51,9 +52,8 @@ import EnlaceSiguiente from '../EnlaceSiguiente.astro';
     </div>
 
     <p class="nota">
-      Es julio en Priego — la tarde será cálida y la noche se fresquea.
-      Un chal o una chaqueta ligera para más tarde no viene mal.
-      Zapato cómodo también recomendado.
+      Es julio en Priego — la tarde será cálida y la noche igual.
+      Zapato cómodo recomendado.
     </p>
 
     <EnlaceSiguiente href="/autobuses/" label="Cómo llegar" />
@@ -88,12 +88,6 @@ import EnlaceSiguiente from '../EnlaceSiguiente.astro';
   .separador .linea {
     flex: 1; height: 1px;
     background: linear-gradient(to right, transparent, var(--color-teja), transparent);
-  }
-  .separador .diamante {
-    width: 6px; height: 6px;
-    background: var(--color-teja);
-    transform: rotate(45deg);
-    flex-shrink: 0;
   }
 
   .intro {

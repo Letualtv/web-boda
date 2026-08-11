@@ -1,0 +1,77 @@
+---
+/**
+ * Botón "Guardar fecha" — genera y descarga un .ics para añadir
+ * la boda al calendario del móvil/ordenador del invitado.
+ */
+---
+
+<button id="btn-guardar-fecha" class="btn-guardar-fecha" type="button">
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="4" width="18" height="18" rx="2"/>
+    <line x1="16" y1="2" x2="16" y2="6"/>
+    <line x1="8" y1="2" x2="8" y2="6"/>
+    <line x1="3" y1="10" x2="21" y2="10"/>
+    <path d="M8 15l2 2 4-4"/>
+  </svg>
+  <span>Guardar fecha</span>
+</button>
+
+<style>
+  .btn-guardar-fecha {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1.75rem;
+    background: transparent;
+    border: 1px solid rgba(30, 58, 95, 0.4);
+    color: var(--color-tinta);
+    font-family: var(--font-sans);
+    font-size: clamp(0.7rem, 1.7vw, 0.78rem);
+    font-weight: 700;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 250ms ease, border-color 250ms ease, transform 200ms ease;
+  }
+  .btn-guardar-fecha:hover {
+    background: rgba(30, 58, 95, 0.06);
+    border-color: var(--color-tinta);
+  }
+  .btn-guardar-fecha:active { transform: scale(0.97); }
+</style>
+
+<script>
+  const btn = document.getElementById('btn-guardar-fecha');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const ics = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Alba y Antonio//Boda 2027//ES',
+        'CALSCALE:GREGORIAN',
+        'BEGIN:VEVENT',
+        'UID:boda-alba-antonio-20270724@genilla',
+        'DTSTAMP:20260811T190000Z',
+        'DTSTART;TZID=Europe/Madrid:20270724T193000',
+        'DTEND;TZID=Europe/Madrid:20270725T080000',
+        'SUMMARY:Boda Alba & Antonio',
+        'LOCATION:Finca Genilla\\, Priego de Córdoba',
+        'DESCRIPTION:Recogida de invitados en Plaza del Palenque de Priego de Córdoba a las 19:30.',
+        'STATUS:CONFIRMED',
+        'END:VEVENT',
+        'END:VCALENDAR',
+      ].join('\r\n');
+
+      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'boda-alba-y-antonio.ics';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+    });
+  }
+</script>

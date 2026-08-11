@@ -2,6 +2,7 @@
 import PaginaMarco from '../PaginaMarco.astro';
 import GotasTinta from '../GotasTinta.astro';
 import EnlaceSiguiente from '../EnlaceSiguiente.astro';
+import LimonMini from '../LimonMini.astro';
 ---
 
 <PaginaMarco titulo="Cómo llegar" scroll>
@@ -11,7 +12,7 @@ import EnlaceSiguiente from '../EnlaceSiguiente.astro';
 
     <div class="separador">
       <span class="linea"></span>
-      <span class="diamante"></span>
+      <LimonMini tam={24} />
       <span class="linea"></span>
     </div>
 
@@ -116,13 +117,7 @@ import EnlaceSiguiente from '../EnlaceSiguiente.astro';
   }
   .separador .linea {
     flex: 1; height: 1px;
-    background: linear-gradient(to right, transparent, var(--color-tinta-clara), transparent);
-  }
-  .separador .diamante {
-    width: 6px; height: 6px;
-    background: var(--color-tinta-clara);
-    transform: rotate(45deg);
-    flex-shrink: 0;
+    background: linear-gradient(to right, transparent, var(--color-teja), transparent);
   }
 
   .intro {
